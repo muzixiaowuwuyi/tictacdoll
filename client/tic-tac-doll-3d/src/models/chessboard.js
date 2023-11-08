@@ -3,11 +3,11 @@ import { Box } from "@react-three/drei";
 
 const Chessboard = () => {
   const boardSize = 3; // 3x3 chessboard
-  const tileSize = 4; // size of each tile
+  const tileSize = 4.8; // size of each tile
   const tileHeight = 0.1; // height of the tile
   const gap = 0.6; // gap between tiles
-  const separatorHeight = 0.2; // height of the separator, slightly higher than the tile
-  const totalSize = boardSize * tileSize + (boardSize - 1) * gap; // total size of the board including gaps
+  const separatorHeight = 0.1; // height of the separator, slightly higher than the tile
+  const totalSize = boardSize * tileSize + (boardSize - 1) * gap + 1.5; // total size of the board including gaps
 
   const tiles = [];
   const separators = [];
@@ -17,9 +17,9 @@ const Chessboard = () => {
     for (let y = 0; y < boardSize; y++) {
       // Calculate position for each tile
       const position = [
-        (x - (boardSize - 1) / 2) * (tileSize + gap) - 10,
+        (x - (boardSize - 1) / 2) * (tileSize + gap),
         tileHeight / 2,
-        (y - (boardSize - 1) / 2) * (tileSize + gap) + 2,
+        (y - (boardSize - 1) / 2) * (tileSize + gap),
       ];
 
       tiles.push(
@@ -29,7 +29,7 @@ const Chessboard = () => {
           args={[tileSize, tileHeight, tileSize]}
           onClick={() => console.log(`Tile ${x}-${y} clicked`)}
         >
-          <meshBasicMaterial attach="material" color={"#f7ede1"} />
+          <meshBasicMaterial attach="material" color={"#f4f4f4"} />
         </Box>
       );
     }
@@ -38,9 +38,9 @@ const Chessboard = () => {
   // Create horizontal separators
   for (let i = 0; i < boardSize - 1; i++) {
     const position = [
-      -10,
+      0,
       separatorHeight / 2,
-      (i - (boardSize - 1) / 2) * (tileSize + gap) + tileSize / 2 + gap / 2 + 2,
+      (i - (boardSize - 1) / 2) * (tileSize + gap) + tileSize / 2 + gap / 2,
     ];
 
     separators.push(
@@ -57,12 +57,9 @@ const Chessboard = () => {
   // Create vertical separators
   for (let i = 0; i < boardSize - 1; i++) {
     const position = [
-      (i - (boardSize - 1) / 2) * (tileSize + gap) +
-        tileSize / 2 +
-        gap / 2 -
-        10,
+      (i - (boardSize - 1) / 2) * (tileSize + gap) + tileSize / 2 + gap / 2,
       separatorHeight / 2,
-      2,
+      0,
     ];
 
     separators.push(

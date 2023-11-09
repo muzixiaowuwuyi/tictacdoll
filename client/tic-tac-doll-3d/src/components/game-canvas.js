@@ -40,7 +40,7 @@ const GameCanvas = (props) => {
   );
 
   const handleSelectPiece = (pieceId) => {
-    dispatch(selectPiece(pieceId));
+    dispatch(selectPiece({ id: pieceId }));
   };
 
   return (
@@ -56,6 +56,7 @@ const GameCanvas = (props) => {
             position={piece.position}
             chessType={ChessType.PLAYER}
             floorPlane={floorPlane}
+            onClick={() => handleSelectPiece(piece.id)}
           />
         ))}
 
@@ -66,6 +67,7 @@ const GameCanvas = (props) => {
             position={piece.position}
             chessType={ChessType.PLAYER}
             floorPlane={floorPlane}
+            onClick={() => handleSelectPiece(piece.id)}
           />
         ))}
 
@@ -76,6 +78,7 @@ const GameCanvas = (props) => {
             position={piece.position}
             chessType={ChessType.PLAYER}
             floorPlane={floorPlane}
+            onClick={() => handleSelectPiece(piece.id)}
           />
         ))}
 
@@ -88,6 +91,7 @@ const GameCanvas = (props) => {
             position={piece.position}
             chessType={ChessType.COMPUTER}
             floorPlane={floorPlane}
+            onClick={() => handleSelectPiece(piece.id)}
           />
         ))}
 
@@ -98,6 +102,7 @@ const GameCanvas = (props) => {
             position={piece.position}
             chessType={ChessType.COMPUTER}
             floorPlane={floorPlane}
+            onClick={() => handleSelectPiece(piece.id)}
           />
         ))}
 
@@ -108,6 +113,7 @@ const GameCanvas = (props) => {
             position={piece.position}
             chessType={ChessType.COMPUTER}
             floorPlane={floorPlane}
+            onClick={() => handleSelectPiece(piece.id)}
           />
         ))}
 

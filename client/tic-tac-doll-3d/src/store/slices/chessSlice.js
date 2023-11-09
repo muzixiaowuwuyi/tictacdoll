@@ -54,14 +54,17 @@ const initialState = {
 };
 
 export const chessSlice = createSlice({
-  name: "chess", // slice 的名称
-  initialState, // 初始状态
+  name: "chess",
+  initialState,
   reducers: {
     // reducer 函数和对应的 action
     selectPiece: (state, action) => {
-      // 处理选择棋子的逻辑
+      const { id } = action.payload;
+      // 找到并更新棋子的状态，例如设置为活动棋子
+      state.players.human.activePiece = id;
     },
     placePiece: (state, action) => {
+      const { pieceId, position } = action.payload;
       // 处理放置棋子的逻辑
     },
     movePiece: (state, action) => {

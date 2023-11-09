@@ -28,10 +28,10 @@ const Chess = props => {
   };
 
   return (
-    <group {...otherProps} dispose={null} ref={groupRef} onClick={handleClick}>
+    <group {...otherProps} dispose={null} onClick={handleClick}>
       {/* Player's chesses */}
       {chessSize === ChessSize.LARGE && chessType === ChessType.PLAYER && (
-        <group position={position} rotation={[Math.PI / 2, 0, 0]}>
+        <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]}>
           <mesh castShadow receiveShadow geometry={nodes.materials1.geometry} material={materials.m010} />
           <mesh castShadow receiveShadow geometry={nodes.materials1_1.geometry} material={materials.m007} />
           <mesh castShadow receiveShadow geometry={nodes.materials1_2.geometry} material={materials.n} />
@@ -39,7 +39,7 @@ const Chess = props => {
         </group>
       )}
       {chessSize === ChessSize.MEDIUM && chessType === ChessType.PLAYER && (
-        <group position={position} rotation={[Math.PI / 2, 0, 0]} ref={props.setRef}>
+        <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]}>
           <mesh castShadow receiveShadow geometry={nodes.materials2.geometry} material={materials.m001} />
           <mesh castShadow receiveShadow geometry={nodes.materials2_1.geometry} material={materials.m002} />
           <mesh castShadow receiveShadow geometry={nodes.materials2_2.geometry} material={materials.n001} />
@@ -47,7 +47,7 @@ const Chess = props => {
         </group>
       )}
       {chessSize === ChessSize.SMALL && chessType === ChessType.PLAYER && (
-        <group position={position} rotation={[Math.PI / 2, 0, 0]} ref={props.setRef}>
+        <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]}>
           <mesh castShadow receiveShadow geometry={nodes.materials3.geometry} material={materials.m004} />
           <mesh castShadow receiveShadow geometry={nodes.materials3_1.geometry} material={materials.m005} />
           <mesh castShadow receiveShadow geometry={nodes.materials3_2.geometry} material={materials.m006} />
@@ -58,7 +58,7 @@ const Chess = props => {
       {/* Computer's chesses */}
 
       {chessSize === ChessSize.LARGE && chessType === ChessType.COMPUTER && (
-        <group position={position} rotation={[Math.PI / 2, 0, 0]}>
+        <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]}>
           <mesh castShadow receiveShadow geometry={nodes.materials1.geometry} material={materials.m010} />
           <mesh castShadow receiveShadow geometry={nodes.materials1_1.geometry} material={materials.m007}>
             <meshStandardMaterial color={"#517bc5"} />
@@ -69,7 +69,7 @@ const Chess = props => {
         </group>
       )}
       {chessSize === ChessSize.MEDIUM && chessType === ChessType.COMPUTER && (
-        <group position={position} rotation={[Math.PI / 2, 0, 0]}>
+        <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]}>
           <mesh castShadow receiveShadow geometry={nodes.materials2.geometry} material={materials.m001} />
           <mesh castShadow receiveShadow geometry={nodes.materials2_1.geometry} material={materials.m002}>
             <meshStandardMaterial color={"#517bc5"} />
@@ -79,7 +79,7 @@ const Chess = props => {
         </group>
       )}
       {chessSize === ChessSize.SMALL && chessType === ChessType.COMPUTER && (
-        <group position={position} rotation={[Math.PI / 2, 0, 0]}>
+        <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]}>
           <mesh castShadow receiveShadow geometry={nodes.materials3.geometry} material={materials.m004} />
           <mesh castShadow receiveShadow geometry={nodes.materials3_1.geometry} material={materials.m005} />
           <mesh castShadow receiveShadow geometry={nodes.materials3_2.geometry} material={materials.m006}>

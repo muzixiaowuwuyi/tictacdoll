@@ -23,17 +23,14 @@ const Chessboard = ({ onPiecePlaced }) => {
   const calculateTargetPosition = (x, y) => {};
 
   const handlePlacePiece = useCallback(
-    (x, y, z) => {
+    (x, y, position) => {
       // 检查逻辑: 确保activePiece存在，并且可以放置
       if (activePiece) {
-        // 计算目标位置（世界坐标）
-        const targetPosition = [0, 1.5, 0]; // calculateTargetPosition(x, y);
-
         // 如果需要，可以在这里添加更多的逻辑
         // ...
 
         // 触发放置棋子的动作
-        onPiecePlaced(activePiece, targetPosition);
+        onPiecePlaced(activePiece, [x, y], position);
       } else {
         // 错误处理或忽略点击事件
       }
@@ -58,7 +55,7 @@ const Chessboard = ({ onPiecePlaced }) => {
           onClick={() => {
             console.log(`Tile ${x}-${y} clicked`);
             console.log(position);
-            handlePlacePiece(x, y);
+            handlePlacePiece(x, y, position);
           }}
         >
           <meshBasicMaterial attach="material" color={"#f4f4f4"} />

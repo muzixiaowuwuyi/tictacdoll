@@ -31,7 +31,7 @@ const GameEnvironment = props => {
     dispatch(selectPiece({ id: piece.id, position: piece.position }));
   };
 
-  const handlePiecePlaced = (props, newPosition) => {
+  const handlePiecePlaced = (props, cell, newPosition) => {
     const [id, position] = props;
 
     const chessRef = chessRefs[id];
@@ -40,17 +40,19 @@ const GameEnvironment = props => {
       const [x, y, z] = newPosition; // 假设 newPosition 是一个包含 x, y, z 的对象
 
       // 启动动画
-      new TWEEN.Tween(position)
+      const animation = new TWEEN.Tween(position)
         .to({ x, y, z }, 1000)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           // 动画中的更新，如果需要
+          chessRef.current.position.x = x;
+          chessRef.current.position.z = z;
         })
         .onComplete(() => {
           // 动画完成后的状态更新
-          dispatch(placePiece({ pieceId: props, position: [x, y, z] })); // 假设棋盘是二维的，z 总是固定的
-        })
-        .start();
+          dispatch(placePiece({ pieceId: props, cell: cell, position: [x, y, z] })); // 假设棋盘是二维的，z 总是固定的
+        });
+      animation.start();
     }
   };
 

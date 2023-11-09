@@ -53,7 +53,7 @@ export const chessSlice = createSlice({
     },
 
     placePiece: (state, action) => {
-      const { pieceId, position } = action.payload;
+      const { pieceId, cell, position } = action.payload;
       // 这里的 position 是一个数组 [x, y], 表示棋盘的坐标
 
       // 找到要放置的棋子
@@ -62,7 +62,9 @@ export const chessSlice = createSlice({
         .find(p => p.id === pieceId);
 
       // 检查目标位置是否为空或者可以覆盖
-      const targetCell = state.board[position[0]][position[1]];
+      const [cellX, cellY] = cell;
+
+      const targetCell = state.board[cellX][cellY];
       const canPlace = !targetCell || state.players.human.pieces[targetCell.size].id > pieceId.size;
 
       if (piece && canPlace) {
@@ -70,7 +72,7 @@ export const chessSlice = createSlice({
         piece.position = position;
 
         // 更新棋盘状态
-        state.board[position[0]][position[1]] = {
+        state.board[cellX][cellY] = {
           size: piece.size,
           id: pieceId
         };

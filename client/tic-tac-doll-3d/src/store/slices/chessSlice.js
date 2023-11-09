@@ -10,19 +10,19 @@ const initialState = {
     human: {
       pieces: {
         large: [
-          { id: 1, position: [6.8, 0.72, 3.4] },
-          { id: 2, position: [6.8, 0.72, 1.8] },
-          { id: 3, position: [6.8, 0.72, 0.2] },
+          { id: 131, position: [6.8, 0.72, 3.4] },
+          { id: 132, position: [6.8, 0.72, 1.8] },
+          { id: 133, position: [6.8, 0.72, 0.2] },
         ],
         medium: [
-          { id: 4, position: [8.7, 0, 7.2] },
-          { id: 5, position: [8.7, 0, 5] },
-          { id: 6, position: [8.7, 0, 2.8] },
+          { id: 121, position: [8.7, 0, 7.2] },
+          { id: 122, position: [8.7, 0, 5] },
+          { id: 123, position: [8.7, 0, 2.8] },
         ],
         small: [
-          { id: 7, position: [5.8, 0, 7.5] },
-          { id: 8, position: [5.8, 0, 5.8] },
-          { id: 9, position: [5.8, 0, 4.1] },
+          { id: 111, position: [5.8, 0, 7.5] },
+          { id: 112, position: [5.8, 0, 5.8] },
+          { id: 113, position: [5.8, 0, 4.1] },
         ],
       },
       activePiece: null,
@@ -30,19 +30,19 @@ const initialState = {
     computer: {
       pieces: {
         large: [
-          { id: 10, position: [-7, 0.72, -3] },
-          { id: 11, position: [-7, 0.72, -1.5] },
-          { id: 12, position: [-7, 0.72, 0] },
+          { id: 231, position: [-7, 0.72, -3] },
+          { id: 232, position: [-7, 0.72, -1.5] },
+          { id: 233, position: [-7, 0.72, 0] },
         ],
         medium: [
-          { id: 13, position: [-13, 0, -6] },
-          { id: 14, position: [-13, 0, -3.5] },
-          { id: 15, position: [-13, 0, -1] },
+          { id: 221, position: [-13, 0, -6] },
+          { id: 222, position: [-13, 0, -3.5] },
+          { id: 223, position: [-13, 0, -1] },
         ],
         small: [
-          { id: 16, position: [-12, 0, -6] },
-          { id: 17, position: [-12, 0, -4] },
-          { id: 18, position: [-12, 0, -2] },
+          { id: 211, position: [-12, 0, -6] },
+          { id: 212, position: [-12, 0, -4] },
+          { id: 213, position: [-12, 0, -2] },
         ],
       },
     },
@@ -63,9 +63,32 @@ export const chessSlice = createSlice({
       // 找到并更新棋子的状态，例如设置为活动棋子
       state.players.human.activePiece = id;
     },
+
     placePiece: (state, action) => {
       const { pieceId, position } = action.payload;
-      // 处理放置棋子的逻辑
+      // 这里的 position 是一个数组 [x, y], 表示棋盘的坐标
+
+      // 找到要放置的棋子
+      const piece = Object.values(state.players.human.pieces)
+        .flat()
+        .find((p) => p.id === pieceId);
+
+      // 检查目标位置是否为空或者可以覆盖
+      const targetCell = state.board[position[0]][position[1]];
+      const canPlace =
+        !targetCell ||
+        state.players.human.pieces[targetCell.size].id > pieceId.size;
+
+      if (piece && canPlace) {
+        // 更新棋子位置
+        piece.position = position;
+
+        // 更新棋盘状态
+        state.board[position[0]][position[1]] = {
+          size: piece.size,
+          id: pieceId,
+        };
+      }
     },
     movePiece: (state, action) => {
       // 处理移动棋子的逻辑

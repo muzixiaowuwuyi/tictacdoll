@@ -1,11 +1,6 @@
-import { Suspense, useRef } from "react";
+import { Suspense, createRef, useRef, useState } from "react";
 import { Chess, ChessSize, ChessType } from "../models/chess";
-import {
-  Environment,
-  PerspectiveCamera,
-  OrbitControls,
-  Plane,
-} from "@react-three/drei";
+import { Environment, PerspectiveCamera, OrbitControls, Plane, useSelect } from "@react-three/drei";
 import { useLoader, useFrame } from "@react-three/fiber";
 import "./game-canvas.css";
 import * as THREE from "three";
@@ -16,45 +11,36 @@ import { useDispatch } from "react-redux";
 import { selectPiece, placePiece } from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 
-const GameEnvironment = (props) => {
+const GameEnvironment = props => {
   const dispatch = useDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, "/texture.png");
-  const playerLargePieces = useSelector(
-    (state) => state.chess.players.human.pieces.large
-  );
-  const playerMediumPieces = useSelector(
-    (state) => state.chess.players.human.pieces.medium
-  );
-  const playerSmallPieces = useSelector(
-    (state) => state.chess.players.human.pieces.small
-  );
-  const computerLargePieces = useSelector(
-    (state) => state.chess.players.computer.pieces.large
-  );
-  const computerMediumPieces = useSelector(
-    (state) => state.chess.players.computer.pieces.medium
-  );
-  const computerSmallPieces = useSelector(
-    (state) => state.chess.players.computer.pieces.small
-  );
-  const activePiece = useSelector(
-    (state) => state.chess.players.human.activePiece
-  );
-  const chessRefs = useRef({});
-  const handleSelectPiece = (pieceId, piecePosition) => {
-    console.log(`Chess ${pieceId} selected. its position is ${piecePosition}`);
-    dispatch(selectPiece({ id: pieceId }));
+  const playerLargePieces = useSelector(state => state.chess.players.human.pieces.large);
+  const playerMediumPieces = useSelector(state => state.chess.players.human.pieces.medium);
+  const playerSmallPieces = useSelector(state => state.chess.players.human.pieces.small);
+  const computerLargePieces = useSelector(state => state.chess.players.computer.pieces.large);
+  const computerMediumPieces = useSelector(state => state.chess.players.computer.pieces.medium);
+  const computerSmallPieces = useSelector(state => state.chess.players.computer.pieces.small);
+  const activePiece = useSelector(state => state.chess.players.human.activePiece);
+
+  const [chessRefs, setChessRefs] = useState({});
+
+  const onChessRefObtained = (ref, piece) => {
+    chessRefs[piece.id] = ref;
+    console.log(`Chess ${piece.id} selected. its position is ${piece.position}`);
+    dispatch(selectPiece({ id: piece.id, position: piece.position }));
   };
 
-  const handlePiecePlaced = (pieceId, newPosition) => {
-    const chessRef = chessRefs.current[pieceId];
+  const handlePiecePlaced = (props, newPosition) => {
+    const [id, position] = props;
+
+    const chessRef = chessRefs[id];
 
     if (chessRef && newPosition) {
-      const { x, y, z } = newPosition; // 假设 newPosition 是一个包含 x, y, z 的对象
+      const [x, y, z] = newPosition; // 假设 newPosition 是一个包含 x, y, z 的对象
 
       // 启动动画
-      new TWEEN.Tween(chessRef.position)
+      new TWEEN.Tween(position)
         .to({ x, y, z }, 1000)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
@@ -62,7 +48,7 @@ const GameEnvironment = (props) => {
         })
         .onComplete(() => {
           // 动画完成后的状态更新
-          dispatch(placePiece({ pieceId, position: [x, y] })); // 假设棋盘是二维的，z 总是固定的
+          dispatch(placePiece({ pieceId: props, position: [x, y, z] })); // 假设棋盘是二维的，z 总是固定的
         })
         .start();
     }
@@ -74,74 +60,80 @@ const GameEnvironment = (props) => {
       <Chessboard onPiecePlaced={handlePiecePlaced} />
 
       {/* player's chesses */}
-      {playerLargePieces.map((piece) => (
+      {playerLargePieces.map(piece => (
         <Chess
+          piece={piece}
           key={piece.id}
-          ref={(ref) => (chessRefs.current[piece.id] = ref)}
+          ref={chessRefs[piece.id]}
           chessSize={ChessSize.LARGE}
           position={piece.position}
           chessType={ChessType.PLAYER}
           floorPlane={floorPlane}
-          onClick={() => handleSelectPiece(piece.id, piece.position)}
+          onRefObtained={onChessRefObtained}
         />
       ))}
 
-      {playerMediumPieces.map((piece) => (
+      {playerMediumPieces.map(piece => (
         <Chess
+          piece={piece}
           key={piece.id}
-          ref={(ref) => (chessRefs.current[piece.id] = ref)}
+          ref={chessRefs[piece.id]}
           chessSize={ChessSize.MEDIUM}
           position={piece.position}
           chessType={ChessType.PLAYER}
           floorPlane={floorPlane}
-          onClick={() => handleSelectPiece(piece.id, piece.position)}
+          onRefObtained={onChessRefObtained}
         />
       ))}
 
-      {playerSmallPieces.map((piece) => (
+      {playerSmallPieces.map(piece => (
         <Chess
+          piece={piece}
           key={piece.id}
-          ref={(ref) => (chessRefs.current[piece.id] = ref)}
+          ref={chessRefs[piece.id]}
           chessSize={ChessSize.SMALL}
           position={piece.position}
           chessType={ChessType.PLAYER}
           floorPlane={floorPlane}
-          onClick={() => handleSelectPiece(piece.id, piece.position)}
+          onRefObtained={onChessRefObtained}
         />
       ))}
 
       {/* computer's chesses */}
 
-      {computerLargePieces.map((piece) => (
+      {computerLargePieces.map(piece => (
         <Chess
           key={piece.id}
+          ref={chessRefs[piece.id]}
           chessSize={ChessSize.LARGE}
           position={piece.position}
           chessType={ChessType.COMPUTER}
           floorPlane={floorPlane}
-          onClick={() => handleSelectPiece(piece.id)}
+          onRefObtained={onChessRefObtained}
         />
       ))}
 
-      {computerMediumPieces.map((piece) => (
+      {computerMediumPieces.map(piece => (
         <Chess
           key={piece.id}
+          ref={chessRefs[piece.id]}
           chessSize={ChessSize.MEDIUM}
           position={piece.position}
           chessType={ChessType.COMPUTER}
           floorPlane={floorPlane}
-          onClick={() => handleSelectPiece(piece.id)}
+          onRefObtained={onChessRefObtained}
         />
       ))}
 
-      {computerSmallPieces.map((piece) => (
+      {computerSmallPieces.map(piece => (
         <Chess
           key={piece.id}
+          ref={chessRefs[piece.id]}
           chessSize={ChessSize.SMALL}
           position={piece.position}
           chessType={ChessType.COMPUTER}
           floorPlane={floorPlane}
-          onClick={() => handleSelectPiece(piece.id)}
+          onRefObtained={onChessRefObtained}
         />
       ))}
 
@@ -159,6 +151,7 @@ const GameEnvironment = (props) => {
       <Plane position={[0, -5, -9]} args={[100, 100]}>
         <meshBasicMaterial attach="material" map={texture} />
       </Plane>
+      <OrbitControls />
     </Suspense>
   );
 };

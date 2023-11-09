@@ -1,55 +1,43 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  board: [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ],
+  board: [[null, null, null], [null, null, null], [null, null, null]],
   players: {
     human: {
       pieces: {
-        large: [
-          { id: 131, position: [6.8, 0.72, 3.4] },
-          { id: 132, position: [6.8, 0.72, 1.8] },
-          { id: 133, position: [6.8, 0.72, 0.2] },
-        ],
-        medium: [
-          { id: 121, position: [8.7, 0, 7.2] },
-          { id: 122, position: [8.7, 0, 5] },
-          { id: 123, position: [8.7, 0, 2.8] },
-        ],
+        large: [{ id: 120, position: [15, 1.5, 0] }, { id: 121, position: [15, 1.5, 3] }, { id: 122, position: [15, 1.5, 6] }],
+        medium: [{ id: 110, position: [12, 0.9, 0] }, { id: 111, position: [12, 0.9, 3] }, { id: 112, position: [12, 0.9, 6] }],
         small: [
-          { id: 111, position: [5.8, 0, 7.5] },
-          { id: 112, position: [5.8, 0, 5.8] },
-          { id: 113, position: [5.8, 0, 4.1] },
-        ],
+          { id: 100, position: [10, 0.57, 0] },
+          { id: 101, position: [10, 0.57, 3] },
+          { id: 102, position: [10, 0.57, 6] }
+        ]
       },
-      activePiece: null,
+      activePiece: null
     },
     computer: {
       pieces: {
         large: [
-          { id: 231, position: [-7, 0.72, -3] },
-          { id: 232, position: [-7, 0.72, -1.5] },
-          { id: 233, position: [-7, 0.72, 0] },
+          { id: 220, position: [-15, 1.5, 0] },
+          { id: 221, position: [-15, 1.5, -3] },
+          { id: 222, position: [-15, 1.5, -6] }
         ],
         medium: [
-          { id: 221, position: [-13, 0, -6] },
-          { id: 222, position: [-13, 0, -3.5] },
-          { id: 223, position: [-13, 0, -1] },
+          { id: 210, position: [-12, 0.9, 0] },
+          { id: 211, position: [-12, 0.9, -3] },
+          { id: 212, position: [-12, 0.9, -6] }
         ],
         small: [
-          { id: 211, position: [-12, 0, -6] },
-          { id: 212, position: [-12, 0, -4] },
-          { id: 213, position: [-12, 0, -2] },
-        ],
-      },
-    },
+          { id: 200, position: [-10, 0.57, 0] },
+          { id: 201, position: [-10, 0.57, -3] },
+          { id: 202, position: [-10, 0.57, -6] }
+        ]
+      }
+    }
   },
   currentPlayer: "human",
   gameState: "playing", // 'won', 'lost', 'tie' 'playing'
-  winCondition: null, // 胜利条件，例如 'row', 'column', 'diagonal', 'tie' 或 null
+  winCondition: null // 胜利条件，例如 'row', 'column', 'diagonal', 'tie' 或 null
   // history: [],
 };
 
@@ -59,9 +47,9 @@ export const chessSlice = createSlice({
   reducers: {
     // reducer 函数和对应的 action
     selectPiece: (state, action) => {
-      const { id } = action.payload;
+      const { id, position } = action.payload;
       // 找到并更新棋子的状态，例如设置为活动棋子
-      state.players.human.activePiece = id;
+      state.players.human.activePiece = [id, position];
     },
 
     placePiece: (state, action) => {
@@ -71,13 +59,11 @@ export const chessSlice = createSlice({
       // 找到要放置的棋子
       const piece = Object.values(state.players.human.pieces)
         .flat()
-        .find((p) => p.id === pieceId);
+        .find(p => p.id === pieceId);
 
       // 检查目标位置是否为空或者可以覆盖
       const targetCell = state.board[position[0]][position[1]];
-      const canPlace =
-        !targetCell ||
-        state.players.human.pieces[targetCell.size].id > pieceId.size;
+      const canPlace = !targetCell || state.players.human.pieces[targetCell.size].id > pieceId.size;
 
       if (piece && canPlace) {
         // 更新棋子位置
@@ -86,15 +72,15 @@ export const chessSlice = createSlice({
         // 更新棋盘状态
         state.board[position[0]][position[1]] = {
           size: piece.size,
-          id: pieceId,
+          id: pieceId
         };
       }
     },
     movePiece: (state, action) => {
       // 处理移动棋子的逻辑
-    },
+    }
     // ...其他 reducers
-  },
+  }
 });
 
 // 导出 action creators

@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { Chess, ChessSize, ChessType } from "../models/chess";
-
 import {
   Environment,
   PerspectiveCamera,
@@ -13,131 +12,104 @@ import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import Chessboard from "../models/chessboard";
 import { TextureLoader } from "three";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { selectPiece, placePiece, movePiece } from "../store/slices/chessSlice";
+
 const GameCanvas = (props) => {
+  const dispatch = useDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, "/texture.png");
+  const playerLargePieces = useSelector(
+    (state) => state.chess.players.human.pieces.large
+  );
+  const playerMediumPieces = useSelector(
+    (state) => state.chess.players.human.pieces.medium
+  );
+  const playerSmallPieces = useSelector(
+    (state) => state.chess.players.human.pieces.small
+  );
+  const computerLargePieces = useSelector(
+    (state) => state.chess.players.computer.pieces.large
+  );
+  const computerMediumPieces = useSelector(
+    (state) => state.chess.players.computer.pieces.medium
+  );
+  const computerSmallPieces = useSelector(
+    (state) => state.chess.players.computer.pieces.small
+  );
+
+  const handleSelectPiece = (pieceId) => {
+    dispatch(selectPiece(pieceId));
+  };
+
   return (
     <Canvas className="GameCanvas">
       <Suspense fallback={null}>
         <Chessboard />
-        <Chess
-          chessSize={ChessSize.LARGE}
-          position={[6.8, 0.72, 3.4]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.LARGE}
-          position={[6.8, 0.72, 1.8]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.LARGE}
-          position={[6.8, 0.72, 0.2]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
 
-        <Chess
-          chessSize={ChessSize.MEDIUM}
-          position={[8.7, 0, 7.2]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
+        {/* player's chesses */}
+        {playerLargePieces.map((piece) => (
+          <Chess
+            key={piece.id}
+            chessSize={ChessSize.LARGE}
+            position={piece.position}
+            chessType={ChessType.PLAYER}
+            floorPlane={floorPlane}
+          />
+        ))}
 
-        <Chess
-          chessSize={ChessSize.MEDIUM}
-          position={[8.7, 0, 5]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
+        {playerMediumPieces.map((piece) => (
+          <Chess
+            key={piece.id}
+            chessSize={ChessSize.MEDIUM}
+            position={piece.position}
+            chessType={ChessType.PLAYER}
+            floorPlane={floorPlane}
+          />
+        ))}
 
-        <Chess
-          chessSize={ChessSize.MEDIUM}
-          position={[8.7, 0, 2.8]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
-
-        <Chess
-          chessSize={ChessSize.SMALL}
-          position={[5.8, 0, 7.5]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.SMALL}
-          position={[5.8, 0, 5.8]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.SMALL}
-          position={[5.8, 0, 4.1]}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-        />
+        {playerSmallPieces.map((piece) => (
+          <Chess
+            key={piece.id}
+            chessSize={ChessSize.SMALL}
+            position={piece.position}
+            chessType={ChessType.PLAYER}
+            floorPlane={floorPlane}
+          />
+        ))}
 
         {/* computer's chesses */}
 
-        <Chess
-          chessSize={ChessSize.LARGE}
-          position={[-7, 0.72, -3]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.LARGE}
-          position={[-7, 0.72, -1.5]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.LARGE}
-          position={[-7, 0.72, 0]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
+        {computerLargePieces.map((piece) => (
+          <Chess
+            key={piece.id}
+            chessSize={ChessSize.LARGE}
+            position={piece.position}
+            chessType={ChessType.COMPUTER}
+            floorPlane={floorPlane}
+          />
+        ))}
 
-        <Chess
-          chessSize={ChessSize.MEDIUM}
-          position={[-13, 0, -6]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.MEDIUM}
-          position={[-13, 0, -3.5]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.MEDIUM}
-          position={[-13, 0, -1]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
+        {computerMediumPieces.map((piece) => (
+          <Chess
+            key={piece.id}
+            chessSize={ChessSize.MEDIUM}
+            position={piece.position}
+            chessType={ChessType.COMPUTER}
+            floorPlane={floorPlane}
+          />
+        ))}
 
-        <Chess
-          chessSize={ChessSize.SMALL}
-          position={[-12, 0, -6]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
-
-        <Chess
-          chessSize={ChessSize.SMALL}
-          position={[-12, 0, -4]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
-        <Chess
-          chessSize={ChessSize.SMALL}
-          position={[-12, 0, -2]}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-        />
+        {computerSmallPieces.map((piece) => (
+          <Chess
+            key={piece.id}
+            chessSize={ChessSize.SMALL}
+            position={piece.position}
+            chessType={ChessType.COMPUTER}
+            floorPlane={floorPlane}
+          />
+        ))}
 
         <OrbitControls
           minZoom={10}
@@ -148,7 +120,6 @@ const GameCanvas = (props) => {
           enableKeys={false}
         />
         <PerspectiveCamera makeDefault fov={35} position={[0, 24, 24]} />
-
         <Environment preset="city" />
         <ambientLight intensity={1} />
         <Plane position={[0, -5, -9]} args={[100, 100]}>

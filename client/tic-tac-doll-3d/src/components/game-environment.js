@@ -13,7 +13,7 @@ import Chessboard from "../models/chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { selectPiece } from "../store/slices/chessSlice";
+import { selectPiece, placePiece } from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 
 const GameEnvironment = (props) => {
@@ -47,10 +47,31 @@ const GameEnvironment = (props) => {
     dispatch(selectPiece({ id: pieceId }));
   };
 
+  const handlePiecePlaced = (pieceId, newPosition) => {
+    const chessRef = chessRefs.current[pieceId];
+
+    if (chessRef && newPosition) {
+      const { x, y, z } = newPosition; // 假设 newPosition 是一个包含 x, y, z 的对象
+
+      // 启动动画
+      new TWEEN.Tween(chessRef.position)
+        .to({ x, y, z }, 1000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+          // 动画中的更新，如果需要
+        })
+        .onComplete(() => {
+          // 动画完成后的状态更新
+          dispatch(placePiece({ pieceId, position: [x, y] })); // 假设棋盘是二维的，z 总是固定的
+        })
+        .start();
+    }
+  };
+
   useFrame(() => TWEEN.update());
   return (
     <Suspense fallback={null}>
-      <Chessboard />
+      <Chessboard onPiecePlaced={handlePiecePlaced} />
 
       {/* player's chesses */}
       {playerLargePieces.map((piece) => (

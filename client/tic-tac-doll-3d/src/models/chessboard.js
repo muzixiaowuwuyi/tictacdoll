@@ -22,10 +22,7 @@ const Chessboard = ({ onPiecePlaced }) => {
     (state) => state.chess.players.human.activePiece
   );
 
-  const calculateTargetPosition = (x, y) => {
-    // 根据 x 和 y 计算目标位置
-    // 注意这应该是基于 Three.js 世界坐标的计算
-  };
+  const calculateTargetPosition = (x, y) => {};
   const handlePlacePiece = useCallback(
     (x, y) => {
       // 检查逻辑: 确保activePiece存在，并且可以放置

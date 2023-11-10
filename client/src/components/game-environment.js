@@ -27,6 +27,7 @@ const GameEnvironment = props => {
 
     if (piece && piece.isMoved) {
       // TODO: Check if the chess is moved. If chess is moved, then do nothing
+      alert("Invalid move! Chess is placed!");
       dispatch(unselectPiece());
       return;
     }

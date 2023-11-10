@@ -1,6 +1,12 @@
 import { Suspense, createRef, useRef, useState } from "react";
 import { Chess, ChessSize, ChessType } from "../models/chess";
-import { Environment, PerspectiveCamera, OrbitControls, Plane, useSelect } from "@react-three/drei";
+import {
+  Environment,
+  PerspectiveCamera,
+  OrbitControls,
+  Plane,
+  useSelect,
+} from "@react-three/drei";
 import { useLoader, useFrame } from "@react-three/fiber";
 import "./game-canvas.css";
 import * as THREE from "three";
@@ -8,31 +14,78 @@ import Chessboard from "../models/chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { selectPiece, placePiece } from "../store/slices/chessSlice";
+import { selectPiece, unselectPiece } from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 
-const GameEnvironment = props => {
+const GameEnvironment = (props) => {
   const dispatch = useDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, "/texture.png");
-  const playerLargePieces = useSelector(state => state.chess.players.human.pieces.large);
-  const playerMediumPieces = useSelector(state => state.chess.players.human.pieces.medium);
-  const playerSmallPieces = useSelector(state => state.chess.players.human.pieces.small);
-  const computerLargePieces = useSelector(state => state.chess.players.computer.pieces.large);
-  const computerMediumPieces = useSelector(state => state.chess.players.computer.pieces.medium);
-  const computerSmallPieces = useSelector(state => state.chess.players.computer.pieces.small);
-  const activePiece = useSelector(state => state.chess.players.human.activePiece);
+  const playerLargePieces = useSelector(
+    (state) => state.chess.players.human.pieces.large
+  );
+  const playerMediumPieces = useSelector(
+    (state) => state.chess.players.human.pieces.medium
+  );
+  const playerSmallPieces = useSelector(
+    (state) => state.chess.players.human.pieces.small
+  );
+  const computerLargePieces = useSelector(
+    (state) => state.chess.players.computer.pieces.large
+  );
+  const computerMediumPieces = useSelector(
+    (state) => state.chess.players.computer.pieces.medium
+  );
+  const computerSmallPieces = useSelector(
+    (state) => state.chess.players.computer.pieces.small
+  );
+  const activePiece = useSelector(
+    (state) => state.chess.players.human.activePiece
+  );
 
   const [chessRefs, setChessRefs] = useState({});
 
   const onChessRefObtained = (ref, piece) => {
+    console.log(piece);
     chessRefs[piece.id] = ref;
-    console.log(`Chess ${piece.id} selected. its position is ${piece.position}`);
-    dispatch(selectPiece({ id: piece.id, position: piece.position }));
+    console.log("zheli");
+    console.log(activePiece);
+    // if (activePiece && activePiece.useID) {
+    //   return;
+    // }
+
+    if (activePiece === null || activePiece === undefined) {
+      // TODO: Check if the chess is moved. If chess is moved, then do nothing
+
+      dispatch(
+        selectPiece({
+          pieceId: piece.id,
+          position: piece.position,
+          isMoved: false,
+        })
+      );
+      return;
+    } else {
+      const [_, position, isMoved] = activePiece;
+
+      if (isMoved) {
+        dispatch(unselectPiece());
+        chessRefs[piece.id] = undefined;
+        return;
+      }
+    }
+
+    console.log(
+      `Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`
+    );
+    dispatch(
+      selectPiece({ id: piece.id, position: piece.position, isMoved: false })
+    );
   };
 
-  const handlePiecePlaced = (props, cell, newPosition) => {
-    const [id, position] = props;
+  const handlePiecePlaced = (activePiece, newPosition) => {
+    const [id, position] = activePiece;
+    console.log(activePiece);
 
     const chessRef = chessRefs[id];
 
@@ -50,9 +103,14 @@ const GameEnvironment = props => {
         })
         .onComplete(() => {
           // 动画完成后的状态更新
-          dispatch(placePiece({ pieceId: props, cell: cell, position: [x, y, z] })); // 假设棋盘是二维的，z 总是固定的
+          // dispatch(
+          //   placePiece({ pieceId: props, cell: cell, position: [x, y, z] })
+          // ); // 假设棋盘是二维的，z 总是固定的
         });
       animation.start();
+      dispatch(unselectPiece());
+
+      // dispatch(selectPiece({ pieceId: 0, position: null, isMoved: null }));
     }
   };
 
@@ -62,10 +120,11 @@ const GameEnvironment = props => {
       <Chessboard onPiecePlaced={handlePiecePlaced} />
 
       {/* player's chesses */}
-      {playerLargePieces.map(piece => (
+      {playerLargePieces.map((piece) => (
         <Chess
           piece={piece}
           key={piece.id}
+          useID={piece.id}
           ref={chessRefs[piece.id]}
           chessSize={ChessSize.LARGE}
           position={piece.position}
@@ -75,7 +134,7 @@ const GameEnvironment = props => {
         />
       ))}
 
-      {playerMediumPieces.map(piece => (
+      {playerMediumPieces.map((piece) => (
         <Chess
           piece={piece}
           key={piece.id}
@@ -88,7 +147,7 @@ const GameEnvironment = props => {
         />
       ))}
 
-      {playerSmallPieces.map(piece => (
+      {playerSmallPieces.map((piece) => (
         <Chess
           piece={piece}
           key={piece.id}
@@ -103,7 +162,7 @@ const GameEnvironment = props => {
 
       {/* computer's chesses */}
 
-      {computerLargePieces.map(piece => (
+      {computerLargePieces.map((piece) => (
         <Chess
           key={piece.id}
           ref={chessRefs[piece.id]}
@@ -115,7 +174,7 @@ const GameEnvironment = props => {
         />
       ))}
 
-      {computerMediumPieces.map(piece => (
+      {computerMediumPieces.map((piece) => (
         <Chess
           key={piece.id}
           ref={chessRefs[piece.id]}
@@ -127,7 +186,7 @@ const GameEnvironment = props => {
         />
       ))}
 
-      {computerSmallPieces.map(piece => (
+      {computerSmallPieces.map((piece) => (
         <Chess
           key={piece.id}
           ref={chessRefs[piece.id]}

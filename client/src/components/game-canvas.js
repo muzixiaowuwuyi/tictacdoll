@@ -1,4 +1,5 @@
 import "./game-canvas.css";
+
 import { Canvas } from "@react-three/fiber";
 import GameEnvironment from "./game-environment";
 const GameCanvas = (props) => {

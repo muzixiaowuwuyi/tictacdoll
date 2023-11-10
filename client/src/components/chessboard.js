@@ -1,10 +1,8 @@
 import React from "react";
 import { useCallback } from "react";
 import { Box } from "@react-three/drei";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+
 import PropTypes from "prop-types";
-import { placePiece, unselectPiece } from "../store/slices/chessSlice";
 
 const Chessboard = props => {
   const boardSize = 3; // 3x3 chessboard
@@ -19,7 +17,6 @@ const Chessboard = props => {
   const cells = [];
 
   const separators = [];
-  const dispatch = useDispatch();
 
   const handlePlacePiece = useCallback(
     (position, cell) => {
@@ -44,7 +41,6 @@ const Chessboard = props => {
           args={[cellSize, cellHeight, cellSize]}
           onClick={() => {
             console.log(`cell ${x}-${y} clicked`);
-            // console.log(position);
             handlePlacePiece(position, [x, y]);
           }}
         >

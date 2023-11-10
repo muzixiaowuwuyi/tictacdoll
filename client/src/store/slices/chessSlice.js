@@ -63,7 +63,7 @@ const initialState = {
     {
       id: 8,
       position: [10, 0.57, 6],
-      moved: false,
+      isMoved: false,
       size: ChessSize.SMALL,
       player: ChessType.HUMAN
     },
@@ -93,13 +93,6 @@ export const chessSlice = createSlice({
       const { piece } = action.payload;
       if (piece && piece.isMoved) state.activePiece = undefined;
       else state.activePiece = piece;
-
-      // 找到并更新棋子的状态，例如设置为活动棋子
-      // TODO: check if chess is moved, if moved, then return
-      // 找到要update的棋子
-      // let piece = Object.values(state.players.human.pieces)
-      //   .flat()
-      //   .find((p) => p.id === id);
     },
 
     unselectPiece: state => {
@@ -121,16 +114,14 @@ export const chessSlice = createSlice({
       state.currentPlayer = activePiece.player === ChessType.HUMAN ? ChessType.COMPUTER : ChessType.HUMAN;
 
       // TODO: Check winning condition
-    },
-    movePiece: (state, action) => {
-      // 处理移动棋子的逻辑
     }
+
     // ...其他 reducers
   }
 });
 
 // 导出 action creators
-export const { selectPiece, unselectPiece, placePiece, movePiece } = chessSlice.actions;
+export const { selectPiece, unselectPiece, placePiece } = chessSlice.actions;
 
 // 导出 reducer
 export default chessSlice.reducer;

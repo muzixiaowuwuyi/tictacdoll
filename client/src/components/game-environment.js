@@ -1,14 +1,14 @@
 import { Suspense, useState } from "react";
-import { Chess } from "../models/chess";
+import { Chess } from "./chess";
 import { Environment, PerspectiveCamera, OrbitControls, Plane, useSelect } from "@react-three/drei";
 import { useLoader, useFrame } from "@react-three/fiber";
 import "./game-canvas.css";
 import * as THREE from "three";
-import Chessboard from "../models/chessboard";
+import Chessboard from "./chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import chessSlice, { placePiece, selectPiece, unselectPiece } from "../store/slices/chessSlice";
+import { placePiece, selectPiece, unselectPiece } from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 
 const GameEnvironment = props => {
@@ -63,6 +63,8 @@ const GameEnvironment = props => {
 
     const chessRef = chessRefs[activePiece.id];
 
+    dispatch(placePiece({ activePiece, cell }));
+    dispatch(unselectPiece());
     if (chessRef && newPosition) {
       const [x, y, z] = newPosition; // 假设 newPosition 是一个包含 x, y, z 的对象
 
@@ -75,15 +77,8 @@ const GameEnvironment = props => {
           chessRef.current.position.x = x;
           chessRef.current.position.z = z;
         })
-        .onComplete(() => {
-          // 动画完成后的状态更新
-          // dispatch(
-          //   placePiece({ pieceId: props, cell: cell, position: [x, y, z] })
-          // ); // 假设棋盘是二维的，z 总是固定的
-        });
+        .onComplete(() => {});
       animation.start();
-      dispatch(placePiece({ activePiece, cell }));
-      dispatch(unselectPiece());
     }
   };
 
@@ -95,7 +90,6 @@ const GameEnvironment = props => {
         <Chess
           piece={piece}
           key={piece.id}
-          useID={piece.id}
           ref={chessRefs[piece.id]}
           chessSize={piece.size}
           position={piece.position}

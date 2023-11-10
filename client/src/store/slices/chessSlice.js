@@ -118,6 +118,8 @@ export const chessSlice = createSlice({
 
       // 更新棋盘状态
       state.cells[cellX][cellY] = activePiece.id;
+      state.currentPlayer = activePiece.player === ChessType.HUMAN ? ChessType.COMPUTER : ChessType.HUMAN;
+
       // TODO: Check winning condition
     },
     movePiece: (state, action) => {

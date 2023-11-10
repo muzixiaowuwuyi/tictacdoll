@@ -18,6 +18,7 @@ const GameEnvironment = props => {
 
   const chessPieces = useSelector(state => state.chess.chessPieces);
   const activePiece = useSelector(state => state.chess.activePiece);
+  const currentPlayer = useSelector(state => state.chess.currentPlayer);
   const cells = useSelector(state => state.chess.cells);
 
   const [chessRefs, setChessRefs] = useState({});
@@ -38,6 +39,11 @@ const GameEnvironment = props => {
   const handlePiecePlaced = (newPosition, cell) => {
     if (activePiece === undefined) return;
 
+    if (activePiece.player !== currentPlayer) {
+      alert("not your turn!");
+      return;
+    }
+
     // 检查目标位置是否为空或者可以覆盖
     const [cellX, cellY] = cell;
 
@@ -47,7 +53,7 @@ const GameEnvironment = props => {
     // If cell exists, check if we can place a new chess piece there.
     if (targetPiece && cells[cellX][cellY] !== undefined) {
       // If item on board has a bigger size, then do nothing and return
-      if (targetPiece.player === activePiece.player || targetPiece.size - activePiece.size >= 0) {
+      if (targetPiece.size - activePiece.size >= 0) {
         // TODO: Add logic showing error placement
         alert("Invalid move!");
         dispatch(unselectPiece());

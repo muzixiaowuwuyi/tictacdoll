@@ -27,7 +27,6 @@ const GameEnvironment = props => {
 
     if (piece && piece.isMoved) {
       // TODO: Check if the chess is moved. If chess is moved, then do nothing
-      alert("Invalid move! Chess is placed!");
       dispatch(unselectPiece());
       return;
     }
@@ -48,8 +47,9 @@ const GameEnvironment = props => {
     // If cell exists, check if we can place a new chess piece there.
     if (targetPiece && cells[cellX][cellY] !== undefined) {
       // If item on board has a bigger size, then do nothing and return
-      if (targetPiece.size - activePiece.size >= 0) {
+      if (targetPiece.player === activePiece.player || targetPiece.size - activePiece.size >= 0) {
         // TODO: Add logic showing error placement
+        alert("Invalid move!");
         dispatch(unselectPiece());
         return;
       }

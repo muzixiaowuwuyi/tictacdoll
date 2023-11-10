@@ -70,12 +70,12 @@ const initialState = {
     { id: 10, position: [-15, 1.5, 0], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
     { id: 11, position: [-15, 1.5, -3], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
     { id: 12, position: [-15, 1.5, -6], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
-    { id: 10, position: [-12, 0.9, 0], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
-    { id: 11, position: [-12, 0.9, -3], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
-    { id: 12, position: [-12, 0.9, -6], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
-    { id: 10, position: [-10, 0.57, 0], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER },
-    { id: 11, position: [-10, 0.57, -3], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER },
-    { id: 12, position: [-10, 0.57, -6], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER }
+    { id: 13, position: [-12, 0.9, 0], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
+    { id: 14, position: [-12, 0.9, -3], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
+    { id: 15, position: [-12, 0.9, -6], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
+    { id: 16, position: [-10, 0.57, 0], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER },
+    { id: 17, position: [-10, 0.57, -3], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER },
+    { id: 18, position: [-10, 0.57, -6], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER }
   ],
   currentPlayer: ChessType.HUMAN,
   activePiece: undefined

@@ -19,12 +19,10 @@ const Chessboard = ({ onPiecePlaced }) => {
   const separators = [];
   const dispatch = useDispatch();
 
-  const activePiece = useSelector(
-    (state) => state.chess.players.human.activePiece
-  );
+  const activePiece = useSelector(state => state.activePiece);
 
   const handlePlacePiece = useCallback(
-    (position) => {
+    position => {
       // 检查逻辑: 确保activePiece存在，并且可以放置
       if (activePiece) {
         // 如果需要，可以在这里添加更多的逻辑
@@ -47,7 +45,7 @@ const Chessboard = ({ onPiecePlaced }) => {
       const position = [
         (x - (boardSize - 1) / 2) * (cellSize + gap),
         cellHeight / 2,
-        (y - (boardSize - 1) / 2) * (cellSize + gap),
+        (y - (boardSize - 1) / 2) * (cellSize + gap)
       ];
 
       cells.push(
@@ -69,18 +67,10 @@ const Chessboard = ({ onPiecePlaced }) => {
 
   // Create horizontal separators
   for (let i = 0; i < boardSize - 1; i++) {
-    const position = [
-      0,
-      separatorHeight / 2,
-      (i - (boardSize - 1) / 2) * (cellSize + gap) + cellSize / 2 + gap / 2,
-    ];
+    const position = [0, separatorHeight / 2, (i - (boardSize - 1) / 2) * (cellSize + gap) + cellSize / 2 + gap / 2];
 
     separators.push(
-      <Box
-        key={`h-sep-${i}`}
-        position={position}
-        args={[totalSize, separatorHeight, gap]}
-      >
+      <Box key={`h-sep-${i}`} position={position} args={[totalSize, separatorHeight, gap]}>
         <meshBasicMaterial attach="material" color={"#c9b29a"} />
       </Box>
     );
@@ -88,18 +78,10 @@ const Chessboard = ({ onPiecePlaced }) => {
 
   // Create vertical separators
   for (let i = 0; i < boardSize - 1; i++) {
-    const position = [
-      (i - (boardSize - 1) / 2) * (cellSize + gap) + cellSize / 2 + gap / 2,
-      separatorHeight / 2,
-      0,
-    ];
+    const position = [(i - (boardSize - 1) / 2) * (cellSize + gap) + cellSize / 2 + gap / 2, separatorHeight / 2, 0];
 
     separators.push(
-      <Box
-        key={`v-sep-${i}`}
-        position={position}
-        args={[gap, separatorHeight, totalSize]}
-      >
+      <Box key={`v-sep-${i}`} position={position} args={[gap, separatorHeight, totalSize]}>
         <meshBasicMaterial attach="material" color={"#c9b29a"} />
       </Box>
     );
@@ -114,7 +96,7 @@ const Chessboard = ({ onPiecePlaced }) => {
 };
 
 Chessboard.propTypes = {
-  onPiecePlaced: PropTypes.func.isRequired,
+  onPiecePlaced: PropTypes.func.isRequired
 };
 
 export default Chessboard;

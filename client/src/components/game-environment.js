@@ -1,12 +1,6 @@
-import { Suspense, createRef, useRef, useState } from "react";
-import { Chess, ChessSize, ChessType } from "../models/chess";
-import {
-  Environment,
-  PerspectiveCamera,
-  OrbitControls,
-  Plane,
-  useSelect,
-} from "@react-three/drei";
+import { Suspense, useState } from "react";
+import { Chess } from "../models/chess";
+import { Environment, PerspectiveCamera, OrbitControls, Plane, useSelect } from "@react-three/drei";
 import { useLoader, useFrame } from "@react-three/fiber";
 import "./game-canvas.css";
 import * as THREE from "three";
@@ -14,34 +8,16 @@ import Chessboard from "../models/chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { selectPiece, unselectPiece } from "../store/slices/chessSlice";
+import chessSlice, { selectPiece, unselectPiece } from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 
-const GameEnvironment = (props) => {
+const GameEnvironment = props => {
   const dispatch = useDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, "/texture.png");
-  const playerLargePieces = useSelector(
-    (state) => state.chess.players.human.pieces.large
-  );
-  const playerMediumPieces = useSelector(
-    (state) => state.chess.players.human.pieces.medium
-  );
-  const playerSmallPieces = useSelector(
-    (state) => state.chess.players.human.pieces.small
-  );
-  const computerLargePieces = useSelector(
-    (state) => state.chess.players.computer.pieces.large
-  );
-  const computerMediumPieces = useSelector(
-    (state) => state.chess.players.computer.pieces.medium
-  );
-  const computerSmallPieces = useSelector(
-    (state) => state.chess.players.computer.pieces.small
-  );
-  const activePiece = useSelector(
-    (state) => state.chess.players.human.activePiece
-  );
+
+  const chessPieces = useSelector(state => state.chessPieces);
+  const activePiece = useSelector(state => state.activePiece);
 
   const [chessRefs, setChessRefs] = useState({});
 
@@ -54,33 +30,19 @@ const GameEnvironment = (props) => {
     //   return;
     // }
 
-    if (activePiece === null || activePiece === undefined) {
+    if (activePiece) {
       // TODO: Check if the chess is moved. If chess is moved, then do nothing
-
-      dispatch(
-        selectPiece({
-          pieceId: piece.id,
-          position: piece.position,
-          isMoved: false,
-        })
-      );
-      return;
-    } else {
       const [_, position, isMoved] = activePiece;
 
       if (isMoved) {
-        dispatch(unselectPiece());
+        dispatch(unselectPiece({ piece: piece }));
         chessRefs[piece.id] = undefined;
         return;
       }
     }
 
-    console.log(
-      `Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`
-    );
-    dispatch(
-      selectPiece({ id: piece.id, position: piece.position, isMoved: false })
-    );
+    console.log(`Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`);
+    dispatch(selectPiece({ id: piece.id, position: piece.position, isMoved: false }));
   };
 
   const handlePiecePlaced = (activePiece, newPosition) => {
@@ -118,86 +80,19 @@ const GameEnvironment = (props) => {
   return (
     <Suspense fallback={null}>
       <Chessboard onPiecePlaced={handlePiecePlaced} />
-
-      {/* player's chesses */}
-      {playerLargePieces.map((piece) => (
+      {chessPieces.map(piece => (
         <Chess
           piece={piece}
           key={piece.id}
           useID={piece.id}
           ref={chessRefs[piece.id]}
-          chessSize={ChessSize.LARGE}
+          chessSize={piece.type}
           position={piece.position}
-          chessType={ChessType.PLAYER}
+          chessType={piece.player}
           floorPlane={floorPlane}
           onRefObtained={onChessRefObtained}
         />
       ))}
-
-      {playerMediumPieces.map((piece) => (
-        <Chess
-          piece={piece}
-          key={piece.id}
-          ref={chessRefs[piece.id]}
-          chessSize={ChessSize.MEDIUM}
-          position={piece.position}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-          onRefObtained={onChessRefObtained}
-        />
-      ))}
-
-      {playerSmallPieces.map((piece) => (
-        <Chess
-          piece={piece}
-          key={piece.id}
-          ref={chessRefs[piece.id]}
-          chessSize={ChessSize.SMALL}
-          position={piece.position}
-          chessType={ChessType.PLAYER}
-          floorPlane={floorPlane}
-          onRefObtained={onChessRefObtained}
-        />
-      ))}
-
-      {/* computer's chesses */}
-
-      {computerLargePieces.map((piece) => (
-        <Chess
-          key={piece.id}
-          ref={chessRefs[piece.id]}
-          chessSize={ChessSize.LARGE}
-          position={piece.position}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-          onRefObtained={onChessRefObtained}
-        />
-      ))}
-
-      {computerMediumPieces.map((piece) => (
-        <Chess
-          key={piece.id}
-          ref={chessRefs[piece.id]}
-          chessSize={ChessSize.MEDIUM}
-          position={piece.position}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-          onRefObtained={onChessRefObtained}
-        />
-      ))}
-
-      {computerSmallPieces.map((piece) => (
-        <Chess
-          key={piece.id}
-          ref={chessRefs[piece.id]}
-          chessSize={ChessSize.SMALL}
-          position={piece.position}
-          chessType={ChessType.COMPUTER}
-          floorPlane={floorPlane}
-          onRefObtained={onChessRefObtained}
-        />
-      ))}
-
       <OrbitControls
         minZoom={10}
         maxZoom={50}

@@ -8,7 +8,7 @@ import Chessboard from "../models/chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import chessSlice, { selectPiece, unselectPiece } from "../store/slices/chessSlice";
+import chessSlice, { placePiece, selectPiece, unselectPiece } from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 
 const GameEnvironment = props => {
@@ -16,46 +16,52 @@ const GameEnvironment = props => {
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, "/texture.png");
 
-  const chessPieces = useSelector(state => state.chessPieces);
-  const activePiece = useSelector(state => state.activePiece);
+  const chessPieces = useSelector(state => state.chess.chessPieces);
+  const activePiece = useSelector(state => state.chess.activePiece);
+  const cells = useSelector(state => state.chess.cells);
 
   const [chessRefs, setChessRefs] = useState({});
 
   const onChessRefObtained = (ref, piece) => {
-    console.log(piece);
     chessRefs[piece.id] = ref;
-    console.log("zheli");
-    console.log(activePiece);
-    // if (activePiece && activePiece.useID) {
-    //   return;
-    // }
 
-    if (activePiece) {
+    if (piece && piece.isMoved) {
       // TODO: Check if the chess is moved. If chess is moved, then do nothing
-      const [_, position, isMoved] = activePiece;
+      dispatch(unselectPiece());
+      return;
+    }
 
-      if (isMoved) {
-        dispatch(unselectPiece({ piece: piece }));
-        chessRefs[piece.id] = undefined;
+    console.log(`Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`);
+    dispatch(selectPiece({ piece }));
+  };
+
+  const handlePiecePlaced = (newPosition, cell) => {
+    if (activePiece === undefined) return;
+
+    // 检查目标位置是否为空或者可以覆盖
+    const [cellX, cellY] = cell;
+
+    const targetPieceId = cells[cellX][cellY];
+    const targetPiece = chessPieces.find(p => p.id === targetPieceId);
+
+    // If cell exists, check if we can place a new chess piece there.
+    if (targetPiece && cells[cellX][cellY] !== undefined) {
+      // If item on board has a bigger size, then do nothing and return
+      if (targetPiece.size - activePiece.size >= 0) {
+        // TODO: Add logic showing error placement
+        alert("Invalid move!");
+        dispatch(unselectPiece());
         return;
       }
     }
 
-    console.log(`Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`);
-    dispatch(selectPiece({ id: piece.id, position: piece.position, isMoved: false }));
-  };
-
-  const handlePiecePlaced = (activePiece, newPosition) => {
-    const [id, position] = activePiece;
-    console.log(activePiece);
-
-    const chessRef = chessRefs[id];
+    const chessRef = chessRefs[activePiece.id];
 
     if (chessRef && newPosition) {
       const [x, y, z] = newPosition; // 假设 newPosition 是一个包含 x, y, z 的对象
 
       // 启动动画
-      const animation = new TWEEN.Tween(position)
+      const animation = new TWEEN.Tween(activePiece.position)
         .to({ x, y, z }, 1000)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
@@ -70,9 +76,8 @@ const GameEnvironment = props => {
           // ); // 假设棋盘是二维的，z 总是固定的
         });
       animation.start();
+      dispatch(placePiece({ activePiece, cell }));
       dispatch(unselectPiece());
-
-      // dispatch(selectPiece({ pieceId: 0, position: null, isMoved: null }));
     }
   };
 
@@ -86,7 +91,7 @@ const GameEnvironment = props => {
           key={piece.id}
           useID={piece.id}
           ref={chessRefs[piece.id]}
-          chessSize={piece.type}
+          chessSize={piece.size}
           position={piece.position}
           chessType={piece.player}
           floorPlane={floorPlane}

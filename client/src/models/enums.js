@@ -5,8 +5,8 @@ const ChessSize = {
 };
 
 const ChessType = {
-  PLAYER: "player",
-  COMPUTER: "computer"
+  HUMAN: 1,
+  COMPUTER: 2
 };
 
 export { ChessSize, ChessType };

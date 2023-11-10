@@ -12,11 +12,6 @@ const Chess = props => {
   const { chessSize, position, chessType, piece, useID, onRefObtained, ...otherProps } = props;
 
   const groupRef = useRef({});
-  const dispatch = useDispatch();
-  // const targetPiece = useSelector(
-  //   (state) => state.chess.players.human.pieces.chessSize
-  // );
-  const activePiece = useSelector(state => state.chess.players.human.activePiece);
 
   const handleClick = evt => {
     onRefObtained(groupRef, piece);
@@ -27,7 +22,7 @@ const Chess = props => {
   return (
     <group {...otherProps} dispose={null}>
       {/* Player's chesses */}
-      {chessSize === ChessSize.LARGE && chessType === ChessType.PLAYER && (
+      {chessSize === ChessSize.LARGE && chessType === ChessType.HUMAN && (
         <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]} onClick={handleClick}>
           <mesh castShadow receiveShadow geometry={nodes.materials1.geometry} material={materials.m010} />
           <mesh castShadow receiveShadow geometry={nodes.materials1_1.geometry} material={materials.m007} />
@@ -35,7 +30,7 @@ const Chess = props => {
           <mesh castShadow receiveShadow geometry={nodes.materials1_3.geometry} material={materials.m011} />
         </group>
       )}
-      {chessSize === ChessSize.MEDIUM && chessType === ChessType.PLAYER && (
+      {chessSize === ChessSize.MEDIUM && chessType === ChessType.HUMAN && (
         <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]} onClick={handleClick}>
           <mesh castShadow receiveShadow geometry={nodes.materials2.geometry} material={materials.m001} />
           <mesh castShadow receiveShadow geometry={nodes.materials2_1.geometry} material={materials.m002} />
@@ -43,7 +38,7 @@ const Chess = props => {
           <mesh castShadow receiveShadow geometry={nodes.materials2_3.geometry} material={materials.n003} />
         </group>
       )}
-      {chessSize === ChessSize.SMALL && chessType === ChessType.PLAYER && (
+      {chessSize === ChessSize.SMALL && chessType === ChessType.HUMAN && (
         <group position={position} ref={groupRef} rotation={[Math.PI / 2, 0, 0]} onClick={handleClick}>
           <mesh castShadow receiveShadow geometry={nodes.materials3.geometry} material={materials.m004} />
           <mesh castShadow receiveShadow geometry={nodes.materials3_1.geometry} material={materials.m005} />

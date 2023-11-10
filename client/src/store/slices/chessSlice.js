@@ -5,77 +5,77 @@ const initialState = {
   cells: [[null, null, null], [null, null, null], [null, null, null]],
   chessPieces: [
     {
-      id: 120,
+      id: 0,
       position: [15, 1.5, 0],
       isMoved: false,
       size: ChessSize.LARGE,
       player: ChessType.HUMAN
     },
     {
-      id: 121,
+      id: 1,
       position: [15, 1.5, 3],
       isMoved: false,
       size: ChessSize.LARGE,
       player: ChessType.HUMAN
     },
     {
-      id: 122,
+      id: 2,
       position: [15, 1.5, 6],
       isMoved: false,
       size: ChessSize.LARGE,
       player: ChessType.HUMAN
     },
     {
-      id: 110,
+      id: 3,
       position: [12, 0.9, 0],
       isMoved: false,
       size: ChessSize.MEDIUM,
       player: ChessType.HUMAN
     },
     {
-      id: 111,
+      id: 4,
       position: [12, 0.9, 3],
       isMoved: false,
       size: ChessSize.MEDIUM,
       player: ChessType.HUMAN
     },
     {
-      id: 112,
+      id: 5,
       position: [12, 0.9, 6],
       isMoved: false,
       size: ChessSize.MEDIUM,
       player: ChessType.HUMAN
     },
     {
-      id: 100,
+      id: 6,
       position: [10, 0.57, 0],
       isMoved: false,
       size: ChessSize.SMALL,
       player: ChessType.HUMAN
     },
     {
-      id: 101,
+      id: 7,
       position: [10, 0.57, 3],
       isMoved: false,
       size: ChessSize.SMALL,
       player: ChessType.HUMAN
     },
     {
-      id: 102,
+      id: 8,
       position: [10, 0.57, 6],
-      isMoved: false,
+      moved: false,
       size: ChessSize.SMALL,
       player: ChessType.HUMAN
     },
-    { id: 220, position: [-15, 1.5, 0], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
-    { id: 221, position: [-15, 1.5, -3], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
-    { id: 222, position: [-15, 1.5, -6], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
-    { id: 210, position: [-12, 0.9, 0], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
-    { id: 211, position: [-12, 0.9, -3], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
-    { id: 212, position: [-12, 0.9, -6], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
-    { id: 200, position: [-10, 0.57, 0], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER },
-    { id: 201, position: [-10, 0.57, -3], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER },
-    { id: 202, position: [-10, 0.57, -6], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER }
+    { id: 10, position: [-15, 1.5, 0], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
+    { id: 11, position: [-15, 1.5, -3], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
+    { id: 12, position: [-15, 1.5, -6], size: ChessSize.LARGE, isMoved: false, player: ChessType.COMPUTER },
+    { id: 10, position: [-12, 0.9, 0], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
+    { id: 11, position: [-12, 0.9, -3], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
+    { id: 12, position: [-12, 0.9, -6], size: ChessSize.MEDIUM, isMoved: false, player: ChessType.COMPUTER },
+    { id: 10, position: [-10, 0.57, 0], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER },
+    { id: 11, position: [-10, 0.57, -3], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER },
+    { id: 12, position: [-10, 0.57, -6], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER }
   ],
   currentPlayer: ChessType.HUMAN,
   activePiece: undefined
@@ -107,36 +107,18 @@ export const chessSlice = createSlice({
     },
 
     placePiece: (state, action) => {
-      const { pieceId, cell, position } = action.payload;
+      const { activePiece, cell } = action.payload;
 
-      // 找到要放置的棋子
-      const piece = state.pieces.find(p => p.id === pieceId);
-
-      // 检查目标位置是否为空或者可以覆盖
+      // find piece and update status
+      const currentPiece = state.chessPieces.find(p => p.id === activePiece.id);
       const [cellX, cellY] = cell;
-
-      const targetPiece = state.cells[cellX][cellY];
-
-      // If cell exists, check if we can place a new chess piece there.
-      if (targetPiece && state.cells[cellX][cellY]) {
-        const itemOnBoard = state.cells[cellX][cellY];
-        // If item on board has a bigger size, then do nothing and return
-        if (itemOnBoard.ChessSize - piece.ChessSize > 0) {
-          // TODO: Add logic showing error placement
-          return;
-        }
-      }
-
-      // 更新棋子位置
-      piece.position = position;
-      piece.isMoved = true;
+      // update piece status
+      currentPiece.isMoved = true;
+      currentPiece.position = activePiece.position;
 
       // 更新棋盘状态
-      state.cells[cellX][cellY] = piece;
+      state.cells[cellX][cellY] = activePiece.id;
       // TODO: Check winning condition
-
-      // TODO: Unset active chess and reference
-      dispatchEvent({});
     },
     movePiece: (state, action) => {
       // 处理移动棋子的逻辑

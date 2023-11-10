@@ -50,7 +50,6 @@ const GameEnvironment = props => {
       // If item on board has a bigger size, then do nothing and return
       if (targetPiece.size - activePiece.size >= 0) {
         // TODO: Add logic showing error placement
-        alert("Invalid move!");
         dispatch(unselectPiece());
         return;
       }

@@ -4,7 +4,7 @@ import { Box } from "@react-three/drei";
 
 import PropTypes from "prop-types";
 
-const Chessboard = props => {
+const Chessboard = (props) => {
   const boardSize = 3; // 3x3 chessboard
   const cellSize = 4.8; // size of each tile
   const cellHeight = 0.1; // height of the tile
@@ -27,11 +27,11 @@ const Chessboard = props => {
   // Create cells
   for (let x = 0; x < boardSize; x++) {
     for (let y = 0; y < boardSize; y++) {
-      // Calculate position for each tile
+      // Calculate position for each cell
       const position = [
         (x - (boardSize - 1) / 2) * (cellSize + gap),
         cellHeight / 2,
-        (y - (boardSize - 1) / 2) * (cellSize + gap)
+        (y - (boardSize - 1) / 2) * (cellSize + gap),
       ];
 
       cells.push(
@@ -52,10 +52,18 @@ const Chessboard = props => {
 
   // Create horizontal separators
   for (let i = 0; i < boardSize - 1; i++) {
-    const position = [0, separatorHeight / 2, (i - (boardSize - 1) / 2) * (cellSize + gap) + cellSize / 2 + gap / 2];
+    const position = [
+      0,
+      separatorHeight / 2,
+      (i - (boardSize - 1) / 2) * (cellSize + gap) + cellSize / 2 + gap / 2,
+    ];
 
     separators.push(
-      <Box key={`h-sep-${i}`} position={position} args={[totalSize, separatorHeight, gap]}>
+      <Box
+        key={`h-sep-${i}`}
+        position={position}
+        args={[totalSize, separatorHeight, gap]}
+      >
         <meshBasicMaterial attach="material" color={"#c9b29a"} />
       </Box>
     );
@@ -63,10 +71,18 @@ const Chessboard = props => {
 
   // Create vertical separators
   for (let i = 0; i < boardSize - 1; i++) {
-    const position = [(i - (boardSize - 1) / 2) * (cellSize + gap) + cellSize / 2 + gap / 2, separatorHeight / 2, 0];
+    const position = [
+      (i - (boardSize - 1) / 2) * (cellSize + gap) + cellSize / 2 + gap / 2,
+      separatorHeight / 2,
+      0,
+    ];
 
     separators.push(
-      <Box key={`v-sep-${i}`} position={position} args={[gap, separatorHeight, totalSize]}>
+      <Box
+        key={`v-sep-${i}`}
+        position={position}
+        args={[gap, separatorHeight, totalSize]}
+      >
         <meshBasicMaterial attach="material" color={"#c9b29a"} />
       </Box>
     );
@@ -81,7 +97,7 @@ const Chessboard = props => {
 };
 
 Chessboard.propTypes = {
-  onPiecePlaced: PropTypes.func.isRequired
+  onPiecePlaced: PropTypes.func.isRequired,
 };
 
 export default Chessboard;

@@ -1,6 +1,12 @@
 import { Suspense, useState } from "react";
 import { Chess } from "./chess";
-import { Environment, PerspectiveCamera, OrbitControls, Plane, useSelect } from "@react-three/drei";
+import {
+  Environment,
+  PerspectiveCamera,
+  OrbitControls,
+  Plane,
+  useSelect,
+} from "@react-three/drei";
 import { useLoader, useFrame } from "@react-three/fiber";
 import "./game-canvas.css";
 import * as THREE from "three";
@@ -8,18 +14,23 @@ import Chessboard from "./chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { placePiece, selectPiece, unselectPiece } from "../store/slices/chessSlice";
+import {
+  placePiece,
+  selectPiece,
+  unselectPiece,
+} from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
+import jumpAudio from "../musics/music-jump.mp3";
 
-const GameEnvironment = props => {
+const GameEnvironment = (props) => {
   const dispatch = useDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, "/texture.png");
 
-  const chessPieces = useSelector(state => state.chess.chessPieces);
-  const activePiece = useSelector(state => state.chess.activePiece);
-  const currentPlayer = useSelector(state => state.chess.currentPlayer);
-  const cells = useSelector(state => state.chess.cells);
+  const chessPieces = useSelector((state) => state.chess.chessPieces);
+  const activePiece = useSelector((state) => state.chess.activePiece);
+  const currentPlayer = useSelector((state) => state.chess.currentPlayer);
+  const cells = useSelector((state) => state.chess.cells);
 
   const [chessRefs, setChessRefs] = useState({});
 
@@ -32,7 +43,9 @@ const GameEnvironment = props => {
       return;
     }
 
-    console.log(`Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`);
+    console.log(
+      `Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`
+    );
     dispatch(selectPiece({ piece }));
   };
 
@@ -48,7 +61,7 @@ const GameEnvironment = props => {
     const [cellX, cellY] = cell;
 
     const targetPieceId = cells[cellX][cellY];
-    const targetPiece = chessPieces.find(p => p.id === targetPieceId);
+    const targetPiece = chessPieces.find((p) => p.id === targetPieceId);
 
     // If cell exists, check if we can place a new chess piece there.
     if (targetPiece && cells[cellX][cellY] !== undefined) {
@@ -65,20 +78,37 @@ const GameEnvironment = props => {
 
     dispatch(placePiece({ activePiece, cell }));
     dispatch(unselectPiece());
-    if (chessRef && newPosition) {
-      const [x, y, z] = newPosition; // 假设 newPosition 是一个包含 x, y, z 的对象
 
-      // 启动动画
-      const animation = new TWEEN.Tween(activePiece.position)
-        .to({ x, y, z }, 1000)
+    if (chessRef && newPosition) {
+      const [x, y, z] = newPosition;
+
+      const jumpSound = new Audio(jumpAudio);
+      const peakPos = {
+        x: (chessRef.current.position.x + x) / 2,
+        y: Math.max(chessRef.current.position.y, y) + 7,
+        z: (chessRef.current.position.z + z) / 2,
+      };
+
+      // star the animation
+      const horizontalTween = new TWEEN.Tween(chessRef.current.position)
+        .to({ x, z }, 500)
+        .onUpdate(() => {})
+        .onStart(() => {
+          jumpSound.play();
+        });
+
+      const upTween = new TWEEN.Tween(chessRef.current.position)
+        .to({ y: peakPos.y }, 250)
         .easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(() => {
-          // 动画中的更新，如果需要
-          chessRef.current.position.x = x;
-          chessRef.current.position.z = z;
-        })
-        .onComplete(() => {});
-      animation.start();
+        .onUpdate(() => {});
+
+      const downTween = new TWEEN.Tween(chessRef.current.position)
+        .to({ y: y + chessRef.current.position.y }, 250)
+        .easing(TWEEN.Easing.Quadratic.In)
+        .onUpdate(() => {});
+      upTween.chain(downTween);
+      horizontalTween.start();
+      upTween.start();
     }
   };
 
@@ -86,7 +116,7 @@ const GameEnvironment = props => {
   return (
     <Suspense fallback={null}>
       <Chessboard onPiecePlaced={handlePiecePlaced} />
-      {chessPieces.map(piece => (
+      {chessPieces.map((piece) => (
         <Chess
           piece={piece}
           key={piece.id}
@@ -98,21 +128,24 @@ const GameEnvironment = props => {
           onRefObtained={onChessRefObtained}
         />
       ))}
-      <OrbitControls
-        minZoom={10}
-        maxZoom={50}
-        enableRotate={false}
-        enableZoom={false}
-        enableDamping={false}
-        enableKeys={false}
-      />
       <PerspectiveCamera makeDefault fov={35} position={[0, 24, 24]} />
       <Environment preset="city" />
       <ambientLight intensity={1} />
-      <Plane position={[0, -5, -9]} args={[100, 100]}>
+      <Plane
+        position={[0, 0, -30]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        args={[200, 200]}
+      >
+        {/* <OrbitControls /> */}
         <meshBasicMaterial attach="material" map={texture} />
       </Plane>
-      <OrbitControls />
+      <OrbitControls
+        enableZoom={false}
+        minAzimuthAngle={-Math.PI / 8}
+        maxAzimuthAngle={Math.PI / 8}
+        minPolarAngle={Math.PI / 5}
+        maxPolarAngle={Math.PI - Math.PI / 1.4}
+      />
     </Suspense>
   );
 };

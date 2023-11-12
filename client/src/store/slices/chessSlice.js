@@ -78,7 +78,8 @@ const initialState = {
     { id: 18, position: [-10, 0.57, -6], size: ChessSize.SMALL, isMoved: false, player: ChessType.COMPUTER }
   ],
   currentPlayer: ChessType.HUMAN,
-  activePiece: undefined
+  activePiece: undefined,
+  winner: null
   // gameState: "playing", // 'won', 'lost', 'tie' 'playing'
   // winCondition: null // 胜利条件，例如 'row', 'column', 'diagonal', 'tie' 或 null
   // history: [],
@@ -113,8 +114,11 @@ export const chessSlice = createSlice({
       state.cells[cellX][cellY] = activePiece.id;
       const test = state.cells.flat();
       state.currentPlayer = activePiece.player === ChessType.HUMAN ? ChessType.COMPUTER : ChessType.HUMAN;
-
-      // TODO: Check winning condition
+    },
+    // TODO: Check winning condition
+    checkWinner: (state, action) => {
+      const { gamewinner } = action.payload;
+      state.winner = gamewinner;
     }
 
     // ...其他 reducers

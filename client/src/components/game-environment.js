@@ -8,7 +8,7 @@ import Chessboard from "./chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { placePiece, selectPiece, unselectPiece } from "../store/slices/chessSlice";
+import { placePiece, selectPiece, unselectPiece, CheckWinner } from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 import jumpAudio from "../musics/music-jump.mp3";
 // import CheckWinner from "../services/game-win-lose-service";
@@ -126,32 +126,82 @@ const GameEnvironment = props => {
     console.log(cells);
     if (cells[0][0] && cells[0][1] && cells[0][2]) {
       const piece1 = pieces.find(p => p.id === cells[0][0]);
-      console.log("you win");
-      console.log(piece1);
+      const piece2 = pieces.find(p => p.id === cells[0][1]);
+      const piece3 = pieces.find(p => p.id === cells[0][2]);
+      if (piece1.player === piece2.player && piece1.player === piece3.player) {
+        console.log(`${piece1.player} you win`);
+      }
     }
     if (cells[1][0] && cells[1][1] && cells[1][2]) {
-      console.log("you win");
+      const piece1 = pieces.find(p => p.id === cells[1][0]);
+      const piece2 = pieces.find(p => p.id === cells[1][1]);
+      const piece3 = pieces.find(p => p.id === cells[1][2]);
+      if (piece1.player === piece2.player && piece1.player === piece3.player) {
+        console.log(`${piece1.player} you win`);
+      }
     }
     if (cells[2][0] && cells[2][1] && cells[2][2]) {
-      console.log("you win");
+      const piece1 = pieces.find(p => p.id === cells[2][0]);
+      const piece2 = pieces.find(p => p.id === cells[2][1]);
+      const piece3 = pieces.find(p => p.id === cells[2][2]);
+      if (piece1.player === piece2.player && piece1.player === piece3.player) {
+        console.log(`${piece1.player} you win`);
+      }
     }
     if (cells[0][0] && cells[1][0] && cells[2][0]) {
-      console.log("you win");
+      const piece1 = pieces.find(p => p.id === cells[0][0]);
+      const piece2 = pieces.find(p => p.id === cells[1][0]);
+      const piece3 = pieces.find(p => p.id === cells[2][0]);
+      if (piece1.player === piece2.player && piece1.player === piece3.player) {
+        console.log(`${piece1.player} you win`);
+      }
     }
     if (cells[0][1] && cells[1][1] && cells[2][1]) {
-      console.log("you win");
+      const piece1 = pieces.find(p => p.id === cells[0][1]);
+      const piece2 = pieces.find(p => p.id === cells[1][1]);
+      const piece3 = pieces.find(p => p.id === cells[2][1]);
+      if (piece1.player === piece2.player && piece1.player === piece3.player) {
+        console.log(`${piece1.player} you win`);
+      }
     }
     if (cells[0][2] && cells[1][2] && cells[2][2]) {
-      console.log("you win");
+      const piece1 = pieces.find(p => p.id === cells[0][2]);
+      const piece2 = pieces.find(p => p.id === cells[1][2]);
+      const piece3 = pieces.find(p => p.id === cells[2][2]);
+      if (piece1.player === piece2.player && piece1.player === piece3.player) {
+        console.log(`${piece1.player} you win`);
+      }
     }
     if (cells[0][0] && cells[1][1] && cells[2][2]) {
-      console.log("you win");
+      const piece1 = pieces.find(p => p.id === cells[0][0]);
+      const piece2 = pieces.find(p => p.id === cells[1][1]);
+      const piece3 = pieces.find(p => p.id === cells[2][2]);
+      if (piece1.player === piece2.player && piece1.player === piece3.player) {
+        console.log(`${piece1.player} you win`);
+      }
     }
     if (cells[0][2] && cells[1][1] && cells[2][0]) {
-      console.log("you win");
+      const piece1 = pieces.find(p => p.id === cells[0][2]);
+      const piece2 = pieces.find(p => p.id === cells[1][1]);
+      const piece3 = pieces.find(p => p.id === cells[2][0]);
+      if (piece1.player === piece2.player && piece1.player === piece3.player) {
+        console.log(`${piece1.player} you win`);
+      }
     }
 
-    ////TODO: lose win or draw
+    if (
+      cells[0][0] &&
+      cells[0][1] &&
+      cells[0][2] &&
+      cells[1][0] &&
+      cells[1][1] &&
+      cells[1][2] &&
+      cells[2][0] &&
+      cells[2][1] &&
+      cells[2][2]
+    ) {
+      console.log("it is  draw");
+    }
   };
 
   useFrame(() => TWEEN.update());

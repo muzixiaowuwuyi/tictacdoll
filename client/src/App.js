@@ -1,12 +1,17 @@
 import "./App.css";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import GameCanvas from "./components/game-canvas";
-import Overlay from "./components/overlay";
+import Navbar from "./components/navbar";
+import Home from "./components/home";
 function App() {
   return (
-    <div className="App">
-      <Overlay />
-      <GameCanvas />
-    </div>
+    <BrowserRouter className="App">
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/game" element={<GameCanvas className="GameCanvas" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

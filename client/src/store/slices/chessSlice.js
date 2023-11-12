@@ -5,63 +5,63 @@ const initialState = {
   cells: [[null, null, null], [null, null, null], [null, null, null]],
   chessPieces: [
     {
-      id: 0,
+      id: 1,
       position: [15, 1.5, 0],
       isMoved: false,
       size: ChessSize.LARGE,
       player: ChessType.HUMAN
     },
     {
-      id: 1,
+      id: 2,
       position: [15, 1.5, 3],
       isMoved: false,
       size: ChessSize.LARGE,
       player: ChessType.HUMAN
     },
     {
-      id: 2,
+      id: 3,
       position: [15, 1.5, 6],
       isMoved: false,
       size: ChessSize.LARGE,
       player: ChessType.HUMAN
     },
     {
-      id: 3,
+      id: 4,
       position: [12, 0.9, 0],
       isMoved: false,
       size: ChessSize.MEDIUM,
       player: ChessType.HUMAN
     },
     {
-      id: 4,
+      id: 5,
       position: [12, 0.9, 3],
       isMoved: false,
       size: ChessSize.MEDIUM,
       player: ChessType.HUMAN
     },
     {
-      id: 5,
+      id: 6,
       position: [12, 0.9, 6],
       isMoved: false,
       size: ChessSize.MEDIUM,
       player: ChessType.HUMAN
     },
     {
-      id: 6,
+      id: 7,
       position: [10, 0.57, 0],
       isMoved: false,
       size: ChessSize.SMALL,
       player: ChessType.HUMAN
     },
     {
-      id: 7,
+      id: 8,
       position: [10, 0.57, 3],
       isMoved: false,
       size: ChessSize.SMALL,
       player: ChessType.HUMAN
     },
     {
-      id: 8,
+      id: 9,
       position: [10, 0.57, 6],
       isMoved: false,
       size: ChessSize.SMALL,
@@ -111,6 +111,7 @@ export const chessSlice = createSlice({
 
       // 更新棋盘状态
       state.cells[cellX][cellY] = activePiece.id;
+      const test = state.cells.flat();
       state.currentPlayer = activePiece.player === ChessType.HUMAN ? ChessType.COMPUTER : ChessType.HUMAN;
 
       // TODO: Check winning condition

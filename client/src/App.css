@@ -4,3 +4,15 @@
   width: 100%;
   color: #e5cac1;
 }
+
+/* .game-container {
+  height: 100vh;
+  width: 100vw;
+} */
+
+.GameCanvas {
+  font-family: sans-serif;
+  text-align: center;
+  height: 100vh !important;
+  width: 100vw;
+}

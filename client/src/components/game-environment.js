@@ -1,11 +1,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { Chess } from "./chess";
-import {
-  Environment,
-  PerspectiveCamera,
-  OrbitControls,
-  Plane,
-} from "@react-three/drei";
+import { ChessType } from "../models/enums";
+import { Environment, PerspectiveCamera, OrbitControls, Plane } from "@react-three/drei";
 import { useLoader, useFrame } from "@react-three/fiber";
 import "./game-canvas.css";
 import * as THREE from "three";
@@ -13,37 +9,33 @@ import Chessboard from "./chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import {
-  placePiece,
-  selectPiece,
-  unselectPiece,
-  endGame,
-} from "../store/slices/chessSlice";
+import { placePiece, selectPiece, unselectPiece, endGame } from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 import jumpAudio from "../musics/music-jump.mp3";
 import errorAudio from "../musics/error.mp3";
 import winAudio from "../musics/success.mp3";
 import { addGamedata } from "../apiService";
+import { findBestSpot, findRandomSpot } from "../services/computer-play-service";
 // import CheckWinner from "../services/game-win-lose-service";
 
-const GameEnvironment = (props) => {
+const GameEnvironment = props => {
   const dispatch = useDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, "/texture.png");
 
-  const chessPieces = useSelector((state) => state.chess.chessPieces);
-  const activePiece = useSelector((state) => state.chess.activePiece);
-  const currentPlayer = useSelector((state) => state.chess.currentPlayer);
-  const cells = useSelector((state) => state.chess.cells);
-  const pieces = useSelector((state) => state.chess.chessPieces);
+  const chessPieces = useSelector(state => state.chess.chessPieces);
+  const activePiece = useSelector(state => state.chess.activePiece);
+  const currentPlayer = useSelector(state => state.chess.currentPlayer);
+  const cells = useSelector(state => state.chess.cells);
+  const pieces = useSelector(state => state.chess.chessPieces);
 
-  const isInGame = useSelector((state) => state.chess.isInGame);
-  const intervalId = useSelector((state) => state.chess.intervalId);
+  const isInGame = useSelector(state => state.chess.isInGame);
+  const intervalId = useSelector(state => state.chess.intervalId);
   // const cells = useSelector(state => state.chess.cells);
   const [chessRefs, setChessRefs] = useState({});
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);
-  const duration = useSelector((state) => state.chess.duration);
+  const duration = useSelector(state => state.chess.duration);
 
   const onChessRefObtained = (ref, piece) => {
     chessRefs[piece.id] = ref;
@@ -59,9 +51,7 @@ const GameEnvironment = (props) => {
       return;
     }
 
-    console.log(
-      `Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`
-    );
+    console.log(`Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`);
 
     dispatch(selectPiece({ piece }));
   };
@@ -69,7 +59,7 @@ const GameEnvironment = (props) => {
   const handlePiecePlaced = (newPosition, cell) => {
     if (activePiece === undefined) return;
 
-    if (activePiece.player !== currentPlayer) {
+    if (activePiece.player !== ChessType.HUMAN) {
       //TODO: 把 alert 移除，放置到二维图层
       errorSound.play();
       setTimeout(() => {
@@ -83,7 +73,7 @@ const GameEnvironment = (props) => {
     const [cellX, cellY] = cell;
 
     const targetPieceId = cells[cellX][cellY];
-    const targetPiece = chessPieces.find((p) => p.id === targetPieceId);
+    const targetPiece = chessPieces.find(p => p.id === targetPieceId);
 
     if (targetPiece && cells[cellX][cellY] !== undefined) {
       if (targetPiece.size - activePiece.size >= 0) {
@@ -104,8 +94,6 @@ const GameEnvironment = (props) => {
     dispatch(placePiece({ activePiece, cell }));
     dispatch(unselectPiece());
 
-    ////TODO: check if is win
-
     if (chessRef && newPosition) {
       const [x, y, z] = newPosition;
 
@@ -113,7 +101,7 @@ const GameEnvironment = (props) => {
       const peakPos = {
         x: (chessRef.current.position.x + x) / 2,
         y: Math.max(chessRef.current.position.y, y) + 7,
-        z: (chessRef.current.position.z + z) / 2,
+        z: (chessRef.current.position.z + z) / 2
       };
 
       // star the animation
@@ -142,9 +130,38 @@ const GameEnvironment = (props) => {
     console.log(chessPieces);
   };
 
-  useEffect(() => {
-    CheckWinner();
-  }, [cells]);
+  useEffect(
+    () => {
+      ////TODO: check if is win
+      // const checkwin = new CheckWinner();
+      const useMinMax = Math.round(Math.random * 100);
+      let computerChess = biggestComputerChess();
+      let computerCell = [null, null];
+      if (useMinMax < 20) {
+        computerCell = findBestSpot(cells);
+      } else {
+        const [s, c] = findRandomSpot(cells, computerChess.size);
+        computerChess = c;
+        computerChess = smallestComputerChess(s);
+      }
+      CheckWinner();
+    },
+    [cells]
+  );
+
+  const smallestComputerChess = size => {
+    const availableChess = chessPieces.flat().filter(p => !p.isMoved && p.size > size && p.player === ChessType.COMPUTER);
+    const c = availableChess.sort((a, b) => a.size - b.size)[0];
+    return c;
+  };
+
+  const biggestComputerChess = () => {
+    const availableChess = chessPieces.flat().filter(p => !p.isMoved && p.player === ChessType.COMPUTER);
+    const c = availableChess.sort((a, b) => a.size - b.size)[0];
+    return c;
+  };
+
+  const computerRound = (piece, target) => {};
 
   ///TODO: adddata to server
 
@@ -156,7 +173,7 @@ const GameEnvironment = (props) => {
     const winnerData = {
       player: username,
       winner: piece1.player,
-      duration: seconds,
+      duration: seconds
     };
     if (piece1.player === piece2.player && piece1.player === piece3.player) {
       winnSound.play();
@@ -166,10 +183,10 @@ const GameEnvironment = (props) => {
       dispatch(endGame()); // 发送游戏数据到服务器
 
       addGamedata(winnerData)
-        .then((response) => {
+        .then(response => {
           console.log("Game data saved:", response);
         })
-        .catch((error) => {
+        .catch(error => {
           console.error("Failed to save game data:", error);
         });
     }
@@ -178,52 +195,52 @@ const GameEnvironment = (props) => {
 
   const CheckWinner = () => {
     if (cells[0][0] && cells[0][1] && cells[0][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][0]);
-      const piece2 = pieces.find((p) => p.id === cells[0][1]);
-      const piece3 = pieces.find((p) => p.id === cells[0][2]);
+      const piece1 = pieces.find(p => p.id === cells[0][0]);
+      const piece2 = pieces.find(p => p.id === cells[0][1]);
+      const piece3 = pieces.find(p => p.id === cells[0][2]);
 
       checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[1][0] && cells[1][1] && cells[1][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[1][0]);
-      const piece2 = pieces.find((p) => p.id === cells[1][1]);
-      const piece3 = pieces.find((p) => p.id === cells[1][2]);
+      const piece1 = pieces.find(p => p.id === cells[1][0]);
+      const piece2 = pieces.find(p => p.id === cells[1][1]);
+      const piece3 = pieces.find(p => p.id === cells[1][2]);
       checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[2][0] && cells[2][1] && cells[2][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[2][0]);
-      const piece2 = pieces.find((p) => p.id === cells[2][1]);
-      const piece3 = pieces.find((p) => p.id === cells[2][2]);
+      const piece1 = pieces.find(p => p.id === cells[2][0]);
+      const piece2 = pieces.find(p => p.id === cells[2][1]);
+      const piece3 = pieces.find(p => p.id === cells[2][2]);
       checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][0] && cells[1][0] && cells[2][0]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][0]);
-      const piece2 = pieces.find((p) => p.id === cells[1][0]);
-      const piece3 = pieces.find((p) => p.id === cells[2][0]);
+      const piece1 = pieces.find(p => p.id === cells[0][0]);
+      const piece2 = pieces.find(p => p.id === cells[1][0]);
+      const piece3 = pieces.find(p => p.id === cells[2][0]);
       checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][1] && cells[1][1] && cells[2][1]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][1]);
-      const piece2 = pieces.find((p) => p.id === cells[1][1]);
-      const piece3 = pieces.find((p) => p.id === cells[2][1]);
+      const piece1 = pieces.find(p => p.id === cells[0][1]);
+      const piece2 = pieces.find(p => p.id === cells[1][1]);
+      const piece3 = pieces.find(p => p.id === cells[2][1]);
       checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][2] && cells[1][2] && cells[2][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][2]);
-      const piece2 = pieces.find((p) => p.id === cells[1][2]);
-      const piece3 = pieces.find((p) => p.id === cells[2][2]);
+      const piece1 = pieces.find(p => p.id === cells[0][2]);
+      const piece2 = pieces.find(p => p.id === cells[1][2]);
+      const piece3 = pieces.find(p => p.id === cells[2][2]);
       checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][0] && cells[1][1] && cells[2][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][0]);
-      const piece2 = pieces.find((p) => p.id === cells[1][1]);
-      const piece3 = pieces.find((p) => p.id === cells[2][2]);
+      const piece1 = pieces.find(p => p.id === cells[0][0]);
+      const piece2 = pieces.find(p => p.id === cells[1][1]);
+      const piece3 = pieces.find(p => p.id === cells[2][2]);
       checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][2] && cells[1][1] && cells[2][0]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][2]);
-      const piece2 = pieces.find((p) => p.id === cells[1][1]);
-      const piece3 = pieces.find((p) => p.id === cells[2][0]);
+      const piece1 = pieces.find(p => p.id === cells[0][2]);
+      const piece2 = pieces.find(p => p.id === cells[1][1]);
+      const piece3 = pieces.find(p => p.id === cells[2][0]);
       checkWinCondition(piece1, piece2, piece3);
     }
 
@@ -248,7 +265,7 @@ const GameEnvironment = (props) => {
   return (
     <Suspense fallback={null}>
       <Chessboard onPiecePlaced={handlePiecePlaced} />
-      {chessPieces.map((piece) => (
+      {chessPieces.map(piece => (
         <Chess
           piece={piece}
           key={piece.id}
@@ -263,11 +280,7 @@ const GameEnvironment = (props) => {
       <PerspectiveCamera makeDefault fov={35} position={[0, 24, 24]} />
       <Environment preset="city" />
       <ambientLight intensity={1} />
-      <Plane
-        position={[0, 0, -10]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        args={[100, 100]}
-      >
+      <Plane position={[0, 0, -10]} rotation={[-Math.PI / 2, 0, 0]} args={[100, 100]}>
         {/* <OrbitControls /> */}
         <meshBasicMaterial attach="material" map={texture} />
       </Plane>

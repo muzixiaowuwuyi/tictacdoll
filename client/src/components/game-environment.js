@@ -1,6 +1,11 @@
 import { Suspense, useEffect, useState } from "react";
 import { Chess } from "./chess";
-import { Environment, PerspectiveCamera, OrbitControls, Plane, useSelect } from "@react-three/drei";
+import {
+  Environment,
+  PerspectiveCamera,
+  OrbitControls,
+  Plane,
+} from "@react-three/drei";
 import { useLoader, useFrame } from "@react-three/fiber";
 import "./game-canvas.css";
 import * as THREE from "three";
@@ -8,26 +13,43 @@ import Chessboard from "./chessboard";
 import { TextureLoader } from "three";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { placePiece, selectPiece, unselectPiece, CheckWinner } from "../store/slices/chessSlice";
+import {
+  placePiece,
+  selectPiece,
+  unselectPiece,
+  endGame,
+} from "../store/slices/chessSlice";
 import TWEEN from "@tweenjs/tween.js";
 import jumpAudio from "../musics/music-jump.mp3";
+import errorAudio from "../musics/error.mp3";
+import winAudio from "../musics/success.mp3";
 // import CheckWinner from "../services/game-win-lose-service";
 
-const GameEnvironment = props => {
+const GameEnvironment = (props) => {
   const dispatch = useDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, "/texture.png");
 
-  const chessPieces = useSelector(state => state.chess.chessPieces);
-  const activePiece = useSelector(state => state.chess.activePiece);
-  const currentPlayer = useSelector(state => state.chess.currentPlayer);
-  const cells = useSelector(state => state.chess.cells);
-  const pieces = useSelector(state => state.chess.chessPieces);
+  const chessPieces = useSelector((state) => state.chess.chessPieces);
+  const activePiece = useSelector((state) => state.chess.activePiece);
+  const currentPlayer = useSelector((state) => state.chess.currentPlayer);
+  const cells = useSelector((state) => state.chess.cells);
+  const pieces = useSelector((state) => state.chess.chessPieces);
+
+  const isInGame = useSelector((state) => state.chess.isInGame);
+  const intervalId = useSelector((state) => state.chess.intervalId);
   // const cells = useSelector(state => state.chess.cells);
   const [chessRefs, setChessRefs] = useState({});
+  const errorSound = new Audio(errorAudio);
+  const winnSound = new Audio(winAudio);
 
   const onChessRefObtained = (ref, piece) => {
     chessRefs[piece.id] = ref;
+
+    if (!isInGame) {
+      dispatch(unselectPiece());
+      return;
+    }
 
     if (piece && piece.isMoved) {
       // Check if the chess is moved. If chess is moved, then do nothing
@@ -35,7 +57,10 @@ const GameEnvironment = props => {
       return;
     }
 
-    console.log(`Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`);
+    console.log(
+      `Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`
+    );
+
     dispatch(selectPiece({ piece }));
   };
 
@@ -44,8 +69,10 @@ const GameEnvironment = props => {
 
     if (activePiece.player !== currentPlayer) {
       //TODO: 把 alert 移除，放置到二维图层
-
-      alert("not your turn!");
+      errorSound.play();
+      setTimeout(() => {
+        alert("not your turn!");
+      }, 500);
 
       return;
     }
@@ -54,17 +81,19 @@ const GameEnvironment = props => {
     const [cellX, cellY] = cell;
 
     const targetPieceId = cells[cellX][cellY];
-    const targetPiece = chessPieces.find(p => p.id === targetPieceId);
+    const targetPiece = chessPieces.find((p) => p.id === targetPieceId);
 
     // If cell exists, check if we can place a new chess piece there.
     if (targetPiece && cells[cellX][cellY] !== undefined) {
-      console.log(cells[cellX][cellY]);
-      console.log(targetPiece);
       // If item on board has a bigger size, then do nothing and return
       if (targetPiece.size - activePiece.size >= 0) {
         // Add logic showing error placement
         //TODO: 把 alert 移除，放置到二维图层
-        alert("Invalid move!");
+        errorSound.play();
+        setTimeout(() => {
+          alert("Invalid move!");
+        }, 500);
+
         dispatch(unselectPiece());
         return;
       }
@@ -78,8 +107,6 @@ const GameEnvironment = props => {
     ////TODO: check if is win
     // const checkwin = new CheckWinner();
 
-    console.log(`the active Piece is ${activePiece}`);
-    console.log(cell);
     if (chessRef && newPosition) {
       const [x, y, z] = newPosition;
 
@@ -87,7 +114,7 @@ const GameEnvironment = props => {
       const peakPos = {
         x: (chessRef.current.position.x + x) / 2,
         y: Math.max(chessRef.current.position.y, y) + 7,
-        z: (chessRef.current.position.z + z) / 2
+        z: (chessRef.current.position.z + z) / 2,
       };
 
       // star the animation
@@ -112,81 +139,78 @@ const GameEnvironment = props => {
       horizontalTween.start();
       upTween.start();
     }
+
+    console.log(chessPieces);
   };
 
-  useEffect(
-    () => {
-      CheckWinner();
-    },
-    [cells]
-  );
+  useEffect(() => {
+    CheckWinner();
+  }, [cells]);
+
+  const checkWinCondition = (piece1, piece2, piece3) => {
+    if (piece1.player === piece2.player && piece1.player === piece3.player) {
+      winnSound.play();
+      setTimeout(() => {
+        alert(`${piece1.player} you win`);
+      }, 1000);
+
+      console.log(`${piece1.player} you win`);
+      clearInterval(intervalId);
+      dispatch(endGame());
+    }
+  };
+
   const CheckWinner = () => {
     ////TODO: the rule of win
 
-    console.log(cells);
     if (cells[0][0] && cells[0][1] && cells[0][2]) {
-      const piece1 = pieces.find(p => p.id === cells[0][0]);
-      const piece2 = pieces.find(p => p.id === cells[0][1]);
-      const piece3 = pieces.find(p => p.id === cells[0][2]);
-      if (piece1.player === piece2.player && piece1.player === piece3.player) {
-        console.log(`${piece1.player} you win`);
-      }
+      const piece1 = pieces.find((p) => p.id === cells[0][0]);
+      const piece2 = pieces.find((p) => p.id === cells[0][1]);
+      const piece3 = pieces.find((p) => p.id === cells[0][2]);
+
+      checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[1][0] && cells[1][1] && cells[1][2]) {
-      const piece1 = pieces.find(p => p.id === cells[1][0]);
-      const piece2 = pieces.find(p => p.id === cells[1][1]);
-      const piece3 = pieces.find(p => p.id === cells[1][2]);
-      if (piece1.player === piece2.player && piece1.player === piece3.player) {
-        console.log(`${piece1.player} you win`);
-      }
+      const piece1 = pieces.find((p) => p.id === cells[1][0]);
+      const piece2 = pieces.find((p) => p.id === cells[1][1]);
+      const piece3 = pieces.find((p) => p.id === cells[1][2]);
+      checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[2][0] && cells[2][1] && cells[2][2]) {
-      const piece1 = pieces.find(p => p.id === cells[2][0]);
-      const piece2 = pieces.find(p => p.id === cells[2][1]);
-      const piece3 = pieces.find(p => p.id === cells[2][2]);
-      if (piece1.player === piece2.player && piece1.player === piece3.player) {
-        console.log(`${piece1.player} you win`);
-      }
+      const piece1 = pieces.find((p) => p.id === cells[2][0]);
+      const piece2 = pieces.find((p) => p.id === cells[2][1]);
+      const piece3 = pieces.find((p) => p.id === cells[2][2]);
+      checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][0] && cells[1][0] && cells[2][0]) {
-      const piece1 = pieces.find(p => p.id === cells[0][0]);
-      const piece2 = pieces.find(p => p.id === cells[1][0]);
-      const piece3 = pieces.find(p => p.id === cells[2][0]);
-      if (piece1.player === piece2.player && piece1.player === piece3.player) {
-        console.log(`${piece1.player} you win`);
-      }
+      const piece1 = pieces.find((p) => p.id === cells[0][0]);
+      const piece2 = pieces.find((p) => p.id === cells[1][0]);
+      const piece3 = pieces.find((p) => p.id === cells[2][0]);
+      checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][1] && cells[1][1] && cells[2][1]) {
-      const piece1 = pieces.find(p => p.id === cells[0][1]);
-      const piece2 = pieces.find(p => p.id === cells[1][1]);
-      const piece3 = pieces.find(p => p.id === cells[2][1]);
-      if (piece1.player === piece2.player && piece1.player === piece3.player) {
-        console.log(`${piece1.player} you win`);
-      }
+      const piece1 = pieces.find((p) => p.id === cells[0][1]);
+      const piece2 = pieces.find((p) => p.id === cells[1][1]);
+      const piece3 = pieces.find((p) => p.id === cells[2][1]);
+      checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][2] && cells[1][2] && cells[2][2]) {
-      const piece1 = pieces.find(p => p.id === cells[0][2]);
-      const piece2 = pieces.find(p => p.id === cells[1][2]);
-      const piece3 = pieces.find(p => p.id === cells[2][2]);
-      if (piece1.player === piece2.player && piece1.player === piece3.player) {
-        console.log(`${piece1.player} you win`);
-      }
+      const piece1 = pieces.find((p) => p.id === cells[0][2]);
+      const piece2 = pieces.find((p) => p.id === cells[1][2]);
+      const piece3 = pieces.find((p) => p.id === cells[2][2]);
+      checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][0] && cells[1][1] && cells[2][2]) {
-      const piece1 = pieces.find(p => p.id === cells[0][0]);
-      const piece2 = pieces.find(p => p.id === cells[1][1]);
-      const piece3 = pieces.find(p => p.id === cells[2][2]);
-      if (piece1.player === piece2.player && piece1.player === piece3.player) {
-        console.log(`${piece1.player} you win`);
-      }
+      const piece1 = pieces.find((p) => p.id === cells[0][0]);
+      const piece2 = pieces.find((p) => p.id === cells[1][1]);
+      const piece3 = pieces.find((p) => p.id === cells[2][2]);
+      checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][2] && cells[1][1] && cells[2][0]) {
-      const piece1 = pieces.find(p => p.id === cells[0][2]);
-      const piece2 = pieces.find(p => p.id === cells[1][1]);
-      const piece3 = pieces.find(p => p.id === cells[2][0]);
-      if (piece1.player === piece2.player && piece1.player === piece3.player) {
-        console.log(`${piece1.player} you win`);
-      }
+      const piece1 = pieces.find((p) => p.id === cells[0][2]);
+      const piece2 = pieces.find((p) => p.id === cells[1][1]);
+      const piece3 = pieces.find((p) => p.id === cells[2][0]);
+      checkWinCondition(piece1, piece2, piece3);
     }
 
     if (
@@ -201,6 +225,8 @@ const GameEnvironment = props => {
       cells[2][2]
     ) {
       console.log("it is  draw");
+      clearInterval(intervalId);
+      dispatch(endGame());
     }
   };
 
@@ -208,7 +234,7 @@ const GameEnvironment = props => {
   return (
     <Suspense fallback={null}>
       <Chessboard onPiecePlaced={handlePiecePlaced} />
-      {chessPieces.map(piece => (
+      {chessPieces.map((piece) => (
         <Chess
           piece={piece}
           key={piece.id}
@@ -223,7 +249,11 @@ const GameEnvironment = props => {
       <PerspectiveCamera makeDefault fov={35} position={[0, 24, 24]} />
       <Environment preset="city" />
       <ambientLight intensity={1} />
-      <Plane position={[0, 0, -30]} rotation={[-Math.PI / 2, 0, 0]} args={[200, 200]}>
+      <Plane
+        position={[0, 0, -30]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        args={[200, 200]}
+      >
         {/* <OrbitControls /> */}
         <meshBasicMaterial attach="material" map={texture} />
       </Plane>

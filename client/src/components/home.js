@@ -20,11 +20,13 @@ export default function Home() {
       return;
     }
 
-    dispatch(startGame());
     // 存储用户名在sessionStorage中
     sessionStorage.setItem("username", username);
     // 页面跳转到游戏界面
     navigate("/game");
+
+    ////start game and the timer
+    dispatch(startGame());
   };
 
   return (

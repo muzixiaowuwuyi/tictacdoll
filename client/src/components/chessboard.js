@@ -1,7 +1,7 @@
 import React from "react";
 import { useCallback } from "react";
 import { Box } from "@react-three/drei";
-
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 const Chessboard = (props) => {
@@ -11,6 +11,7 @@ const Chessboard = (props) => {
   const gap = 0.6; // gap between tile
   const separatorHeight = 0.1; // height of the separator, slightly higher than the tile
   const totalSize = boardSize * cellSize + (boardSize - 1) * gap + 1.5; // total size of the board including gaps
+  const gameState = useSelector((state) => state.chess.isInGame);
 
   const { onPiecePlaced } = props;
 
@@ -40,7 +41,8 @@ const Chessboard = (props) => {
           position={position}
           args={[cellSize, cellHeight, cellSize]}
           onClick={() => {
-            console.log(`cell ${x}-${y} clicked`);
+            console.log(`cell ${x}-${y} clicked and is in game: ${gameState}`);
+
             handlePlacePiece(position, [x, y]);
           }}
         >

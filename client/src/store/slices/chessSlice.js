@@ -2,9 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ChessSize, ChessType } from "../../models/enums";
 
 const initialState = {
-  gameStarted: false,
+  isInGame: false,
+  duration: 0,
+  intervalId: null,
+  startTime: null,
 
-  timeDuration: 0,
   cells: [
     [null, null, null],
     [null, null, null],
@@ -151,32 +153,35 @@ export const chessSlice = createSlice({
   initialState,
   reducers: {
     startGame: (state) => {
-      state.gameStarted = true;
+      state.isInGame = true;
       state.startTime = Date.now();
-      state.timeDuration = 0;
     },
 
     endGame: (state) => {
-      state.gameStarted = false;
+      state.isInGame = false;
     },
 
-    resetGame: (state) => {
-      // 重置游戏到初始状态
-      // 这里你需要根据你的游戏逻辑来重置所有相关状态
-      state.gameStarted = false;
-      state.startTime = null;
-      state.timeDuration = 0;
-      // ...重置棋盘和棋子等
+    // resetGame: (state) => {
+    //   // 重置游戏到初始状态
+    //   // 这里你需要根据你的游戏逻辑来重置所有相关状态
+    //   state.isInGame = true;
+    //   state.duration = 0;
+    //   // ...重置棋盘和棋子等
+    // },
+
+    setIntervalId: (state, action) => {
+      const { intervalId } = action.payload;
+      state.intervalId = intervalId;
     },
 
     updateDuration: (state, action) => {
-      state.timeDuration = action.payload;
+      const { duration } = action.payload;
+      state.duration = duration;
     },
 
-    resetTimer: (state) => {
-      state.timeDuration = 0;
-      state.startTime = null;
-    },
+    // resetTimer: (state) => {
+    //   state.timeDuration = 0;
+    // },
 
     // reducer 函数和对应的 action
     selectPiece: (state, action) => {
@@ -203,7 +208,7 @@ export const chessSlice = createSlice({
 
       // 更新棋盘状态
       state.cells[cellX][cellY] = activePiece.id;
-      const test = state.cells.flat();
+
       state.currentPlayer =
         activePiece.player === ChessType.HUMAN
           ? ChessType.COMPUTER
@@ -222,12 +227,14 @@ export const chessSlice = createSlice({
 // 导出 action creators
 export const {
   startGame,
+  setIntervalId,
   selectPiece,
   unselectPiece,
   placePiece,
   updateDuration,
   resetGame,
-  resetTimer,
+
+  endGame,
 } = chessSlice.actions;
 
 // 导出 reducer

@@ -1,38 +1,32 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { updateDuration, resetTimer } from "../store/slices/chessSlice";
+import { setIntervalId, updateDuration } from "../store/slices/chessSlice";
 
 import "./timer.css";
 
 const Timer = () => {
-  const gameState = useSelector((state) => state.chess.gameStarted);
-  const duration = useSelector((state) => state.chess.timeDuration);
   const dispatch = useDispatch();
-
-  ///////Later put in redux///////////////
+  const isInGame = useSelector((state) => state.chess.isInGame);
+  const startTime = useSelector((state) => state.chess.startTime);
+  const duration = useSelector((state) => state.chess.duration);
+  const timerId = useSelector((state) => state.chess.intervalId);
 
   useEffect(() => {
-    let intervalId;
-    if (gameState) {
-      const startTime = Date.now();
-      console.log(`startTime is at ${startTime}`);
-      intervalId = setInterval(() => {
-        // 更新计时器的时间
-        dispatch(updateDuration(Date.now() - startTime));
-        console.log(`allready passed ${Date.now() - startTime} seconds`);
+    if (isInGame) {
+      const id = setInterval(() => {
+        const d = Date.now() - startTime;
+        dispatch(updateDuration({ duration: d }));
       }, 1000);
-    } else if (!gameState && intervalId) {
-      clearInterval(intervalId);
-      dispatch(resetTimer()); // 游戏结束时重置计时器
+      dispatch(setIntervalId({ intervalId: id }));
     }
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [gameState]);
+    if (!isInGame) {
+      clearInterval(timerId);
+    }
+  }, [isInGame]);
 
   const formatTime = (totalSeconds) => {
+    totalSeconds = Math.floor(totalSeconds / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;

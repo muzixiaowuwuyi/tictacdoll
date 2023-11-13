@@ -20,7 +20,7 @@
 
 .startgame {
   animation-name: fadeIn;
-  animation-duration: 6s;
+  animation-duration: 5s;
   animation-fill-mode: both;
 }
 
@@ -35,7 +35,7 @@
 
 @keyframes slideInFromRightAndBounce {
   0% {
-    transform: translateX(100%);
+    transform: translateX(150%);
   }
   50%,
   100% {
@@ -50,17 +50,15 @@
 }
 
 .logo1 {
-  animation: slideInFromLeft 1.5s ease-out forwards;
+  width: 200px;
+  animation: slideInFromLeft 1.8s ease-out forwards;
 }
 
 .logo2 {
-  animation: slideInFromRightAndBounce 1s ease-out forwards;
+  animation: slideInFromRightAndBounce 3s ease-out forwards;
 
   width: 150px;
   padding-bottom: 10px;
-}
-.logo1 {
-  width: 200px;
 }
 
 .startgame {

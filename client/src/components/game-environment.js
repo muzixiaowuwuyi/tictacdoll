@@ -18,6 +18,9 @@ import { addGamedata } from "../apiService";
 import { findBestSpot, findRandomSpot } from "../services/computer-play-service";
 // import CheckWinner from "../services/game-win-lose-service";
 
+const gridPosition =
+  "[[-5.3999999999999995,0.05,-5.3999999999999995],[-5.3999999999999995,0.05,0],[-5.3999999999999995,0.05,5.3999999999999995],[0,0.05,-5.3999999999999995],[0,0.05,0],[0,0.05,5.3999999999999995],[5.3999999999999995,0.05,-5.3999999999999995],[5.3999999999999995,0.05,0],[5.3999999999999995,0.05,5.3999999999999995]]";
+
 const GameEnvironment = props => {
   const dispatch = useDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
@@ -31,13 +34,12 @@ const GameEnvironment = props => {
 
   const isInGame = useSelector(state => state.chess.isInGame);
   const intervalId = useSelector(state => state.chess.intervalId);
-  // const cells = useSelector(state => state.chess.cells);
   const [chessRefs, setChessRefs] = useState({});
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);
   const duration = useSelector(state => state.chess.duration);
 
-  const onChessRefObtained = (ref, piece) => {
+  const onChessClicked = (ref, piece) => {
     chessRefs[piece.id] = ref;
 
     if (!isInGame) {
@@ -54,6 +56,10 @@ const GameEnvironment = props => {
     console.log(`Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`);
 
     dispatch(selectPiece({ piece }));
+  };
+
+  const onChessRefCreated = (ref, piece) => {
+    chessRefs[piece.id] = ref;
   };
 
   const handlePiecePlaced = (newPosition, cell) => {
@@ -90,78 +96,127 @@ const GameEnvironment = props => {
     }
 
     const chessRef = chessRefs[activePiece.id];
+    const blockedCell = [activePiece.id, cell];
 
     dispatch(placePiece({ activePiece, cell }));
     dispatch(unselectPiece());
 
     if (chessRef && newPosition) {
-      const [x, y, z] = newPosition;
-
-      const jumpSound = new Audio(jumpAudio);
-      const peakPos = {
-        x: (chessRef.current.position.x + x) / 2,
-        y: Math.max(chessRef.current.position.y, y) + 7,
-        z: (chessRef.current.position.z + z) / 2
-      };
-
-      // star the animation
-      const horizontalTween = new TWEEN.Tween(chessRef.current.position)
-        .to({ x, z }, 500)
-        .onUpdate(() => {})
-        .onStart(() => {
-          jumpSound.play();
-        });
-
-      const upTween = new TWEEN.Tween(chessRef.current.position)
-        .to({ y: peakPos.y }, 250)
-        .easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(() => {});
-
-      const downTween = new TWEEN.Tween(chessRef.current.position)
-        .to({ y: y + chessRef.current.position.y }, 250)
-        .easing(TWEEN.Easing.Quadratic.In)
-        .onUpdate(() => {});
-
-      upTween.chain(downTween);
-      horizontalTween.start();
-      upTween.start();
+      jumpAnimation(chessRef, newPosition);
     }
 
+    setTimeout(() => {
+      CheckWinner();
+      computerRound(blockedCell);
+
+      // TODO: Fix winning condition
+    }, 1000);
+
     console.log(chessPieces);
+  };
+
+  const jumpAnimation = (chessRef, newPosition) => {
+    const [x, y, z] = newPosition;
+
+    const jumpSound = new Audio(jumpAudio);
+    const peakPos = {
+      x: (chessRef.current.position.x + x) / 2,
+      y: Math.max(chessRef.current.position.y, y) + 7,
+      z: (chessRef.current.position.z + z) / 2
+    };
+
+    // star the animation
+    const horizontalTween = new TWEEN.Tween(chessRef.current.position)
+      .to({ x, z }, 500)
+      .onUpdate(() => {})
+      .onStart(() => {
+        jumpSound.play();
+      });
+
+    const upTween = new TWEEN.Tween(chessRef.current.position)
+      .to({ y: peakPos.y }, 250)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(() => {});
+
+    const downTween = new TWEEN.Tween(chessRef.current.position)
+      .to({ y: y + chessRef.current.position.y }, 250)
+      .easing(TWEEN.Easing.Quadratic.In)
+      .onUpdate(() => {});
+
+    upTween.chain(downTween);
+    horizontalTween.start();
+    upTween.start();
+  };
+  const computerRound = blockedCell => {
+    const useMinMax = Math.round(Math.random * 100);
+    let computerChess = biggestComputerChess();
+    let computerCell = [null, null];
+    let updatedCells = [];
+
+    const [id, c] = blockedCell;
+    const [x, y] = c;
+
+    for (let cx = 0; cx < cells.length; cx++) {
+      const columns = [];
+      for (let cy = 0; cy < cells.length; cy++) {
+        if (x === cx && y === cy) columns.push(id);
+        else columns.push(cells[cx][cy]);
+      }
+      updatedCells.push(columns);
+    }
+
+    if (useMinMax < 10) {
+      computerCell = findBestSpot(updatedCells);
+    } else {
+      const remainingChess = getRemainingComputerChess();
+      const [cell, size] = findRandomSpot(updatedCells, computerChess.size, remainingChess);
+      computerCell = cell;
+
+      computerChess = smallestComputerChess(size);
+
+      if (cell === null || computerChess === undefined) {
+        CheckWinner();
+        dispatch(endGame());
+        return;
+      }
+    }
+
+    const gridPositions = JSON.parse(gridPosition);
+    const targetCell = computerCell[0] * 3 + computerCell[1];
+    const targetPosition = gridPositions[targetCell];
+
+    const ref = chessRefs[computerChess.id];
+    dispatch(placePiece({ activePiece: computerChess, cell: computerCell }));
+
+    jumpAnimation(ref, targetPosition);
+    CheckWinner();
+    // TODO: check computer is win
   };
 
   useEffect(
     () => {
       ////TODO: check if is win
       // const checkwin = new CheckWinner();
-      const useMinMax = Math.round(Math.random * 100);
-      let computerChess = biggestComputerChess();
-      let computerCell = [null, null];
-      if (useMinMax < 20) {
-        computerCell = findBestSpot(cells);
-      } else {
-        const [s, c] = findRandomSpot(cells, computerChess.size);
-        computerChess = c;
-        computerChess = smallestComputerChess(s);
-      }
       CheckWinner();
     },
     [cells]
   );
 
+  const getRemainingComputerChess = () => {
+    return chessPieces.flat().filter(p => !p.isMoved && p.player === ChessType.COMPUTER);
+  };
+
   const smallestComputerChess = size => {
-    const availableChess = chessPieces.flat().filter(p => !p.isMoved && p.size > size && p.player === ChessType.COMPUTER);
+    const availableChess = getRemainingComputerChess().filter(p => p.size > size);
     const c = availableChess.sort((a, b) => a.size - b.size)[0];
     return c;
   };
 
   const biggestComputerChess = () => {
-    const availableChess = chessPieces.flat().filter(p => !p.isMoved && p.player === ChessType.COMPUTER);
-    const c = availableChess.sort((a, b) => a.size - b.size)[0];
+    const availableChess = getRemainingComputerChess();
+    const c = availableChess.sort((a, b) => b.size - b.size)[0];
     return c;
   };
-
-  const computerRound = (piece, target) => {};
 
   ///TODO: adddata to server
 
@@ -189,8 +244,9 @@ const GameEnvironment = props => {
         .catch(error => {
           console.error("Failed to save game data:", error);
         });
+      return true;
     }
-    ////TODO: add apiservise
+    return false;
   };
 
   const CheckWinner = () => {
@@ -199,49 +255,49 @@ const GameEnvironment = props => {
       const piece2 = pieces.find(p => p.id === cells[0][1]);
       const piece3 = pieces.find(p => p.id === cells[0][2]);
 
-      checkWinCondition(piece1, piece2, piece3);
+      return checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[1][0] && cells[1][1] && cells[1][2]) {
       const piece1 = pieces.find(p => p.id === cells[1][0]);
       const piece2 = pieces.find(p => p.id === cells[1][1]);
       const piece3 = pieces.find(p => p.id === cells[1][2]);
-      checkWinCondition(piece1, piece2, piece3);
+      return checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[2][0] && cells[2][1] && cells[2][2]) {
       const piece1 = pieces.find(p => p.id === cells[2][0]);
       const piece2 = pieces.find(p => p.id === cells[2][1]);
       const piece3 = pieces.find(p => p.id === cells[2][2]);
-      checkWinCondition(piece1, piece2, piece3);
+      return checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][0] && cells[1][0] && cells[2][0]) {
       const piece1 = pieces.find(p => p.id === cells[0][0]);
       const piece2 = pieces.find(p => p.id === cells[1][0]);
       const piece3 = pieces.find(p => p.id === cells[2][0]);
-      checkWinCondition(piece1, piece2, piece3);
+      return checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][1] && cells[1][1] && cells[2][1]) {
       const piece1 = pieces.find(p => p.id === cells[0][1]);
       const piece2 = pieces.find(p => p.id === cells[1][1]);
       const piece3 = pieces.find(p => p.id === cells[2][1]);
-      checkWinCondition(piece1, piece2, piece3);
+      return checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][2] && cells[1][2] && cells[2][2]) {
       const piece1 = pieces.find(p => p.id === cells[0][2]);
       const piece2 = pieces.find(p => p.id === cells[1][2]);
       const piece3 = pieces.find(p => p.id === cells[2][2]);
-      checkWinCondition(piece1, piece2, piece3);
+      return checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][0] && cells[1][1] && cells[2][2]) {
       const piece1 = pieces.find(p => p.id === cells[0][0]);
       const piece2 = pieces.find(p => p.id === cells[1][1]);
       const piece3 = pieces.find(p => p.id === cells[2][2]);
-      checkWinCondition(piece1, piece2, piece3);
+      return checkWinCondition(piece1, piece2, piece3);
     }
     if (cells[0][2] && cells[1][1] && cells[2][0]) {
       const piece1 = pieces.find(p => p.id === cells[0][2]);
       const piece2 = pieces.find(p => p.id === cells[1][1]);
       const piece3 = pieces.find(p => p.id === cells[2][0]);
-      checkWinCondition(piece1, piece2, piece3);
+      return checkWinCondition(piece1, piece2, piece3);
     }
 
     if (
@@ -258,7 +314,9 @@ const GameEnvironment = props => {
       console.log("it is  draw");
       clearInterval(intervalId);
       dispatch(endGame());
+      return true;
     }
+    return false;
   };
 
   useFrame(() => TWEEN.update());
@@ -274,7 +332,8 @@ const GameEnvironment = props => {
           position={piece.position}
           chessType={piece.player}
           floorPlane={floorPlane}
-          onRefObtained={onChessRefObtained}
+          onClicked={onChessClicked}
+          onRefCreated={onChessRefCreated}
         />
       ))}
       <PerspectiveCamera makeDefault fov={35} position={[0, 24, 24]} />

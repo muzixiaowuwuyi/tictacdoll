@@ -11,6 +11,37 @@ const findBestSpot = board => {
   return result;
 };
 
+<<<<<<< HEAD
+const findRandomSpot = (board, maxChessSize, availableChess) => {
+  let randomX = -1;
+  let randomY = -1;
+
+  const hasSlot = board.flat().filter(b => b !== null || b < maxChessSize).length > 0;
+  if (!hasSlot) return null;
+
+  while (randomX === -1 || randomY === -1) {
+    randomY = Math.floor(Math.random() * 3);
+
+    const rows = board[randomY];
+    const rowHasSlot = rows.filter(b => b !== null || b < maxChessSize).length > 0;
+    if (!rowHasSlot) continue;
+
+    while (randomX === -1) {
+      randomX = Math.floor(Math.random() * 3);
+      if (rows[randomX] !== null && rows[randomX] > maxChessSize) {
+        randomX = -1;
+      }
+    }
+  }
+
+  const chessSize = 0;
+
+  const chess = availableChess.find(c => c.id === board[randomX][randomY]);
+  if (chess !== null && chess !== undefined) {
+    chessSize = chess.size;
+  }
+  return [[randomX, randomY], chessSize];
+=======
 const findRandomSpot = (board, maxChessSize) => {
   const slots = board.flat().filter(b => b === null || b < maxChessSize);
 
@@ -18,6 +49,7 @@ const findRandomSpot = (board, maxChessSize) => {
 
   const random = Math.floor(Math.random() * slots);
   return [restoreToGrid(random), slots[random] === null ? 0 : slots[random]];
+>>>>>>> 955ea16 (AI/wip)
 };
 
 const restoreToGrid = bestMove => {
@@ -94,4 +126,8 @@ const minimax = (board, player) => {
   }
 };
 
+<<<<<<< HEAD
+export { findBestSpot, findRandomSpot, restoreToGrid };
+=======
 export { findBestSpot, findRandomSpot };
+>>>>>>> 955ea16 (AI/wip)

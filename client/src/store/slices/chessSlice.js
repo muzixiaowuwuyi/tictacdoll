@@ -226,7 +226,6 @@ export const {
   placePiece,
   updateDuration,
   resetGame,
-  setGridPositions,
   endGame
 } = chessSlice.actions;
 

@@ -28,6 +28,7 @@ const Chessboard = props => {
     },
     [onPiecePlaced]
   );
+
   // Create cells
   for (let x = 0; x < boardSize; x++) {
     for (let y = 0; y < boardSize; y++) {
@@ -54,7 +55,7 @@ const Chessboard = props => {
     }
   }
 
-  dispatch(setGridPositions({ positions: grids }));
+  console.log(JSON.stringify(grids));
 
   // Create horizontal separators
   for (let i = 0; i < boardSize - 1; i++) {

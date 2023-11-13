@@ -3,8 +3,11 @@ import logo2 from "../logos/logo-2.png";
 import "./navbar.css";
 import OverPage from "./overpage";
 import Timer from "./timer";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
+  const gameEnded = useSelector((state) => state.chess.gameEnded);
+
   return (
     <div className="invisibal-container">
       <div className="navinfo">
@@ -15,9 +18,8 @@ export default function Navbar() {
           <img className="logo-doll-1" src={logo1} alt="logo-doll" />
         </div>
       </div>
-      <div className="game-info">
-        <OverPage className="overpage" />
-      </div>
+
+      {gameEnded && <OverPage className="overpage" />}
     </div>
   );
 }

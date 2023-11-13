@@ -1,11 +1,108 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .home-page {
+  background-image: url("../public/texture.png"); /* 替换为你的图片路径 */
+  background-size: cover; /* 背景图像覆盖整个div */
+  background-position: center; /* 图片居中 */
+  background-repeat: no-repeat; /* 防止背景重复 */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
+
+.startgame {
+  animation-name: fadeIn;
+  animation-duration: 6s;
+  animation-fill-mode: both;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRightAndBounce {
+  0% {
+    transform: translateX(100%);
+  }
+  50%,
+  100% {
+    transform: translateX(0);
+  }
+  70% {
+    transform: translateX(-10px);
+  }
+  90% {
+    transform: translateX(5px);
+  }
+}
+
+.logo1 {
+  animation: slideInFromLeft 1.5s ease-out forwards;
+}
+
+.logo2 {
+  animation: slideInFromRightAndBounce 1s ease-out forwards;
+
+  width: 150px;
+  padding-bottom: 10px;
+}
+.logo1 {
+  width: 200px;
+}
+
+.startgame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+}
+.username-input {
+  width: 200px;
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  /* color: #ddd; */
+
+  &:focus {
+    border-color: #888; /* 焦点时边框颜色变化 */
+    outline: none; /* 移除默认轮廓 */
+  }
+}
+
 .start-button {
-  display: block;
-  margin: 0 auto;
+  display: block; /* 块状元素 */
+  width: 200px; /* 充满容器宽度 */
+  padding: 10px 15px; /* 舒适的内边距 */
+  background-color: #e25026; /* 蓝色背景 */
+  color: white; /* 白色文字 */
+  border: none; /* 无边框 */
+  border-radius: 5px; /* 圆角 */
+  font-size: 16px; /* 清晰的字体大小 */
+  cursor: pointer; /* 鼠标悬停时光标变换 */
+
+  /* 鼠标悬停和点击效果 */
+  &:hover {
+    background-color: #f0a286; /* 悬停时更深的背景色 */
+    scale: 1.1;
+  }
+
+  &:active {
+    background-color: #f0a286; /* 点击时的背景色 */
+  }
 }

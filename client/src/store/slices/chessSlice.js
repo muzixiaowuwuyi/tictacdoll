@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ChessSize, ChessType } from "../../models/enums";
 
 const initialState = {
+  gameEnded: false,
   isInGame: false,
   duration: 0,
   intervalId: null,
@@ -143,9 +144,6 @@ const initialState = {
   currentPlayer: ChessType.HUMAN,
   activePiece: undefined,
   winner: null,
-  // gameState: "playing", // 'won', 'lost', 'tie' 'playing'
-  // winCondition: null // 胜利条件，例如 'row', 'column', 'diagonal', 'tie' 或 null
-  // history: [],
 };
 
 export const chessSlice = createSlice({
@@ -158,16 +156,9 @@ export const chessSlice = createSlice({
     },
 
     endGame: (state) => {
+      state.gameEnded = true;
       state.isInGame = false;
     },
-
-    // resetGame: (state) => {
-    //   // 重置游戏到初始状态
-    //   // 这里你需要根据你的游戏逻辑来重置所有相关状态
-    //   state.isInGame = true;
-    //   state.duration = 0;
-    //   // ...重置棋盘和棋子等
-    // },
 
     setIntervalId: (state, action) => {
       const { intervalId } = action.payload;

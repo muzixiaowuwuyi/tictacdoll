@@ -23,6 +23,7 @@ import TWEEN from "@tweenjs/tween.js";
 import jumpAudio from "../musics/music-jump.mp3";
 import errorAudio from "../musics/error.mp3";
 import winAudio from "../musics/success.mp3";
+import { addGamedata } from "../apiService";
 // import CheckWinner from "../services/game-win-lose-service";
 
 const GameEnvironment = (props) => {
@@ -42,6 +43,7 @@ const GameEnvironment = (props) => {
   const [chessRefs, setChessRefs] = useState({});
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);
+  const duration = useSelector((state) => state.chess.duration);
 
   const onChessRefObtained = (ref, piece) => {
     chessRefs[piece.id] = ref;
@@ -147,12 +149,24 @@ const GameEnvironment = (props) => {
     CheckWinner();
   }, [cells]);
 
+  ///TODO: adddata to server
+
+  // const gameSchema = new Schema({
+  //   player: String,
+  //   winner: Number,
+  //   duration: Number, // in seconds
+  //   createdAt: { type: Date, default: Date.now },
+  // });
+  // let data = sessionStorage.getItem("key");
+
   const checkWinCondition = (piece1, piece2, piece3) => {
+    const winnerData = {
+      player: sessionStorage.getItem("username"),
+      winner: piece1.player,
+      duration: duration,
+    };
     if (piece1.player === piece2.player && piece1.player === piece3.player) {
       winnSound.play();
-      setTimeout(() => {
-        alert(`${piece1.player} you win`);
-      }, 1000);
 
       console.log(`${piece1.player} you win`);
       clearInterval(intervalId);
@@ -250,9 +264,9 @@ const GameEnvironment = (props) => {
       <Environment preset="city" />
       <ambientLight intensity={1} />
       <Plane
-        position={[0, 0, -30]}
+        position={[0, 0, -10]}
         rotation={[-Math.PI / 2, 0, 0]}
-        args={[200, 200]}
+        args={[100, 100]}
       >
         {/* <OrbitControls /> */}
         <meshBasicMaterial attach="material" map={texture} />

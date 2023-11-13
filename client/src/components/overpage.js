@@ -1,22 +1,23 @@
 import { useNavigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
-// import { resetGame } from "../store/slices/chessSlice";
+import "./overpage.css";
+import { useState } from "react";
+import { fetchGamedata } from "../apiService";
 
 export default function OverPage() {
+  const [clName, setClName] = useState("game-info");
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const gameState = useSelector((state) => state.chess.isInGame);
 
   function handlePlayAgain() {
+    setClName("game-info pop-hide");
+
     navigate("/");
     window.location.reload();
-    // dispatch(resetGame());
   }
   return (
-    <>
-      <div>This is overpage</div>
-      <button onClick={handlePlayAgain}>Play Again</button>
-    </>
+    <div className={clName}>
+      <button className="again-button" onClick={handlePlayAgain}>
+        Play Again
+      </button>
+    </div>
   );
 }

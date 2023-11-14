@@ -85,9 +85,7 @@ const GameEnvironment = (props) => {
     const targetPieceId = cells[cellX][cellY];
     const targetPiece = chessPieces.find((p) => p.id === targetPieceId);
 
-    // If cell exists, check if we can place a new chess piece there.
     if (targetPiece && cells[cellX][cellY] !== undefined) {
-      // If item on board has a bigger size, then do nothing and return
       if (targetPiece.size - activePiece.size >= 0) {
         // Add logic showing error placement
         //TODO: 把 alert 移除，放置到二维图层
@@ -107,7 +105,6 @@ const GameEnvironment = (props) => {
     dispatch(unselectPiece());
 
     ////TODO: check if is win
-    // const checkwin = new CheckWinner();
 
     if (chessRef && newPosition) {
       const [x, y, z] = newPosition;
@@ -150,14 +147,6 @@ const GameEnvironment = (props) => {
   }, [cells]);
 
   ///TODO: adddata to server
-
-  // const gameSchema = new Schema({
-  //   player: String,
-  //   winner: Number,
-  //   duration: Number, // in seconds
-  //   createdAt: { type: Date, default: Date.now },
-  // });
-  // let data = sessionStorage.getItem("key");
 
   const checkWinCondition = (piece1, piece2, piece3) => {
     const winnerData = {

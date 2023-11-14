@@ -2,7 +2,6 @@ import "./home.css";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { startGame } from "../store/slices/chessSlice";
-import background from "../public/texture.png";
 import { useNavigate } from "react-router-dom";
 import logo1 from "../public/logo-1.png";
 import logo2 from "../public/logo-2.png";
@@ -22,13 +21,11 @@ export default function Home() {
 
   const handleStartGame = () => {
     if (!username.trim()) {
-      alert("Please enter a username."); // 提醒用户输入用户名
-      return;
+      alert("Please enter a username.");
     }
 
-    // 存储用户名在sessionStorage中
     sessionStorage.setItem("username", username);
-    // 页面跳转到游戏界面
+
     navigate("/game");
 
     ////start game and the timer
@@ -55,7 +52,6 @@ export default function Home() {
           </button>
         </div>
       )}
-      {/* <img className="background" src={background} alt="backgroud img" /> */}
     </div>
   );
 }

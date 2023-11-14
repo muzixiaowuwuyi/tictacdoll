@@ -25,6 +25,23 @@
   align-self: flex-end;
   text-shadow: 1px 1px 5px rgba(65, 64, 64, 0.486);
 }
+
+.timer {
+  margin-right: 60px;
+  color: #ffffff;
+  align-self: flex-end;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 8px;
+  height: 35px;
+  background-color: #e24f2684;
+  display: flex;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+}
+
 .logo_container {
   display: flex;
   justify-content: flex-end;

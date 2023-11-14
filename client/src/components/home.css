@@ -78,7 +78,7 @@
   /* color: #ddd; */
 
   &:focus {
-    border-color: #888; /* 焦点时边框颜色变化 */
+    border-color: #e25026; /* 焦点时边框颜色变化 */
     outline: none; /* 移除默认轮廓 */
   }
 }
@@ -93,14 +93,17 @@
   border-radius: 5px; /* 圆角 */
   font-size: 16px; /* 清晰的字体大小 */
   cursor: pointer; /* 鼠标悬停时光标变换 */
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* 平滑过渡效果 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
 
-  /* 鼠标悬停和点击效果 */
   &:hover {
-    background-color: #f0a286; /* 悬停时更深的背景色 */
-    scale: 1.1;
+    background-color: #f0a286;
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 悬停时阴影更大更深 */
   }
 
   &:active {
-    background-color: #f0a286; /* 点击时的背景色 */
+    background-color: #f0a286;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 点击时阴影更小更浅 */
   }
 }

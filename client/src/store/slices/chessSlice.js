@@ -153,11 +153,13 @@ export const chessSlice = createSlice({
     startGame: (state) => {
       state.isInGame = true;
       state.startTime = Date.now();
+      localStorage.setItem("gameStarted", "true");
     },
 
     endGame: (state) => {
       state.gameEnded = true;
       state.isInGame = false;
+      localStorage.setItem("gameStarted", "false");
     },
 
     setIntervalId: (state, action) => {
@@ -224,7 +226,6 @@ export const {
   placePiece,
   updateDuration,
   resetGame,
-
   endGame,
 } = chessSlice.actions;
 

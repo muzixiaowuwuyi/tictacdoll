@@ -23,6 +23,7 @@ const Timer = () => {
     if (!isInGame) {
       clearInterval(timerId);
     }
+    // return () => clearInterval(timerId);
   }, [isInGame]);
 
   const formatTime = (totalSeconds) => {

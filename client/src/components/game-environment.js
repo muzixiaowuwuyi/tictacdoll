@@ -149,23 +149,34 @@ const GameEnvironment = (props) => {
   ///TODO: adddata to server
 
   const checkWinCondition = (piece1, piece2, piece3) => {
+    const username = sessionStorage.getItem("username");
+    let seconds = Math.floor(duration / 1000);
+    console.log(`username ${username} win in ${seconds} seconds`);
+
     const winnerData = {
-      player: sessionStorage.getItem("username"),
+      player: username,
       winner: piece1.player,
-      duration: duration,
+      duration: seconds,
     };
     if (piece1.player === piece2.player && piece1.player === piece3.player) {
       winnSound.play();
 
       console.log(`${piece1.player} you win`);
       clearInterval(intervalId);
-      dispatch(endGame());
+      dispatch(endGame()); // 发送游戏数据到服务器
+
+      addGamedata(winnerData)
+        .then((response) => {
+          console.log("Game data saved:", response);
+        })
+        .catch((error) => {
+          console.error("Failed to save game data:", error);
+        });
     }
+    ////TODO: add apiservise
   };
 
   const CheckWinner = () => {
-    ////TODO: the rule of win
-
     if (cells[0][0] && cells[0][1] && cells[0][2]) {
       const piece1 = pieces.find((p) => p.id === cells[0][0]);
       const piece2 = pieces.find((p) => p.id === cells[0][1]);

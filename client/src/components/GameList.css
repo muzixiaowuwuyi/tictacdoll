@@ -1,0 +1,27 @@
+.game-list {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.053); /* 半透明白色背景 */
+  border-collapse: collapse;
+  margin-top: 12px;
+  margin-left: 50px;
+}
+
+.game-list th,
+.game-list td {
+  padding: 8px; /* 单元格内边距 */
+  border: 1px solid #fcc3aecd;
+  text-align: left; /* 文本对齐方式 */
+  color: rgb(255, 246, 237);
+}
+
+.game-list th {
+  background-color: #f0a28694;
+}
+
+.game-list tr:nth-child(even) {
+  background-color: #f0a2862d;
+}
+
+.game-list tr:nth-child(odd) {
+  background-color: #f0a28656;
+}

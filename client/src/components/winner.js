@@ -6,11 +6,10 @@ export default function Winner() {
   const username = sessionStorage.getItem("username");
 
   duration = Math.floor(duration / 1000);
-  console.log(username);
-  console.log(duration);
+
   return (
     <div className="winner-info">
-      <strong>Congratulations! 🎉</strong>
+      <strong>Congratulations! </strong>
       <span className="username-highlight">
         <strong>{username}</strong>
       </span>

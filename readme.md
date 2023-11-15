@@ -24,27 +24,27 @@ cd tic-tac-doll
 
 ```
 
-# Frontend dependencies
+## Frontend dependencies
 
 cd client
 npm install
 
-# Backend dependencies
+## Backend dependencies
 
 cd ../server
 npm install
 
-# Frontend
+## Frontend
 
 cd client
 npm start
 
-# Backend
+## Backend
 
 cd ../server
 npm start
 
-# Project Link
+## Project Link
 
-https://github.com/muzixiaowuwuyi/tictacdoll
-https://www.youtube.com/watch?v=e_wa6LVl4TQ
+GITHUB: https://github.com/muzixiaowuwuyi/tictacdoll
+YOUTUBE: https://www.youtube.com/watch?v=e_wa6LVl4TQ

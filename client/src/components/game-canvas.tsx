@@ -6,7 +6,7 @@ import GameEnvironment from "./game-environment";
 import { useDispatch } from "react-redux";
 import { startGame } from "../store/slices/chessSlice";
 
-const GameCanvas = (props) => {
+const GameCanvas = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {

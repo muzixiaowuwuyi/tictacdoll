@@ -5,25 +5,25 @@ import {Mesh, MeshStandardMaterial} from 'three';
 export type GameState = {
   gameEnded: boolean;
   isInGame: boolean;
-  duration: 0;
-  intervalId: null;
+  duration: number;
+  intervalId?: number;
   startTime: null | number;
 
-  cells: null[][];
+  cells: (null | number)[][];
 
-  chessPiece: ChessPiece[]
+  chessPieces: ChessPiece[]
 
-  currentPlayer: 1 | 2;
-  activePiece?: ChessPiece;
+  currentPlayer: number;
+  activePiece:  undefined | ChessPiece;
   winner: null
 };
 
 export type ChessPiece = {
   id: number;
   position: Vector3;
-  isMoved: boolean;
-  size: 1 | 2 | 3;
-  player: 1 | 2;
+  hasMoved: boolean;
+  size: number;
+  player: number;
 };
 
 export type GLTFResult = GLTF & {

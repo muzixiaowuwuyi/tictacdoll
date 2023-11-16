@@ -1,51 +1,60 @@
-import { Suspense, useEffect, useState } from "react";
-import { Chess } from "./chess";
+import { MutableRefObject, Suspense, useEffect, useState } from 'react';
+import { Chess } from './chess';
 import {
   Environment,
   PerspectiveCamera,
   OrbitControls,
   Plane,
-} from "@react-three/drei";
-import { useLoader, useFrame } from "@react-three/fiber";
-import "./game-canvas.css";
-import * as THREE from "three";
-import Chessboard from "./chessboard";
-import { TextureLoader } from "three";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+} from '@react-three/drei';
+import { useLoader, useFrame, Vector3 } from '@react-three/fiber';
+import './game-canvas.css';
+import * as THREE from 'three';
+import Chessboard from './chessboard';
+import { TextureLoader } from 'three';
+import { useAppSelector, useAppDispatch } from '../store/hooks';
 import {
   placePiece,
   selectPiece,
   unselectPiece,
   endGame,
-} from "../store/slices/chessSlice";
-import TWEEN from "@tweenjs/tween.js";
-import jumpAudio from "../musics/music-jump.mp3";
-import errorAudio from "../musics/error.mp3";
-import winAudio from "../musics/success.mp3";
-import { addGamedata } from "../apiService";
+} from '../store/slices/chessSlice';
+import TWEEN from '@tweenjs/tween.js';
+import jumpAudio from '../musics/music-jump.mp3';
+import errorAudio from '../musics/error.mp3';
+import winAudio from '../musics/success.mp3';
+import { addGamedata } from '../apiService';
+import { Group } from 'three';
+import { ChessPiece } from '../utils/types';
+
 // import CheckWinner from "../services/game-win-lose-service";
 
-const GameEnvironment = (props) => {
-  const dispatch = useDispatch();
+const GameEnvironment = () => {
+  const dispatch = useAppDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-  const texture = useLoader(TextureLoader, "/texture.png");
+  const texture = useLoader(TextureLoader, '/texture.png');
 
-  const chessPieces = useSelector((state) => state.chess.chessPieces);
-  const activePiece = useSelector((state) => state.chess.activePiece);
-  const currentPlayer = useSelector((state) => state.chess.currentPlayer);
-  const cells = useSelector((state) => state.chess.cells);
-  const pieces = useSelector((state) => state.chess.chessPieces);
+  const chessPieces = useAppSelector((state) => state.chess.chessPieces);
+  const activePiece = useAppSelector((state) => state.chess.activePiece);
+  const currentPlayer = useAppSelector((state) => state.chess.currentPlayer);
+  const cells = useAppSelector((state) => state.chess.cells);
+  const pieces = useAppSelector((state) => state.chess.chessPieces);
 
-  const isInGame = useSelector((state) => state.chess.isInGame);
-  const intervalId = useSelector((state) => state.chess.intervalId);
-  // const cells = useSelector(state => state.chess.cells);
-  const [chessRefs, setChessRefs] = useState({});
+  const isInGame = useAppSelector((state) => state.chess.isInGame);
+  const intervalId = useAppSelector((state) => state.chess.intervalId);
+  // const cells = useAppSelector(state => state.chess.cells);
+
+  const [chessRefs, setChessRefs] = useState<
+    Record<number, MutableRefObject<Group>>
+  >({});
+
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);
-  const duration = useSelector((state) => state.chess.duration);
+  const duration = useAppSelector((state) => state.chess.duration);
 
-  const onChessRefObtained = (ref, piece) => {
+  const onChessRefObtained = (
+    ref: MutableRefObject<Group>,
+    piece: ChessPiece
+  ) => {
     chessRefs[piece.id] = ref;
 
     if (!isInGame) {
@@ -53,28 +62,28 @@ const GameEnvironment = (props) => {
       return;
     }
 
-    if (piece && piece.isMoved) {
+    if (piece && piece.hasMoved) {
       // Check if the chess is moved. If chess is moved, then do nothing
       dispatch(unselectPiece());
       return;
     }
 
     console.log(
-      `Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`
+      `Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.hasMoved}`
     );
 
     dispatch(selectPiece({ piece }));
     return;
   };
 
-  const handlePiecePlaced = (newPosition, cell) => {
+  const handlePiecePlaced = (newPosition: Vector3, cell: number[]) => {
     if (activePiece === undefined) return;
 
     if (activePiece.player !== currentPlayer) {
       //TODO: 把 alert 移除，放置到二维图层
       errorSound.play();
       setTimeout(() => {
-        alert("not your turn!");
+        alert('not your turn!');
       }, 500);
 
       return;
@@ -92,7 +101,7 @@ const GameEnvironment = (props) => {
         //TODO: 把 alert 移除，放置到二维图层
         errorSound.play();
         setTimeout(() => {
-          alert("Invalid move!");
+          alert('Invalid move!');
         }, 500);
 
         dispatch(unselectPiece());
@@ -102,13 +111,14 @@ const GameEnvironment = (props) => {
 
     const chessRef = chessRefs[activePiece.id];
 
+    // console.log(activePiece, cell)
     dispatch(placePiece({ activePiece, cell }));
     dispatch(unselectPiece());
 
     ////TODO: check if is win
 
     if (chessRef && newPosition) {
-      const [x, y, z] = newPosition;
+      const {x, y, z} = newPosition as {x: number, y:number, z:number}
 
       const jumpSound = new Audio(jumpAudio);
       const peakPos = {
@@ -140,7 +150,8 @@ const GameEnvironment = (props) => {
       upTween.start();
     }
 
-    console.log(chessPieces);
+    // console.log(chessPieces);
+    return;
   };
 
   useEffect(() => {
@@ -149,8 +160,8 @@ const GameEnvironment = (props) => {
 
   ///TODO: adddata to server
 
-  const checkWinCondition = (piece1, piece2, piece3) => {
-    const username = sessionStorage.getItem("username");
+  const checkWinCondition = (piece1 : ChessPiece, piece2 : ChessPiece, piece3 : ChessPiece) => {
+    const username = sessionStorage.getItem('username');
     let seconds = Math.floor(duration / 1000);
     console.log(`username ${username} win in ${seconds} seconds`);
 
@@ -168,10 +179,10 @@ const GameEnvironment = (props) => {
 
       addGamedata(winnerData)
         .then((response) => {
-          console.log("Game data saved:", response);
+          console.log('Game data saved:', response);
         })
         .catch((error) => {
-          console.error("Failed to save game data:", error);
+          console.error('Failed to save game data:', error);
         });
     }
     ////TODO: add apiservise
@@ -183,49 +194,49 @@ const GameEnvironment = (props) => {
       const piece2 = pieces.find((p) => p.id === cells[0][1]);
       const piece3 = pieces.find((p) => p.id === cells[0][2]);
 
-      checkWinCondition(piece1, piece2, piece3);
+      checkWinCondition(piece1!, piece2!, piece3!);
     }
     if (cells[1][0] && cells[1][1] && cells[1][2]) {
       const piece1 = pieces.find((p) => p.id === cells[1][0]);
       const piece2 = pieces.find((p) => p.id === cells[1][1]);
       const piece3 = pieces.find((p) => p.id === cells[1][2]);
-      checkWinCondition(piece1, piece2, piece3);
+      checkWinCondition(piece1!, piece2!, piece3!);
     }
     if (cells[2][0] && cells[2][1] && cells[2][2]) {
       const piece1 = pieces.find((p) => p.id === cells[2][0]);
       const piece2 = pieces.find((p) => p.id === cells[2][1]);
       const piece3 = pieces.find((p) => p.id === cells[2][2]);
-      checkWinCondition(piece1, piece2, piece3);
+      checkWinCondition(piece1!, piece2!, piece3!);
     }
     if (cells[0][0] && cells[1][0] && cells[2][0]) {
       const piece1 = pieces.find((p) => p.id === cells[0][0]);
       const piece2 = pieces.find((p) => p.id === cells[1][0]);
       const piece3 = pieces.find((p) => p.id === cells[2][0]);
-      checkWinCondition(piece1, piece2, piece3);
+      checkWinCondition(piece1!, piece2!, piece3!);
     }
     if (cells[0][1] && cells[1][1] && cells[2][1]) {
       const piece1 = pieces.find((p) => p.id === cells[0][1]);
       const piece2 = pieces.find((p) => p.id === cells[1][1]);
       const piece3 = pieces.find((p) => p.id === cells[2][1]);
-      checkWinCondition(piece1, piece2, piece3);
+      checkWinCondition(piece1!, piece2!, piece3!);
     }
     if (cells[0][2] && cells[1][2] && cells[2][2]) {
       const piece1 = pieces.find((p) => p.id === cells[0][2]);
       const piece2 = pieces.find((p) => p.id === cells[1][2]);
       const piece3 = pieces.find((p) => p.id === cells[2][2]);
-      checkWinCondition(piece1, piece2, piece3);
+      checkWinCondition(piece1!, piece2!, piece3!);
     }
     if (cells[0][0] && cells[1][1] && cells[2][2]) {
       const piece1 = pieces.find((p) => p.id === cells[0][0]);
       const piece2 = pieces.find((p) => p.id === cells[1][1]);
       const piece3 = pieces.find((p) => p.id === cells[2][2]);
-      checkWinCondition(piece1, piece2, piece3);
+      checkWinCondition(piece1!, piece2!, piece3!);
     }
     if (cells[0][2] && cells[1][1] && cells[2][0]) {
       const piece1 = pieces.find((p) => p.id === cells[0][2]);
       const piece2 = pieces.find((p) => p.id === cells[1][1]);
       const piece3 = pieces.find((p) => p.id === cells[2][0]);
-      checkWinCondition(piece1, piece2, piece3);
+      checkWinCondition(piece1!, piece2!, piece3!);
     }
 
     if (
@@ -239,7 +250,7 @@ const GameEnvironment = (props) => {
       cells[2][1] &&
       cells[2][2]
     ) {
-      console.log("it is  draw");
+      console.log('it is  draw');
       clearInterval(intervalId);
       dispatch(endGame());
     }
@@ -262,7 +273,7 @@ const GameEnvironment = (props) => {
         />
       ))}
       <PerspectiveCamera makeDefault fov={35} position={[0, 24, 24]} />
-      <Environment preset="city" />
+      <Environment preset='city' />
       <ambientLight intensity={1} />
       <Plane
         position={[0, 0, -10]}
@@ -270,7 +281,7 @@ const GameEnvironment = (props) => {
         args={[100, 100]}
       >
         {/* <OrbitControls /> */}
-        <meshBasicMaterial attach="material" map={texture} />
+        <meshBasicMaterial attach='material' map={texture} />
       </Plane>
       <OrbitControls
         enableZoom={false}

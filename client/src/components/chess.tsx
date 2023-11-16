@@ -2,16 +2,18 @@ import { MutableRefObject, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 
 import { ChessSize, ChessType } from '../models/enums';
-import { ChessPiece, GLTFResult } from '../types';
+import { ChessPiece, GLTFResult } from '../utils/types';
 import { Vector3 } from '@react-three/fiber';
-import { Group } from 'three';
+import { Group, Plane } from 'three';
 
 type ChessProps = {
-  chessSize: 1 | 2 | 3;
+  chessSize: number;
   piece: ChessPiece;
   position: Vector3;
-  chessType: 1 | 2;
-  onRefObtained: (ref: MutableRefObject<Group>, piece: ChessPiece) => undefined;
+  chessType: number;
+  onRefObtained: (ref: MutableRefObject<Group>, piece: ChessPiece) => void;
+  ref: MutableRefObject<Group>
+  floorPlane: Plane
 };
 
 const Chess = (props: ChessProps) => {

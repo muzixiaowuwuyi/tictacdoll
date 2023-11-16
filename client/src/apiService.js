@@ -1,6 +1,6 @@
 const API_BASE_URL = "http://localhost:3002";
 
-const fetchGamedata = async () => {
+export const fetchGamedata = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/sessions`);
     if (!response.ok) {
@@ -13,7 +13,7 @@ const fetchGamedata = async () => {
   }
 };
 
-const addGamedata = async (gameData) => {
+export const addGamedata = async (gameData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/sessions`, {
       method: "POST",
@@ -32,7 +32,3 @@ const addGamedata = async (gameData) => {
   }
 };
 
-module.exports = {
-  fetchGamedata,
-  addGamedata,
-};

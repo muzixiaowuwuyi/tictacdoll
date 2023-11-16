@@ -1,10 +1,21 @@
-import React, { useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+import { MutableRefObject, useRef } from 'react';
+import { useGLTF } from '@react-three/drei';
 
-import { ChessSize, ChessType } from "../models/enums";
+import { ChessSize, ChessType } from '../models/enums';
+import { ChessPiece, GLTFResult } from '../types';
+import { Vector3 } from '@react-three/fiber';
+import { Group } from 'three';
 
-const Chess = (props) => {
-  const { nodes, materials } = useGLTF("/assets/chess.glb");
+type ChessProps = {
+  chessSize: 1 | 2 | 3;
+  piece: ChessPiece;
+  position: Vector3;
+  chessType: 1 | 2;
+  onRefObtained: (ref: MutableRefObject<Group>, piece: ChessPiece) => undefined;
+};
+
+const Chess = (props: ChessProps) => {
+  const { nodes, materials } = useGLTF('/assets/chess.glb') as GLTFResult;
   const {
     chessSize,
     position,
@@ -14,9 +25,9 @@ const Chess = (props) => {
     ...otherProps
   } = props;
 
-  const groupRef = useRef({});
+  const groupRef = useRef<Group>(new Group());
 
-  const handleClick = (evt) => {
+  const handleClick = () => {
     onRefObtained(groupRef, piece);
   };
 
@@ -144,7 +155,7 @@ const Chess = (props) => {
             geometry={nodes.materials1_1.geometry}
             material={materials.m007}
           >
-            <meshStandardMaterial color={"#517bc5"} />
+            <meshStandardMaterial color={'#517bc5'} />
           </mesh>
           <mesh
             castShadow
@@ -179,7 +190,7 @@ const Chess = (props) => {
             geometry={nodes.materials2_1.geometry}
             material={materials.m002}
           >
-            <meshStandardMaterial color={"#517bc5"} />
+            <meshStandardMaterial color={'#517bc5'} />
           </mesh>
           <mesh
             castShadow
@@ -220,7 +231,7 @@ const Chess = (props) => {
             geometry={nodes.materials3_2.geometry}
             material={materials.m006}
           >
-            <meshStandardMaterial color={"#517bc5"} />
+            <meshStandardMaterial color={'#517bc5'} />
           </mesh>
           <mesh
             castShadow
@@ -234,6 +245,6 @@ const Chess = (props) => {
   );
 };
 
-useGLTF.preload("/assets/chess.glb");
+useGLTF.preload('/assets/chess.glb');
 
 export { Chess };

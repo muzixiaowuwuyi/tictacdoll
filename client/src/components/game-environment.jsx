@@ -64,6 +64,7 @@ const GameEnvironment = (props) => {
     );
 
     dispatch(selectPiece({ piece }));
+    return;
   };
 
   const handlePiecePlaced = (newPosition, cell) => {

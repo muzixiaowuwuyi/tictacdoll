@@ -6,7 +6,7 @@ const initialState = {
   isInGame: false,
   duration: 0,
   intervalId: null,
-  startTime: null,
+  startTime: null as number | null,
 
   cells: [
     [null, null, null],
@@ -176,7 +176,7 @@ export const chessSlice = createSlice({
     //   state.timeDuration = 0;
     // },
 
-    // reducer 函数和对应的 action
+    // reducer functions and corresponding actions
     selectPiece: (state, action) => {
       const { piece } = action.payload;
       if (piece && piece.isMoved) state.activePiece = undefined;
@@ -196,8 +196,8 @@ export const chessSlice = createSlice({
       );
       const [cellX, cellY] = cell;
       // update piece status
-      currentPiece.isMoved = true;
-      currentPiece.position = activePiece.position;
+      currentPiece!.isMoved = true;
+      currentPiece!.position = activePiece.position;
 
       // 更新棋盘状态
       state.cells[cellX][cellY] = activePiece.id;
@@ -225,7 +225,6 @@ export const {
   unselectPiece,
   placePiece,
   updateDuration,
-  resetGame,
   endGame,
 } = chessSlice.actions;
 

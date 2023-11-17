@@ -209,18 +209,19 @@ export const chessSlice = createSlice({
 
       if (!state.activePiece) console.log('NOOOPPE', activePiece, cell)
 
-      // // find piece and update statuss
-      // const currentPiece = state.chessPieces.find(
-      //   (p) => p.id === activePiece.id
-      // );
-
+      // find piece and update statuss
+      const currentPiece = state.chessPieces.find(
+        (p) => p.id === activePiece.id
+      );
+      
       const [cellX, cellY] = cell;
 
       // update piece status
-      // currentPiece!.hasMoved = true;
-      // currentPiece!.position = activePiece.position;
+      currentPiece!.hasMoved = true;
+      // @ts-ignore
+      currentPiece!.position = activePiece.position; //I don't know how to get this to work soo yeah
 
-      state.activePiece!.hasMoved = true;
+      // state.activePiece!.hasMoved = true;
       // 更新棋盘状态
       state.cells[cellX][cellY] = activePiece.id;
 

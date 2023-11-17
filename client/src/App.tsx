@@ -6,13 +6,13 @@ import Home from "./components/home/home";
 
 function App() {
   return (
-    <BrowserRouter className="App">
+    <BrowserRouter>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
           path="/game"
-          element={<GameCanvas className="GameCanvas" key={Date.now()} />}
+          element={<GameCanvas key={Date.now()} />}
         />
       </Routes>
     </BrowserRouter>

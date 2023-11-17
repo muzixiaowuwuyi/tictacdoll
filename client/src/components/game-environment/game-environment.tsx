@@ -1,4 +1,4 @@
-import { MutableRefObject, Suspense, useEffect } from 'react';
+import { MutableRefObject, Suspense, useEffect, useState} from 'react';
 import { Chess } from '../chess/chess';
 import {
   Environment,
@@ -43,11 +43,11 @@ const GameEnvironment = () => {
   const intervalId = useAppSelector((state) => state.chess.intervalId);
   // const cells = useAppSelector(state => state.chess.cells);
 
-  // const [chessRefs, setChessRefs] = useState<
-  //   Record<number, MutableRefObject<Group>>
-  // >({});
+  const [chessRefs, setChessRefs] = useState<
+    Record<number, MutableRefObject<Group>>
+  >({});
 
-  const chessRefs : Record<number, MutableRefObject<Group>> = {}
+  // const chessRefs : Record<number, MutableRefObject<Group>> = {}
 
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);

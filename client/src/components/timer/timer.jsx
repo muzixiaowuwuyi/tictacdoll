@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setIntervalId, updateDuration } from "../store/slices/chessSlice";
+import { setIntervalId, updateDuration } from "../../store/slices/chessSlice";
 
 import "./timer.css";
 

@@ -1,5 +1,5 @@
 import { MutableRefObject, Suspense, useEffect } from 'react';
-import { Chess } from './chess';
+import { Chess } from '../chess/chess';
 import {
   Environment,
   PerspectiveCamera,
@@ -9,23 +9,23 @@ import {
 import { useLoader, useFrame, Vector3 } from '@react-three/fiber';
 import './game-canvas.css';
 import * as THREE from 'three';
-import Chessboard from './chessboard';
+import Chessboard from '../chessboard/chessboard';
 import { TextureLoader } from 'three';
-import { useAppSelector, useAppDispatch } from '../store/hooks';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
   placePiece,
   selectPiece,
   unselectPiece,
   endGame,
-} from '../store/slices/chessSlice';
+} from '../../store/slices/chessSlice';
 //@ts-ignore
 import TWEEN from '@tweenjs/tween.js'; //doesn't resolve type definitions but it works
 import jumpAudio from '../musics/music-jump.mp3';
 import errorAudio from '../musics/error.mp3';
 import winAudio from '../musics/success.mp3';
-import { addGamedata } from '../apiService';
+import { addGamedata } from '../../apiService';
 import { Group } from 'three';
-import { ChessPiece } from '../utils/types';
+import { ChessPiece } from '../../utils/types';
 
 // import CheckWinner from "../services/game-win-lose-service";
 

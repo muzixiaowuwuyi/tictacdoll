@@ -2,9 +2,9 @@ import "./game-canvas.css";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
-import GameEnvironment from "./game-environment";
+import GameEnvironment from "../game-environment/game-environment";
 import { useDispatch } from "react-redux";
-import { startGame } from "../store/slices/chessSlice";
+import { startGame } from "../../store/slices/chessSlice";
 
 const GameCanvas = () => {
   const dispatch = useDispatch();

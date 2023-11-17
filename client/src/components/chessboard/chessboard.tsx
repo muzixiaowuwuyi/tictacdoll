@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { Box } from '@react-three/drei';
-import { useAppSelector } from '../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import PropTypes from 'prop-types';
 import { Vector3 } from 'three';
 

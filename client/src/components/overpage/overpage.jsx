@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import "./overpage.css";
 import { useState } from "react";
-import Winner from "./winner.tsx";
-import GameList from "./GameList";
+import Winner from "../winner/winner.tsx";
+import GameList from "../game-list/game-list.jsx";
 
 export default function OverPage() {
   const [clName, setClName] = useState("game-info");

@@ -1,7 +1,7 @@
 import "./home.css";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { startGame } from "../store/slices/chessSlice";
+import { startGame } from "../../store/slices/chessSlice";
 import { useNavigate } from "react-router-dom";
 import logo1 from "../public/logo-1.png";
 import logo2 from "../public/logo-2.png";

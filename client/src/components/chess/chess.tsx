@@ -1,8 +1,8 @@
 import { MutableRefObject, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 
-import { ChessSize, ChessType } from '../models/enums';
-import { ChessPiece, GLTFResult } from '../utils/types';
+import { ChessSize, ChessType } from '../../models/enums';
+import { ChessPiece, GLTFResult } from '../../utils/types';
 import { Vector3 } from '@react-three/fiber';
 import { Group, Plane } from 'three';
 

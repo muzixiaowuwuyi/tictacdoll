@@ -1,4 +1,4 @@
-import { MutableRefObject, Suspense, useEffect, useState } from 'react';
+import { MutableRefObject, Suspense, useEffect } from 'react';
 import { Chess } from './chess';
 import {
   Environment,
@@ -18,7 +18,8 @@ import {
   unselectPiece,
   endGame,
 } from '../store/slices/chessSlice';
-import TWEEN from '@tweenjs/tween.js';
+//@ts-ignore
+import TWEEN from '@tweenjs/tween.js'; //doesn't resolve type definitions but it works
 import jumpAudio from '../musics/music-jump.mp3';
 import errorAudio from '../musics/error.mp3';
 import winAudio from '../musics/success.mp3';
@@ -43,9 +44,11 @@ const GameEnvironment = () => {
   const intervalId = useAppSelector((state) => state.chess.intervalId);
   // const cells = useAppSelector(state => state.chess.cells);
 
-  const [chessRefs, setChessRefs] = useState<
-    Record<number, MutableRefObject<Group>>
-  >({});
+  // const [chessRefs, setChessRefs] = useState<
+  //   Record<number, MutableRefObject<Group>>
+  // >({});
+
+  const chessRefs : Record<number, MutableRefObject<Group>> = {}
 
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);
@@ -118,7 +121,8 @@ const GameEnvironment = () => {
     ////TODO: check if is win
 
     if (chessRef && newPosition) {
-      const {x, y, z} = newPosition as {x: number, y:number, z:number}
+      //should be able to deconstruct with vector3 but it won't accept so have to cast
+      const {x, y, z} = newPosition as {x: number, y:number, z:number} 
 
       const jumpSound = new Audio(jumpAudio);
       const peakPos = {

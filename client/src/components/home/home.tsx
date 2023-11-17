@@ -1,5 +1,5 @@
 import "./home.css";
-import React, { useState, useEffect } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { startGame } from "../../store/slices/chessSlice";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +15,8 @@ export default function Home() {
     setShowButton(true);
   }, []);
 
-  const handleInputChange = (e) => {
-    setUsername(e.target.value);
+  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
+    setUsername(event.currentTarget.value);
   };
 
   const handleStartGame = () => {

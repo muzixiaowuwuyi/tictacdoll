@@ -1,7 +1,7 @@
 import { ChessPiece } from './types';
 
 export type SetIntervalIdPayload = {
-  intervalId: number;
+  intervalId: NodeJS.Timeout;
 };
 
 export type UpdateDurationPayload = {

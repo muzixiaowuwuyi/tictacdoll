@@ -4,7 +4,7 @@ export type GameState = {
   gameEnded: boolean;
   isInGame: boolean;
   duration: number;
-  intervalId?: number;
+  intervalId?: NodeJS.Timeout;
   startTime: null | number;
 
   cells: (null | number)[][];

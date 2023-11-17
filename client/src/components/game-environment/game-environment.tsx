@@ -43,7 +43,7 @@ const GameEnvironment = () => {
   const intervalId = useAppSelector((state) => state.chess.intervalId);
   // const cells = useAppSelector(state => state.chess.cells);
 
-  // @ts-ig
+  // @ts-ignore
   const [chessRefs, setChessRefs] = useState< //This is never used but for some reason it breaks everything
     Record<number, MutableRefObject<Group>>
   >({});

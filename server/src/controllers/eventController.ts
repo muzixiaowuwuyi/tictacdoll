@@ -1,8 +1,6 @@
 import GameSessions from "../models/GameSessions";
 import { Request, Response } from "express"
 
-
-
 async function getGameSession(req: Request, res: Response): Promise<void> {
   try {
     const games = await GameSessions.find();

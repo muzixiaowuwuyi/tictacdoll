@@ -13,8 +13,8 @@ const initialState: GameState = {
   gameEnded: false,
   isInGame: false,
   duration: 0,
-  intervalId: null,
-  startTime: null as number | null,
+  intervalId: undefined,
+  startTime: null,
 
   cells: [
     [null, null, null],

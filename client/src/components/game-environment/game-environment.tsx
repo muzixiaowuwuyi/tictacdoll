@@ -43,11 +43,10 @@ const GameEnvironment = () => {
   const intervalId = useAppSelector((state) => state.chess.intervalId);
   // const cells = useAppSelector(state => state.chess.cells);
 
+  // @ts-ignore
   const [chessRefs, setChessRefs] = useState<
     Record<number, MutableRefObject<Group>>
   >({});
-
-  // const chessRefs : Record<number, MutableRefObject<Group>> = {}
 
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);

@@ -207,8 +207,6 @@ export const chessSlice = createSlice({
     placePiece: (state, { payload }: PayloadAction<PlacePiecePayload>) => {
       const { activePiece, cell } = payload;
 
-      if (!state.activePiece) console.log('NOOOPPE', activePiece, cell)
-
       // find piece and update statuss
       const currentPiece = state.chessPieces.find(
         (p) => p.id === activePiece.id
@@ -219,7 +217,7 @@ export const chessSlice = createSlice({
       // update piece status
       currentPiece!.hasMoved = true;
       // @ts-ignore
-      currentPiece!.position = activePiece.position; //I don't know how to get this to work soo yeah
+      currentPiece!.position = activePiece.position; //I don't know how to get this to work in TS
 
       // state.activePiece!.hasMoved = true;
       // 更新棋盘状态

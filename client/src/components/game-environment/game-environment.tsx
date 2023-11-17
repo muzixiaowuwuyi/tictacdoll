@@ -43,10 +43,13 @@ const GameEnvironment = () => {
   const intervalId = useAppSelector((state) => state.chess.intervalId);
   // const cells = useAppSelector(state => state.chess.cells);
 
-  // @ts-ignore
-  const [chessRefs, setChessRefs] = useState<
+  // @ts-ig
+  const [chessRefs, setChessRefs] = useState< //This is never used but for some reason it breaks everything
     Record<number, MutableRefObject<Group>>
   >({});
+
+  console.log('Out', chessRefs);
+  // const chessRefs : Record<number, MutableRefObject<Group>> = {};
 
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);
@@ -57,6 +60,7 @@ const GameEnvironment = () => {
     piece: ChessPiece
   ) => {
     chessRefs[piece.id] = ref;
+    console.log('GOT', chessRefs)
 
     if (!isInGame) {
       dispatch(unselectPiece());

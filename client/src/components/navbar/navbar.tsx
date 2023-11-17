@@ -1,5 +1,5 @@
-import logo1 from "../logos/logo-1.png";
-import logo2 from "../logos/logo-2.png";
+import logo1 from "../../logos/logo-1.png";
+import logo2 from "../../logos/logo-2.png";
 import "./navbar.css";
 import OverPage from "../overpage/overpage";
 import Timer from "../timer/timer";

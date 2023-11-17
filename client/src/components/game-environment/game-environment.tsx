@@ -7,7 +7,6 @@ import {
   Plane,
 } from '@react-three/drei';
 import { useLoader, useFrame, Vector3 } from '@react-three/fiber';
-import './game-canvas.css';
 import * as THREE from 'three';
 import Chessboard from '../chessboard/chessboard';
 import { TextureLoader } from 'three';
@@ -20,9 +19,9 @@ import {
 } from '../../store/slices/chessSlice';
 //@ts-ignore
 import TWEEN from '@tweenjs/tween.js'; //doesn't resolve type definitions but it works
-import jumpAudio from '../musics/music-jump.mp3';
-import errorAudio from '../musics/error.mp3';
-import winAudio from '../musics/success.mp3';
+import jumpAudio from '../../musics/music-jump.mp3';
+import errorAudio from '../../musics/error.mp3';
+import winAudio from '../../musics/success.mp3';
 import { addGamedata } from '../../apiService';
 import { Group } from 'three';
 import { ChessPiece } from '../../utils/types';
@@ -170,7 +169,7 @@ const GameEnvironment = () => {
     console.log(`username ${username} win in ${seconds} seconds`);
 
     const winnerData = {
-      player: username,
+      player: username!,
       winner: piece1.player,
       duration: seconds,
     };

@@ -3,8 +3,8 @@ import { FormEvent, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { startGame } from "../../store/slices/chessSlice";
 import { useNavigate } from "react-router-dom";
-import logo1 from "../public/logo-1.png";
-import logo2 from "../public/logo-2.png";
+import logo1 from "../../public/logo-1.png";
+import logo2 from "../../public/logo-2.png";
 export default function Home() {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");

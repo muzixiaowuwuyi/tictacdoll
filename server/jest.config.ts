@@ -5,6 +5,7 @@ const config: Config.InitialOptions = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
+  rootDir: __dirname
 };
 
 export default config;

@@ -1,0 +1,98 @@
+export const mockGames = [
+  {
+    player: 'Alice',
+    winner: 1,
+    duration: 45,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Bob',
+    winner: 2,
+    duration: 30,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Charlie',
+    winner: 1,
+    duration: 50,
+    createdAt: new Date(),
+  },
+  {
+    player: 'David',
+    winner: 2,
+    duration: 20,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Eva',
+    winner: 1,
+    duration: 35,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Frank',
+    winner: 2,
+    duration: 40,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Grace',
+    winner: 1,
+    duration: 55,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Henry',
+    winner: 2,
+    duration: 25,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Ivy',
+    winner: 1,
+    duration: 42,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Jack',
+    winner: 2,
+    duration: 28,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Kate',
+    winner: 1,
+    duration: 48,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Leo',
+    winner: 2,
+    duration: 18,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Mia',
+    winner: 1,
+    duration: 37,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Noah',
+    winner: 2,
+    duration: 32,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Olivia',
+    winner: 1,
+    duration: 53,
+    createdAt: new Date(),
+  },
+  {
+    player: 'Peter',
+    winner: 2,
+    duration: 22,
+    createdAt: new Date(),
+  },
+];

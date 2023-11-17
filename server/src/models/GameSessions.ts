@@ -1,14 +1,6 @@
 import mongoose from './index';
-import { Schema } from 'mongoose';
 
-interface IGame {
-  player: string;
-  winner: number;
-  duration: number;
-  createdAt: Date;
-}
-
-const gameSchema = new Schema<IGame>({
+const gameSchema = new mongoose.Schema({
   player: { type: String, required: true },
   winner: { type: Number, required: true },
   duration: { type: Number, required: true },

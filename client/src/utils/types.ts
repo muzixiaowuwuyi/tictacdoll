@@ -1,4 +1,4 @@
-import { Vector3 } from "@react-three/fiber";
+import { Vector3 } from '@react-three/fiber';
 
 export type GameState = {
   gameEnded: boolean;
@@ -9,11 +9,11 @@ export type GameState = {
 
   cells: (null | number)[][];
 
-  chessPieces: ChessPiece[]
+  chessPieces: ChessPiece[];
 
   currentPlayer: number;
-  activePiece:  undefined | ChessPiece;
-  winner: null
+  activePiece: undefined | ChessPiece;
+  winner: null;
 };
 
 export type ChessPiece = {
@@ -22,4 +22,15 @@ export type ChessPiece = {
   hasMoved: boolean;
   size: number;
   player: number;
+};
+
+export type NewGameSession = {
+  player: string;
+  winner: number;
+  duration: number;
+};
+
+export type GameSession = NewGameSession & {
+  _id: string;
+  createdAt: Date;
 };

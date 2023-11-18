@@ -1,3 +1,5 @@
+import { ChessSize, ChessType } from '../models/enums';
+
 export const mockGames = [
   {
     player: 'Alice',
@@ -97,7 +99,6 @@ export const mockGames = [
   },
 ];
 
-
 export const mockNewGames = [
   {
     player: 'Alice',
@@ -179,4 +180,20 @@ export const mockNewGames = [
     winner: 2,
     duration: 22,
   },
-]
+];
+
+export const mockPiece1 = {
+  id: 2,
+  position: [15, 1.5, 3],
+  hasMoved: false,
+  size: ChessSize.LARGE,
+  player: ChessType.HUMAN,
+};
+
+export const mockPiece2 = {
+  id: 5,
+  position: [12, 0.9, 3],
+  hasMoved: false,
+  size: ChessSize.MEDIUM,
+  player: ChessType.HUMAN,
+};

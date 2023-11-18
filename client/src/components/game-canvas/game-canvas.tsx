@@ -7,12 +7,15 @@ import { useDispatch } from "react-redux";
 import { startGame } from "../../store/slices/chessSlice";
 
 import './game-canvas.css'
+import { useAppSelector } from "../../store/hooks";
 
 const GameCanvas = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isInGame = useAppSelector((state) => state.chess.isInGame);
+  
   useEffect(() => {
-    const gameStarted = localStorage.getItem("gameStarted") === "true";
+    const gameStarted = isInGame;
     if (gameStarted) {
       dispatch(startGame());
     } else {

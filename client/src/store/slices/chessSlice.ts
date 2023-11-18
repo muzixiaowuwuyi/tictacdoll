@@ -9,7 +9,7 @@ import {
   UpdateDurationPayload,
 } from '../../utils/payloadTypes';
 
-const initialState: GameState = {
+export const initialState: GameState = {
   gameEnded: false,
   isInGame: false,
   duration: 0,
@@ -163,13 +163,11 @@ export const chessSlice = createSlice({
     startGame: (state) => {
       state.isInGame = true;
       state.startTime = Date.now();
-      localStorage.setItem('gameStarted', 'true');
     },
 
     endGame: (state) => {
       state.gameEnded = true;
       state.isInGame = false;
-      localStorage.setItem('gameStarted', 'false');
     },
 
     setIntervalId: (
@@ -211,7 +209,7 @@ export const chessSlice = createSlice({
       const currentPiece = state.chessPieces.find(
         (p) => p.id === activePiece.id
       );
-      
+
       const [cellX, cellY] = cell;
 
       // update piece status

@@ -48,7 +48,6 @@ const GameEnvironment = () => {
     Record<number, MutableRefObject<Group>>
   >({});
 
-  console.log('Out', chessRefs);
   // const chessRefs : Record<number, MutableRefObject<Group>> = {};
 
   const errorSound = new Audio(errorAudio);
@@ -60,7 +59,6 @@ const GameEnvironment = () => {
     piece: ChessPiece
   ) => {
     chessRefs[piece.id] = ref;
-    console.log('GOT', chessRefs)
 
     if (!isInGame) {
       dispatch(unselectPiece());

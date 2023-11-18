@@ -4,7 +4,7 @@ import { useGLTF } from '@react-three/drei';
 import { ChessSize, ChessType } from '../../models/enums';
 import { ChessPiece } from '../../utils/types';
 import { GLTFResult } from '../../utils/GTLFChess';
-import { Vector3 } from '@react-three/fiber';
+import { ThreeEvent, Vector3 } from '@react-three/fiber';
 import { Group, Plane } from 'three';
 
 type ChessProps = {
@@ -13,11 +13,11 @@ type ChessProps = {
   position: Vector3;
   chessType: number;
   onRefObtained: (ref: MutableRefObject<Group>, piece: ChessPiece) => void;
-  ref: MutableRefObject<Group>
-  floorPlane: Plane
+  ref: MutableRefObject<Group>;
+  floorPlane: Plane;
 };
 
-const Chess = (props: ChessProps) => {
+const Chess: React.FC<ChessProps> = (props: ChessProps) => {
   const { nodes, materials } = useGLTF('/assets/chess.glb') as GLTFResult;
   const {
     chessSize,
@@ -30,20 +30,24 @@ const Chess = (props: ChessProps) => {
 
   const groupRef = useRef<Group>(new Group());
 
-  const handleClick = () => {
+  const handleClick = (event: ThreeEvent<MouseEvent>) => {
+    console.log('CLICKED', event.clientX, event.clientY);
+    console.log(groupRef.current.uuid);
     onRefObtained(groupRef, piece);
   };
 
   return (
-    <group {...otherProps} dispose={null}>
+    <group
+      {...otherProps}
+      dispose={null}
+      position={position}
+      ref={groupRef}
+      rotation={[Math.PI / 2, 0, 0]}
+      onClick={handleClick}
+    >
       {/* Player's chesses */}
       {chessSize === ChessSize.LARGE && chessType === ChessType.HUMAN && (
-        <group
-          position={position}
-          ref={groupRef}
-          rotation={[Math.PI / 2, 0, 0]}
-          onClick={handleClick}
-        >
+        <>
           <mesh
             castShadow
             receiveShadow
@@ -68,15 +72,10 @@ const Chess = (props: ChessProps) => {
             geometry={nodes.materials1_3.geometry}
             material={materials.m011}
           />
-        </group>
+        </>
       )}
       {chessSize === ChessSize.MEDIUM && chessType === ChessType.HUMAN && (
-        <group
-          position={position}
-          ref={groupRef}
-          rotation={[Math.PI / 2, 0, 0]}
-          onClick={handleClick}
-        >
+        <>
           <mesh
             castShadow
             receiveShadow
@@ -101,15 +100,10 @@ const Chess = (props: ChessProps) => {
             geometry={nodes.materials2_3.geometry}
             material={materials.n003}
           />
-        </group>
+        </>
       )}
       {chessSize === ChessSize.SMALL && chessType === ChessType.HUMAN && (
-        <group
-          position={position}
-          ref={groupRef}
-          rotation={[Math.PI / 2, 0, 0]}
-          onClick={handleClick}
-        >
+        <>
           <mesh
             castShadow
             receiveShadow
@@ -134,18 +128,13 @@ const Chess = (props: ChessProps) => {
             geometry={nodes.materials3_3.geometry}
             material={materials.n002}
           />
-        </group>
+        </>
       )}
 
       {/* Computer's chesses */}
 
       {chessSize === ChessSize.LARGE && chessType === ChessType.COMPUTER && (
-        <group
-          position={position}
-          ref={groupRef}
-          rotation={[Math.PI / 2, 0, 0]}
-          onClick={handleClick}
-        >
+        <>
           <mesh
             castShadow
             receiveShadow
@@ -172,15 +161,10 @@ const Chess = (props: ChessProps) => {
             geometry={nodes.materials1_3.geometry}
             material={materials.m011}
           />
-        </group>
+        </>
       )}
       {chessSize === ChessSize.MEDIUM && chessType === ChessType.COMPUTER && (
-        <group
-          position={position}
-          ref={groupRef}
-          rotation={[Math.PI / 2, 0, 0]}
-          onClick={handleClick}
-        >
+        <>
           <mesh
             castShadow
             receiveShadow
@@ -207,15 +191,10 @@ const Chess = (props: ChessProps) => {
             geometry={nodes.materials2_3.geometry}
             material={materials.n003}
           />
-        </group>
+        </>
       )}
       {chessSize === ChessSize.SMALL && chessType === ChessType.COMPUTER && (
-        <group
-          position={position}
-          ref={groupRef}
-          rotation={[Math.PI / 2, 0, 0]}
-          onClick={handleClick}
-        >
+        <>
           <mesh
             castShadow
             receiveShadow
@@ -242,7 +221,7 @@ const Chess = (props: ChessProps) => {
             geometry={nodes.materials3_3.geometry}
             material={materials.n002}
           />
-        </group>
+        </>
       )}
     </group>
   );

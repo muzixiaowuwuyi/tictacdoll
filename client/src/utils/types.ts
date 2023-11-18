@@ -13,7 +13,7 @@ export type GameState = {
 
   currentPlayer: number;
   activePiece: undefined | ChessPiece;
-  winner: null;
+  winner: null | string;
 };
 
 export type ChessPiece = {

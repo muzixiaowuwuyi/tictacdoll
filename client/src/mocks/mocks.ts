@@ -198,3 +198,4 @@ export const mockPiece2 : ChessPiece = {
   size: ChessSize.MEDIUM,
   player: ChessType.HUMAN,
 };
+

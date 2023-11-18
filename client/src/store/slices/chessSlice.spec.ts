@@ -115,4 +115,13 @@ describe('chessReducer', () => {
       activePiece: mockPiece1,
     });
   });
+
+  it('should handle settingWinner', () => {
+    const stateBeforeAction = initialState;
+    const action = {type: 'chess/checkWinner', payload: {gamewinner: 'guy'}}
+
+    const result = chessReducer(stateBeforeAction, action)
+
+    expect(result).toStrictEqual({...initialState, winner: 'guy'})
+  })
 });

@@ -1,4 +1,5 @@
 import { ChessSize, ChessType } from '../models/enums';
+import { ChessPiece } from '../utils/types';
 
 export const mockGames = [
   {
@@ -182,7 +183,7 @@ export const mockNewGames = [
   },
 ];
 
-export const mockPiece1 = {
+export const mockPiece1 : ChessPiece = {
   id: 2,
   position: [15, 1.5, 3],
   hasMoved: false,
@@ -190,7 +191,7 @@ export const mockPiece1 = {
   player: ChessType.HUMAN,
 };
 
-export const mockPiece2 = {
+export const mockPiece2 : ChessPiece = {
   id: 5,
   position: [12, 0.9, 3],
   hasMoved: false,

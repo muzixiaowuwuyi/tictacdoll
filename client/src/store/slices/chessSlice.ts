@@ -206,9 +206,7 @@ export const chessSlice = createSlice({
       const { activePiece, cell } = payload;
 
       // find piece and update statuss
-      const currentPiece = state.chessPieces.find(
-        (p) => p.id === activePiece.id
-      );
+      const currentPiece = state.chessPieces[activePiece.id-1]
 
       const [cellX, cellY] = cell;
 

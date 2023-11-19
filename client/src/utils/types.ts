@@ -19,7 +19,6 @@ export type GameState = {
 export type GamePiece = {
   id: number;
   position: Vector3;
-  hasMoved: boolean;
   size: number;
   player: number;
 };

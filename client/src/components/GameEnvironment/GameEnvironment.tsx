@@ -15,7 +15,6 @@ import {
   placePiece,
   selectPiece,
   unselectPiece,
-  // endGame,
 } from '../../store/slices/gameSlice';
 
 //@ts-ignore
@@ -49,17 +48,11 @@ const GameEnvironment = () => {
     ref: MutableRefObject<Group>,
     piece: GamePiece
   ) => {
-    setChessRefs((prev) => ({...prev, [piece.id]: ref}))
+    setChessRefs((prev) => ({ ...prev, [piece.id]: ref }));
 
-    if (!isInGame) {
-      dispatch(unselectPiece());
-      return;
-    }
+    if (!isInGame) return;
 
-    if (piece && piece.hasMoved) {
-      dispatch(unselectPiece());
-      return;
-    }
+    for (const row of cells) if (row.includes(piece.id)) return;
 
     dispatch(selectPiece({ piece }));
     return;
@@ -82,7 +75,7 @@ const GameEnvironment = () => {
     const targetPieceId = cells[cellX][cellY];
 
     let targetPiece: GamePiece | undefined;
-    if (targetPieceId != null) targetPiece = chessPieces[targetPieceId - 1];
+    if (targetPieceId != null) targetPiece = chessPieces[targetPieceId];
 
     console.log(targetPiece, targetPieceId);
 
@@ -97,12 +90,11 @@ const GameEnvironment = () => {
       return;
     }
 
-    console.log(activePiece, cell);
     dispatch(placePiece({ activePiece, cell }));
     dispatch(unselectPiece());
 
     ////TODO: check if is win
-    ///checking the places surronding this piece after a piece is placed 
+    ///checking the places surronding this piece after a piece is placed
     ///will be more efficient than checking the current way.
 
     const chessRef = chessRefs[activePiece.id];

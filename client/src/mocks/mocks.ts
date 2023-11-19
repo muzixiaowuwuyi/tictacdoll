@@ -186,7 +186,6 @@ export const mockNewGames = [
 export const mockPiece1 : GamePiece = {
   id: 2,
   position: [15, 1.5, 3],
-  hasMoved: false,
   size: PieceSize.LARGE,
   player: PiecePlayer.HUMAN,
 };
@@ -194,7 +193,6 @@ export const mockPiece1 : GamePiece = {
 export const mockPiece2 : GamePiece = {
   id: 5,
   position: [12, 0.9, 3],
-  hasMoved: false,
   size: PieceSize.MEDIUM,
   player: PiecePlayer.HUMAN,
 };

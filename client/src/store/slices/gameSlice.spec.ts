@@ -91,7 +91,7 @@ describe('gameReducer', () => {
     const [cellX, cellY] = [0, 0];
     const action = {
       type: 'game/placePiece',
-      payload: { activePiece: mockPiece1, cell: [cellX, cellY] },
+      payload: { cell: [cellX, cellY] },
     };
 
     const result = gameReducer(stateBeforeAction, action);
@@ -104,14 +104,9 @@ describe('gameReducer', () => {
       )
     );
 
-    const newPieces = initialState.pieces.map((piece) =>
-      piece.id === mockPiece1.id ? { ...mockPiece1, hasMoved: true } : piece
-    );
-
     expect(result).toStrictEqual({
       ...initialState,
       cells: newCells,
-      pieces: newPieces,
       currentPlayer: PiecePlayer.COMPUTER,
       activePiece: mockPiece1,
     });
@@ -119,7 +114,7 @@ describe('gameReducer', () => {
 
   it('should handle settingWinner', () => {
     const stateBeforeAction = initialState;
-    const action = {type: 'game/checkWinner', payload: {gamewinner: 'guy'}}
+    const action = {type: 'game/setWinner', payload: {gamewinner: 'guy'}}
 
     const result = gameReducer(stateBeforeAction, action)
 

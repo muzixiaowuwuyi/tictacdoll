@@ -15,20 +15,17 @@ import {
   placePiece,
   selectPiece,
   unselectPiece,
-  endGame,
+  // endGame,
 } from '../../store/slices/gameSlice';
 
 //@ts-ignore
 import TWEEN from '@tweenjs/tween.js'; //doesn't resolve type definitions but they're there and it works
 
-import errorAudio from '../../../public/sound/error.mp3';
-import winAudio from '../../../public/sound/success.mp3';
-import { addGamedata } from '../../services/apiService';
+import errorAudio from '../../assets/sound/error.mp3';
 import { Group } from 'three';
 import { GamePiece } from '../../utils/types';
 import { placePieceAnimation } from '../../animations/placePieceAnimation';
-
-// import CheckWinner from "../services/game-win-lose-service";
+import CheckWinner from '../../services/checkWinService';
 
 const GameEnvironment = () => {
   const dispatch = useAppDispatch();
@@ -39,29 +36,20 @@ const GameEnvironment = () => {
   const activePiece = useAppSelector((state) => state.game.activePiece);
   const currentPlayer = useAppSelector((state) => state.game.currentPlayer);
   const cells = useAppSelector((state) => state.game.cells);
-  const pieces = useAppSelector((state) => state.game.pieces);
 
   const isInGame = useAppSelector((state) => state.game.isInGame);
-  const intervalId = useAppSelector((state) => state.game.intervalId);
-  // const cells = useAppSelector(state => state.chess.cells);
 
-  // @ts-ignore
   const [chessRefs, setChessRefs] = useState<
-    //This is never used but for some reason it breaks everything
     Record<number, MutableRefObject<Group>>
   >({});
 
-  // const chessRefs : Record<number, MutableRefObject<Group>> = {};
-
   const errorSound = new Audio(errorAudio);
-  const winnSound = new Audio(winAudio);
-  const duration = useAppSelector((state) => state.game.duration);
 
   const onChessRefObtained = (
     ref: MutableRefObject<Group>,
     piece: GamePiece
   ) => {
-    chessRefs[piece.id] = ref;
+    setChessRefs((prev) => ({...prev, [piece.id]: ref}))
 
     if (!isInGame) {
       dispatch(unselectPiece());
@@ -69,14 +57,9 @@ const GameEnvironment = () => {
     }
 
     if (piece && piece.hasMoved) {
-      // Check if the chess is moved. If chess is moved, then do nothing
       dispatch(unselectPiece());
       return;
     }
-
-    console.log(
-      `Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.hasMoved}`
-    );
 
     dispatch(selectPiece({ piece }));
     return;
@@ -86,7 +69,7 @@ const GameEnvironment = () => {
     if (activePiece === undefined) return;
 
     if (activePiece.player !== currentPlayer) {
-      //TODO: 把 alert 移除，放置到二维图层
+      //TODO: 把 alert 移除，放置到二维图层 / Remove the alert and add a UI pop up
       errorSound.play();
       setTimeout(() => {
         alert('not your turn!');
@@ -95,9 +78,7 @@ const GameEnvironment = () => {
       return;
     }
 
-    // 检查目标位置是否为空或者可以覆盖
     const [cellX, cellY] = cell;
-
     const targetPieceId = cells[cellX][cellY];
 
     let targetPiece: GamePiece | undefined;
@@ -106,8 +87,7 @@ const GameEnvironment = () => {
     console.log(targetPiece, targetPieceId);
 
     if (targetPiece && targetPiece.size >= activePiece.size) {
-      // Add logic showing error placement
-      //TODO: 把 alert 移除，放置到二维图层
+      //TODO: 把 alert 移除，放置到二维图层 / Remove the alert and add a UI pop up
       errorSound.play();
       setTimeout(() => {
         alert('Invalid move!');
@@ -135,108 +115,6 @@ const GameEnvironment = () => {
   useEffect(() => {
     CheckWinner();
   }, [cells]);
-
-  ///TODO: adddata to server
-
-  const checkWinCondition = (
-    piece1: GamePiece,
-    piece2: GamePiece,
-    piece3: GamePiece
-  ) => {
-    const username = sessionStorage.getItem('username');
-    let seconds = Math.floor(duration / 1000);
-    console.log(`username ${username} win in ${seconds} seconds`);
-
-    const winnerData = {
-      player: username!,
-      winner: piece1.player,
-      duration: seconds,
-    };
-    if (piece1.player === piece2.player && piece1.player === piece3.player) {
-      winnSound.play();
-
-      console.log(`${piece1.player} you win`);
-      clearInterval(intervalId);
-      dispatch(endGame()); // 发送游戏数据到服务器
-
-      addGamedata(winnerData)
-        .then((response) => {
-          console.log('Game data saved:', response);
-        })
-        .catch((error) => {
-          console.error('Failed to save game data:', error);
-        });
-    }
-    ////TODO: add apiservise
-  };
-
-  const CheckWinner = () => {
-    if (cells[0][0] && cells[0][1] && cells[0][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][0]);
-      const piece2 = pieces.find((p) => p.id === cells[0][1]);
-      const piece3 = pieces.find((p) => p.id === cells[0][2]);
-
-      checkWinCondition(piece1!, piece2!, piece3!);
-    }
-    if (cells[1][0] && cells[1][1] && cells[1][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[1][0]);
-      const piece2 = pieces.find((p) => p.id === cells[1][1]);
-      const piece3 = pieces.find((p) => p.id === cells[1][2]);
-      checkWinCondition(piece1!, piece2!, piece3!);
-    }
-    if (cells[2][0] && cells[2][1] && cells[2][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[2][0]);
-      const piece2 = pieces.find((p) => p.id === cells[2][1]);
-      const piece3 = pieces.find((p) => p.id === cells[2][2]);
-      checkWinCondition(piece1!, piece2!, piece3!);
-    }
-    if (cells[0][0] && cells[1][0] && cells[2][0]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][0]);
-      const piece2 = pieces.find((p) => p.id === cells[1][0]);
-      const piece3 = pieces.find((p) => p.id === cells[2][0]);
-      checkWinCondition(piece1!, piece2!, piece3!);
-    }
-    if (cells[0][1] && cells[1][1] && cells[2][1]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][1]);
-      const piece2 = pieces.find((p) => p.id === cells[1][1]);
-      const piece3 = pieces.find((p) => p.id === cells[2][1]);
-      checkWinCondition(piece1!, piece2!, piece3!);
-    }
-    if (cells[0][2] && cells[1][2] && cells[2][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][2]);
-      const piece2 = pieces.find((p) => p.id === cells[1][2]);
-      const piece3 = pieces.find((p) => p.id === cells[2][2]);
-      checkWinCondition(piece1!, piece2!, piece3!);
-    }
-    if (cells[0][0] && cells[1][1] && cells[2][2]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][0]);
-      const piece2 = pieces.find((p) => p.id === cells[1][1]);
-      const piece3 = pieces.find((p) => p.id === cells[2][2]);
-      checkWinCondition(piece1!, piece2!, piece3!);
-    }
-    if (cells[0][2] && cells[1][1] && cells[2][0]) {
-      const piece1 = pieces.find((p) => p.id === cells[0][2]);
-      const piece2 = pieces.find((p) => p.id === cells[1][1]);
-      const piece3 = pieces.find((p) => p.id === cells[2][0]);
-      checkWinCondition(piece1!, piece2!, piece3!);
-    }
-
-    if (
-      cells[0][0] &&
-      cells[0][1] &&
-      cells[0][2] &&
-      cells[1][0] &&
-      cells[1][1] &&
-      cells[1][2] &&
-      cells[2][0] &&
-      cells[2][1] &&
-      cells[2][2]
-    ) {
-      console.log('it is  draw');
-      clearInterval(intervalId);
-      dispatch(endGame());
-    }
-  };
 
   useFrame(() => TWEEN.update());
   return (

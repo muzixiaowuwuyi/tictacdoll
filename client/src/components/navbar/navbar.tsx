@@ -1,5 +1,5 @@
-import logo1 from "../../../public/logos-and-icons/logo-1.png";;
-import logo2 from "../../../public/logos-and-icons/logo-2.png";
+import logo1 from "../../assets/logos-and-icons/logo-1.png";
+import logo2 from "../../assets/logos-and-icons/logo-2.png";
 import "./Navbar.css";
 import GameOverPage from "../GameOverPage/GameOverPage";
 import Timer from "../Timer/Timer";

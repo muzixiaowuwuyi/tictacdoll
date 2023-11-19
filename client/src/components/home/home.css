@@ -7,7 +7,7 @@
   }
 }
 .home-page {
-  background-image: url("../public/texture.png"); /* 替换为你的图片路径 */
+  background-image: url("/texture.png"); /* 替换为你的图片路径 */
   background-size: cover; /* 背景图像覆盖整个div */
   background-position: center; /* 图片居中 */
   background-repeat: no-repeat; /* 防止背景重复 */

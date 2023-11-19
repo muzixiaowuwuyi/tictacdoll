@@ -17,14 +17,16 @@ import {
   unselectPiece,
   endGame,
 } from '../../store/slices/chessSlice';
+
 //@ts-ignore
 import TWEEN from '@tweenjs/tween.js'; //doesn't resolve type definitions but they're there and it works
-import jumpAudio from '../../musics/music-jump.mp3';
+
 import errorAudio from '../../musics/error.mp3';
 import winAudio from '../../musics/success.mp3';
 import { addGamedata } from '../../apiService';
 import { Group } from 'three';
 import { ChessPiece } from '../../utils/types';
+import { placePieceAnimation } from '../../animations/placePieceAnimation';
 
 // import CheckWinner from "../services/game-win-lose-service";
 
@@ -120,40 +122,12 @@ const GameEnvironment = () => {
     dispatch(unselectPiece());
 
     ////TODO: check if is win
+    ///checking the places surronding this piece after a piece is placed 
+    ///will be more efficient than checking the current way.
 
     const chessRef = chessRefs[activePiece.id];
 
-    //should be able to deconstruct with vector3 but it won't accept so have to cast
-    const { x, y, z } = newPosition as { x: number; y: number; z: number };
-
-    const jumpSound = new Audio(jumpAudio);
-    const peakPos = {
-      x: (chessRef.current.position.x + x) / 2,
-      y: Math.max(chessRef.current.position.y, y) + 7,
-      z: (chessRef.current.position.z + z) / 2,
-    };
-
-    // start the animation
-    const horizontalTween = new TWEEN.Tween(chessRef.current.position)
-      .to({ x, z }, 500)
-      .onUpdate(() => {})
-      .onStart(() => {
-        jumpSound.play();
-      });
-
-    const upTween = new TWEEN.Tween(chessRef.current.position)
-      .to({ y: peakPos.y }, 250)
-      .easing(TWEEN.Easing.Quadratic.Out)
-      .onUpdate(() => {});
-
-    const downTween = new TWEEN.Tween(chessRef.current.position)
-      .to({ y: y + chessRef.current.position.y }, 250)
-      .easing(TWEEN.Easing.Quadratic.In)
-      .onUpdate(() => {});
-
-    upTween.chain(downTween);
-    horizontalTween.start();
-    upTween.start();
+    placePieceAnimation(newPosition, chessRef);
 
     return;
   };

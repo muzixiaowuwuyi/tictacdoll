@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchGamedata } from "../../apiService";
-import "./game-list.css";
+import { fetchGamedata } from "../../services/apiService";
+import "./GameList.css";
 import { GameSession } from "../../utils/types";
 
 export default function GameList() {

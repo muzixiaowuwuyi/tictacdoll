@@ -1,5 +1,5 @@
 import { fetchGamedata, addGamedata } from './apiService';
-import { mockGames, mockNewGames } from './mocks/mocks';
+import { mockGames, mockNewGames } from '../mocks/mocks';
 
 
 const url = 'http://localhost:3002'

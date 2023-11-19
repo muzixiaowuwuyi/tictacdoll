@@ -9,14 +9,14 @@ export type GameState = {
 
   cells: (null | number)[][];
 
-  chessPieces: ChessPiece[];
+  pieces: GamePiece[];
 
   currentPlayer: number;
-  activePiece: undefined | ChessPiece;
+  activePiece: undefined | GamePiece;
   winner: null | string;
 };
 
-export type ChessPiece = {
+export type GamePiece = {
   id: number;
   position: Vector3;
   hasMoved: boolean;

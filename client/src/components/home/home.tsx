@@ -1,10 +1,10 @@
 import "./home.css";
 import { FormEvent, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { startGame } from "../../store/slices/chessSlice";
+import { startGame } from "../../store/slices/gameSlice";
 import { useNavigate } from "react-router-dom";
-import logo1 from "../../public/logo-1.png";
-import logo2 from "../../public/logo-2.png";
+import logo1 from "../../../public/logos-and-icons/logo-1.png";
+import logo2 from "../../../public/logos-and-icons/logo-2.png";
 export default function Home() {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");

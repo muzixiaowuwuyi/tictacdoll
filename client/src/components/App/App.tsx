@@ -1,8 +1,8 @@
 import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import GameCanvas from "./components/game-canvas/game-canvas";
-import Navbar from "./components/navbar/navbar";
-import Home from "./components/home/home";
+import GameCanvas from "../GameCanvas/GameCavas";
+import Navbar from "../Navbar/Navbar";
+import Home from "../Home/Home";
 
 function App() {
   return (

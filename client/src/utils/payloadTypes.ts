@@ -1,4 +1,4 @@
-import { ChessPiece } from './types';
+import { GamePiece } from './types';
 
 export type SetIntervalIdPayload = {
   intervalId: NodeJS.Timeout;
@@ -9,10 +9,10 @@ export type UpdateDurationPayload = {
 };
 
 export type SelectPiecePayload = {
-  piece: ChessPiece;
+  piece: GamePiece;
 };
 
 export type PlacePiecePayload = {
-  activePiece: ChessPiece;
+  activePiece: GamePiece;
   cell: number[];
 };

@@ -1,28 +1,28 @@
 import { MutableRefObject, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 
-import { ChessSize, ChessType } from '../../models/enums';
-import { ChessPiece } from '../../utils/types';
-import { GLTFResult } from '../../utils/GTLFChess';
+import { PieceSize, PiecePlayer } from '../../models/enums';
+import { GamePiece } from '../../utils/types';
+import { GLTFResult } from '../../utils/GTLFPiece';
 import { Vector3 } from '@react-three/fiber';
 import { Group, Plane } from 'three';
 
-type ChessProps = {
-  chessSize: number;
-  piece: ChessPiece;
+type PieceProps = {
+  pieceSize: number;
+  piece: GamePiece;
   position: Vector3;
-  chessType: number;
-  onRefObtained: (ref: MutableRefObject<Group>, piece: ChessPiece) => void;
+  piecePlayer: number;
+  onRefObtained: (ref: MutableRefObject<Group>, piece: GamePiece) => void;
   ref: MutableRefObject<Group>;
   floorPlane: Plane;
 };
 
-const Chess: React.FC<ChessProps> = (props: ChessProps) => {
-  const { nodes, materials } = useGLTF('/assets/chess.glb') as GLTFResult;
+const Piece = (props: PieceProps) => {
+  const { nodes, materials } = useGLTF('/3d-models/piece.glb') as GLTFResult;
   const {
-    chessSize,
+    pieceSize,
     position,
-    chessType,
+    piecePlayer,
     piece,
     onRefObtained,
     ...otherProps
@@ -43,8 +43,8 @@ const Chess: React.FC<ChessProps> = (props: ChessProps) => {
       rotation={[Math.PI / 2, 0, 0]}
       onClick={handleClick}
     >
-      {/* Player's chesses */}
-      {chessSize === ChessSize.LARGE && chessType === ChessType.HUMAN && (
+      {/* Player's pieces */}
+      {pieceSize === PieceSize.LARGE && piecePlayer === PiecePlayer.HUMAN && (
         <>
           <mesh
             castShadow
@@ -72,7 +72,7 @@ const Chess: React.FC<ChessProps> = (props: ChessProps) => {
           />
         </>
       )}
-      {chessSize === ChessSize.MEDIUM && chessType === ChessType.HUMAN && (
+      {pieceSize === PieceSize.MEDIUM && piecePlayer === PiecePlayer.HUMAN && (
         <>
           <mesh
             castShadow
@@ -100,7 +100,7 @@ const Chess: React.FC<ChessProps> = (props: ChessProps) => {
           />
         </>
       )}
-      {chessSize === ChessSize.SMALL && chessType === ChessType.HUMAN && (
+      {pieceSize === PieceSize.SMALL && piecePlayer === PiecePlayer.HUMAN && (
         <>
           <mesh
             castShadow
@@ -129,9 +129,9 @@ const Chess: React.FC<ChessProps> = (props: ChessProps) => {
         </>
       )}
 
-      {/* Computer's chesses */}
+      {/* Computer's pieces */}
 
-      {chessSize === ChessSize.LARGE && chessType === ChessType.COMPUTER && (
+      {pieceSize === PieceSize.LARGE && piecePlayer === PiecePlayer.COMPUTER && (
         <>
           <mesh
             castShadow
@@ -161,7 +161,7 @@ const Chess: React.FC<ChessProps> = (props: ChessProps) => {
           />
         </>
       )}
-      {chessSize === ChessSize.MEDIUM && chessType === ChessType.COMPUTER && (
+      {pieceSize === PieceSize.MEDIUM && piecePlayer === PiecePlayer.COMPUTER && (
         <>
           <mesh
             castShadow
@@ -191,7 +191,7 @@ const Chess: React.FC<ChessProps> = (props: ChessProps) => {
           />
         </>
       )}
-      {chessSize === ChessSize.SMALL && chessType === ChessType.COMPUTER && (
+      {pieceSize === PieceSize.SMALL && piecePlayer === PiecePlayer.COMPUTER && (
         <>
           <mesh
             castShadow
@@ -225,6 +225,6 @@ const Chess: React.FC<ChessProps> = (props: ChessProps) => {
   );
 };
 
-useGLTF.preload('/assets/chess.glb');
+useGLTF.preload('/3d-models/piece.glb');
 
-export { Chess };
+export { Piece };

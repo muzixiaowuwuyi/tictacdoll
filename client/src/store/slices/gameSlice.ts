@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ChessSize, ChessType } from '../../models/enums';
+import { PieceSize, PiecePlayer } from '../../models/enums';
 import { GameState } from '../../utils/types';
 
 import {
@@ -22,142 +22,142 @@ export const initialState: GameState = {
     [null, null, null],
   ],
 
-  chessPieces: [
+  pieces: [
     {
       id: 1,
       position: [15, 1.5, 0],
       hasMoved: false,
-      size: ChessSize.LARGE,
-      player: ChessType.HUMAN,
+      size: PieceSize.LARGE,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 2,
       position: [15, 1.5, 3],
       hasMoved: false,
-      size: ChessSize.LARGE,
-      player: ChessType.HUMAN,
+      size: PieceSize.LARGE,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 3,
       position: [15, 1.5, 6],
       hasMoved: false,
-      size: ChessSize.LARGE,
-      player: ChessType.HUMAN,
+      size: PieceSize.LARGE,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 4,
       position: [12, 0.9, 0],
       hasMoved: false,
-      size: ChessSize.MEDIUM,
-      player: ChessType.HUMAN,
+      size: PieceSize.MEDIUM,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 5,
       position: [12, 0.9, 3],
       hasMoved: false,
-      size: ChessSize.MEDIUM,
-      player: ChessType.HUMAN,
+      size: PieceSize.MEDIUM,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 6,
       position: [12, 0.9, 6],
       hasMoved: false,
-      size: ChessSize.MEDIUM,
-      player: ChessType.HUMAN,
+      size: PieceSize.MEDIUM,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 7,
       position: [10, 0.57, 0],
       hasMoved: false,
-      size: ChessSize.SMALL,
-      player: ChessType.HUMAN,
+      size: PieceSize.SMALL,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 8,
       position: [10, 0.57, 3],
       hasMoved: false,
-      size: ChessSize.SMALL,
-      player: ChessType.HUMAN,
+      size: PieceSize.SMALL,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 9,
       position: [10, 0.57, 6],
       hasMoved: false,
-      size: ChessSize.SMALL,
-      player: ChessType.HUMAN,
+      size: PieceSize.SMALL,
+      player: PiecePlayer.HUMAN,
     },
     {
       id: 10,
       position: [-15, 1.5, 0],
-      size: ChessSize.LARGE,
+      size: PieceSize.LARGE,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
     {
       id: 11,
       position: [-15, 1.5, -3],
-      size: ChessSize.LARGE,
+      size: PieceSize.LARGE,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
     {
       id: 12,
       position: [-15, 1.5, -6],
-      size: ChessSize.LARGE,
+      size: PieceSize.LARGE,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
     {
       id: 13,
       position: [-12, 0.9, 0],
-      size: ChessSize.MEDIUM,
+      size: PieceSize.MEDIUM,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
     {
       id: 14,
       position: [-12, 0.9, -3],
-      size: ChessSize.MEDIUM,
+      size: PieceSize.MEDIUM,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
     {
       id: 15,
       position: [-12, 0.9, -6],
-      size: ChessSize.MEDIUM,
+      size: PieceSize.MEDIUM,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
     {
       id: 16,
       position: [-10, 0.57, 0],
-      size: ChessSize.SMALL,
+      size: PieceSize.SMALL,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
     {
       id: 17,
       position: [-10, 0.57, -3],
-      size: ChessSize.SMALL,
+      size: PieceSize.SMALL,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
     {
       id: 18,
       position: [-10, 0.57, -6],
-      size: ChessSize.SMALL,
+      size: PieceSize.SMALL,
       hasMoved: false,
-      player: ChessType.COMPUTER,
+      player: PiecePlayer.COMPUTER,
     },
   ],
 
-  currentPlayer: ChessType.HUMAN,
+  currentPlayer: PiecePlayer.HUMAN,
   activePiece: undefined,
   winner: null,
 };
 
-export const chessSlice = createSlice({
-  name: 'chess',
+export const gameSlice = createSlice({
+  name: 'game',
   initialState,
   reducers: {
     startGame: (state) => {
@@ -206,7 +206,7 @@ export const chessSlice = createSlice({
       const { activePiece, cell } = payload;
 
       // find piece and update statuss
-      const currentPiece = state.chessPieces[activePiece.id-1]
+      const currentPiece = state.pieces[activePiece.id-1]
 
       const [cellX, cellY] = cell;
 
@@ -220,9 +220,9 @@ export const chessSlice = createSlice({
       state.cells[cellX][cellY] = activePiece.id;
 
       state.currentPlayer =
-        activePiece.player === ChessType.HUMAN
-          ? ChessType.COMPUTER
-          : ChessType.HUMAN;
+        activePiece.player === PiecePlayer.HUMAN
+          ? PiecePlayer.COMPUTER
+          : PiecePlayer.HUMAN;
     },
 
     // TODO: Check winning condition
@@ -244,7 +244,7 @@ export const {
   placePiece,
   updateDuration,
   endGame,
-} = chessSlice.actions;
+} = gameSlice.actions;
 
 // 导出 reducer
-export default chessSlice.reducer;
+export default gameSlice.reducer;

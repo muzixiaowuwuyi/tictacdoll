@@ -5,7 +5,7 @@ import TWEEN from '@tweenjs/tween.js'; //doesn't resolve type definitions but th
 import { Vector3 } from '@react-three/fiber';
 import { Group } from 'three';
 
-import jumpAudio from '../musics/music-jump.mp3';
+import jumpAudio from '../../public/sound/music-jump.mp3';
 
 export function placePieceAnimation(
   newPosition: Vector3,

@@ -1,14 +1,14 @@
-import logo1 from "../../logos/logo-1.png";
-import logo2 from "../../logos/logo-2.png";
-import "./navbar.css";
-import OverPage from "../overpage/overpage";
-import Timer from "../timer/timer";
+import logo1 from "../../../public/logos-and-icons/logo-1.png";;
+import logo2 from "../../../public/logos-and-icons/logo-2.png";
+import "./Navbar.css";
+import GameOverPage from "../GameOverPage/GameOverPage";
+import Timer from "../Timer/Timer";
 import { useAppSelector } from "../../store/hooks";
 import { useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const location = useLocation();
-  const gameEnded = useAppSelector((state) => state.chess.gameEnded);
+  const gameEnded = useAppSelector((state) => state.game.gameEnded);
   const shouldShowTimer = location.pathname !== "/";
   return (
     <div className="invisibal-container">
@@ -23,7 +23,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {gameEnded && <OverPage/>}
+      {gameEnded && <GameOverPage/>}
     </div>
   );
 }

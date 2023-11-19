@@ -1,5 +1,5 @@
 import { MutableRefObject, Suspense, useEffect, useState } from 'react';
-import { Chess } from '../chess/chess';
+import { Piece } from '../Piece/Piece';
 import {
   Environment,
   PerspectiveCamera,
@@ -8,7 +8,7 @@ import {
 } from '@react-three/drei';
 import { useLoader, useFrame, Vector3 } from '@react-three/fiber';
 import * as THREE from 'three';
-import Chessboard from '../chessboard/chessboard';
+import Board from '../Board/Board';
 import { TextureLoader } from 'three';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
@@ -16,16 +16,16 @@ import {
   selectPiece,
   unselectPiece,
   endGame,
-} from '../../store/slices/chessSlice';
+} from '../../store/slices/gameSlice';
 
 //@ts-ignore
 import TWEEN from '@tweenjs/tween.js'; //doesn't resolve type definitions but they're there and it works
 
-import errorAudio from '../../musics/error.mp3';
-import winAudio from '../../musics/success.mp3';
-import { addGamedata } from '../../apiService';
+import errorAudio from '../../../public/sound/error.mp3';
+import winAudio from '../../../public/sound/success.mp3';
+import { addGamedata } from '../../services/apiService';
 import { Group } from 'three';
-import { ChessPiece } from '../../utils/types';
+import { GamePiece } from '../../utils/types';
 import { placePieceAnimation } from '../../animations/placePieceAnimation';
 
 // import CheckWinner from "../services/game-win-lose-service";
@@ -35,14 +35,14 @@ const GameEnvironment = () => {
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, '/texture.png');
 
-  const chessPieces = useAppSelector((state) => state.chess.chessPieces);
-  const activePiece = useAppSelector((state) => state.chess.activePiece);
-  const currentPlayer = useAppSelector((state) => state.chess.currentPlayer);
-  const cells = useAppSelector((state) => state.chess.cells);
-  const pieces = useAppSelector((state) => state.chess.chessPieces);
+  const chessPieces = useAppSelector((state) => state.game.pieces);
+  const activePiece = useAppSelector((state) => state.game.activePiece);
+  const currentPlayer = useAppSelector((state) => state.game.currentPlayer);
+  const cells = useAppSelector((state) => state.game.cells);
+  const pieces = useAppSelector((state) => state.game.pieces);
 
-  const isInGame = useAppSelector((state) => state.chess.isInGame);
-  const intervalId = useAppSelector((state) => state.chess.intervalId);
+  const isInGame = useAppSelector((state) => state.game.isInGame);
+  const intervalId = useAppSelector((state) => state.game.intervalId);
   // const cells = useAppSelector(state => state.chess.cells);
 
   // @ts-ignore
@@ -55,11 +55,11 @@ const GameEnvironment = () => {
 
   const errorSound = new Audio(errorAudio);
   const winnSound = new Audio(winAudio);
-  const duration = useAppSelector((state) => state.chess.duration);
+  const duration = useAppSelector((state) => state.game.duration);
 
   const onChessRefObtained = (
     ref: MutableRefObject<Group>,
-    piece: ChessPiece
+    piece: GamePiece
   ) => {
     chessRefs[piece.id] = ref;
 
@@ -100,7 +100,7 @@ const GameEnvironment = () => {
 
     const targetPieceId = cells[cellX][cellY];
 
-    let targetPiece: ChessPiece | undefined;
+    let targetPiece: GamePiece | undefined;
     if (targetPieceId != null) targetPiece = chessPieces[targetPieceId - 1];
 
     console.log(targetPiece, targetPieceId);
@@ -139,9 +139,9 @@ const GameEnvironment = () => {
   ///TODO: adddata to server
 
   const checkWinCondition = (
-    piece1: ChessPiece,
-    piece2: ChessPiece,
-    piece3: ChessPiece
+    piece1: GamePiece,
+    piece2: GamePiece,
+    piece3: GamePiece
   ) => {
     const username = sessionStorage.getItem('username');
     let seconds = Math.floor(duration / 1000);
@@ -241,15 +241,15 @@ const GameEnvironment = () => {
   useFrame(() => TWEEN.update());
   return (
     <Suspense fallback={null}>
-      <Chessboard onPiecePlaced={handlePiecePlaced} />
+      <Board onPiecePlaced={handlePiecePlaced} />
       {chessPieces.map((piece) => (
-        <Chess
+        <Piece
           piece={piece}
           key={piece.id}
           ref={chessRefs[piece.id]}
-          chessSize={piece.size}
+          pieceSize={piece.size}
           position={piece.position}
-          chessType={piece.player}
+          piecePlayer={piece.player}
           floorPlane={floorPlane}
           onRefObtained={onChessRefObtained}
         />

@@ -2,7 +2,7 @@ import { useAppSelector } from '../../store/hooks';
 import "./winner.css";
 
 export default function Winner() {
-  let duration = useAppSelector((state ) => state.chess.duration);
+  let duration = useAppSelector((state ) => state.game.duration);
   const username = sessionStorage.getItem("username");
 
   duration = Math.floor(duration / 1000);

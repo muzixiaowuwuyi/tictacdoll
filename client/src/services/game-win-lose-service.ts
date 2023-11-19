@@ -1,8 +1,8 @@
 import { useAppSelector } from "../store/hooks";
 
 const CheckWinner = () => {
-  const pieces = useAppSelector(state => state.chess.chessPieces);
-  const cells = useAppSelector(state => state.chess.cells);
+  const pieces = useAppSelector(state => state.game.pieces);
+  const cells = useAppSelector(state => state.game.cells);
 
   ////TODO: the rule of win
 

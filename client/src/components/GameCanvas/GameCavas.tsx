@@ -1,18 +1,17 @@
-import "./game-canvas.css";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
-import GameEnvironment from "../game-environment/game-environment";
+import GameEnvironment from "../GameEnvironment/GameEnvironment";
 import { useDispatch } from "react-redux";
-import { startGame } from "../../store/slices/chessSlice";
+import { startGame } from "../../store/slices/gameSlice";
 
-import './game-canvas.css'
+import './GameCanvas.css'
 import { useAppSelector } from "../../store/hooks";
 
 const GameCanvas = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isInGame = useAppSelector((state) => state.chess.isInGame);
+  const isInGame = useAppSelector((state) => state.game.isInGame);
   
   useEffect(() => {
     const gameStarted = isInGame;

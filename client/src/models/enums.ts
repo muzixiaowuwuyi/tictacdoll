@@ -1,12 +1,12 @@
-const ChessSize = {
+const PieceSize = {
   LARGE: 3,
   MEDIUM: 2,
   SMALL: 1
 };
 
-const ChessType = {
+const PiecePlayer = {
   HUMAN: 1,
   COMPUTER: 2
 };
 
-export { ChessSize, ChessType };
+export { PieceSize, PiecePlayer};

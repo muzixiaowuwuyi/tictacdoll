@@ -4,18 +4,18 @@ import { useAppSelector } from '../../store/hooks';
 import PropTypes from 'prop-types';
 import { Vector3 } from 'three';
 
-type ChessBoardProps = {
+type BoardProps = {
   onPiecePlaced: (newPosition: Vector3, cell: number[]) => void;
 };
 
-const Chessboard = (props: ChessBoardProps) => {
-  const boardSize = 3; // 3x3 chessboard
+const Board = (props: BoardProps) => {
+  const boardSize = 3; // 3x3 board
   const cellSize = 4.8; // size of each tile
   const cellHeight = 0.1; // height of the tile
   const gap = 0.6; // gap between tile
   const separatorHeight = 0.1; // height of the separator, slightly higher than the tile
   const totalSize = boardSize * cellSize + (boardSize - 1) * gap + 1.5; // total size of the board including gaps
-  const gameState = useAppSelector((state) => state.chess.isInGame);
+  const gameState = useAppSelector((state) => state.game.isInGame);
 
   const { onPiecePlaced } = props;
 
@@ -103,8 +103,8 @@ const Chessboard = (props: ChessBoardProps) => {
   );
 };
 
-Chessboard.propTypes = {
+Board.propTypes = {
   onPiecePlaced: PropTypes.func.isRequired,
 };
 
-export default Chessboard;
+export default Board;

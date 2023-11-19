@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { useDispatch } from "react-redux";
-import { setIntervalId, updateDuration } from "../../store/slices/chessSlice";
+import { setIntervalId, updateDuration } from "../../store/slices/gameSlice";
 
 import "./timer.css";
 
 const Timer = () => {
   const dispatch = useDispatch();
-  const isInGame = useAppSelector((state) => state.chess.isInGame);
-  const startTime = useAppSelector((state) => state.chess.startTime);
-  const duration = useAppSelector((state) => state.chess.duration);
-  const timerId = useAppSelector((state) => state.chess.intervalId);
+  const isInGame = useAppSelector((state) => state.game.isInGame);
+  const startTime = useAppSelector((state) => state.game.startTime);
+  const duration = useAppSelector((state) => state.game.duration);
+  const timerId = useAppSelector((state) => state.game.intervalId);
 
   useEffect(() => {
     if (isInGame) {

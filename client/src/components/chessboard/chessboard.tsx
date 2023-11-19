@@ -29,6 +29,7 @@ const Chessboard = (props: ChessBoardProps) => {
     },
     [onPiecePlaced]
   );
+  
   // Create cells
   for (let x = 0; x < boardSize; x++) {
     for (let y = 0; y < boardSize; y++) {

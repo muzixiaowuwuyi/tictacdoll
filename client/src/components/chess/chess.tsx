@@ -4,7 +4,7 @@ import { useGLTF } from '@react-three/drei';
 import { ChessSize, ChessType } from '../../models/enums';
 import { ChessPiece } from '../../utils/types';
 import { GLTFResult } from '../../utils/GTLFChess';
-import { ThreeEvent, Vector3 } from '@react-three/fiber';
+import { Vector3 } from '@react-three/fiber';
 import { Group, Plane } from 'three';
 
 type ChessProps = {
@@ -30,9 +30,7 @@ const Chess: React.FC<ChessProps> = (props: ChessProps) => {
 
   const groupRef = useRef<Group>(new Group());
 
-  const handleClick = (event: ThreeEvent<MouseEvent>) => {
-    console.log('CLICKED', event.clientX, event.clientY);
-    console.log(groupRef.current.uuid);
+  const handleClick = () => {
     onRefObtained(groupRef, piece);
   };
 

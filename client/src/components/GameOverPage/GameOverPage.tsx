@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import './GameOverPage.css';
 import { useState } from 'react';
-import Winner from '../winner/Winner.tsx';
+import Winner from '../Winner/Winner.tsx';
 import GameList from '../GameList/GameList.js';
 
 export default function GameOverPage() {
@@ -15,7 +15,7 @@ export default function GameOverPage() {
     navigate('/');
     window.location.reload();
   }
-  
+
   return (
     <div className='overpage-container'>
       <div className={list}>

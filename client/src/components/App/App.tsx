@@ -2,14 +2,20 @@ import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import GameCanvas from "../GameCanvas/GameCavas";
 import Navbar from "../Navbar/Navbar";
-import Home from "../Home/Home";
+import Local from "../Local/Local";
+import Login from "../Login/Login";
+import Register from "../Register/Register";
+import Gamemode from "../Gamemode/Gamemode";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/gamemode" element={<Gamemode />} />
+        <Route path="/local" element={<Local />} />
         <Route
           path="/game"
           element={<GameCanvas key={Date.now()} />}

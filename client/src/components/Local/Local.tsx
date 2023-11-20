@@ -1,11 +1,11 @@
-import "./home.css";
+import "./Local.css";
 import { FormEvent, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { startGame } from "../../store/slices/gameSlice";
 import { useNavigate } from "react-router-dom";
 import logo1 from "/logos-and-icons/logo-1.png";
 import logo2 from "/logos-and-icons/logo-2.png";
-export default function Home() {
+export default function Local() {
   const dispatch = useDispatch();
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");

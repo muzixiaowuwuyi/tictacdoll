@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
+import { RequestWithPayload } from '../types';
 
 const PRIVATE_KEY = 'TEMP_PRIVATE_KEY';
 
@@ -43,13 +44,18 @@ async function login(req: Request, res: Response) {
       return res.status(401).send({ messgae: 'User does not exist' });
     }
 
-    const correctCredentials = await bcrypt.compare(password, user.passwordHash);
+    const correctCredentials = await bcrypt.compare(
+      password,
+      user.passwordHash
+    );
 
-    if(!correctCredentials) {
-      return res.status(401).send({message: 'Incorrect username or password'})
+    if (!correctCredentials) {
+      return res
+        .status(401)
+        .send({ message: 'Incorrect username or password' });
     }
 
-    const token = jwt.sign({userId: user._id}, PRIVATE_KEY);
+    const token = jwt.sign({ userId: user._id }, PRIVATE_KEY);
 
     res.cookie('accessToken', token);
     res.status(200).send();

@@ -8,7 +8,6 @@ import store from '../store/index';
 const winSound = new Audio(winAudio);
 
 export const handleWin = (winner: number) => {
-  console.log("WIN")
   const gameState = store.getState().game;
   const duration = gameState.duration;
 
@@ -72,7 +71,9 @@ export const checkWinner = (cell: number[], player: number) => {
   if (
     row === col &&
     cells.every((row, index) => {
-      if (row[index] != null) return pieces[row[index]!].player === player;
+      if (row[index] != null) {
+        return pieces[row[index]!].player === player;
+      }
       return false;
     })
   ) {
@@ -83,7 +84,9 @@ export const checkWinner = (cell: number[], player: number) => {
   if (
     row + col === 2 &&
     cells.every((row, index) => {
-      if (row[index] != null) return pieces[row[index]!].player === player;
+      if (row[2-index] != null) {
+        return pieces[row[2-index]!].player === player;
+      } 
       return false;
     })
   ) {
@@ -130,6 +133,5 @@ export const checkDraw = (player: number) => {
     )
   );
 
-  console.log(piecesThatCanBePlaced);
   return piecesThatCanBePlaced.length === 0;
 };

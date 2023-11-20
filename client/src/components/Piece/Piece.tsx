@@ -31,7 +31,6 @@ const Piece = (props: PieceProps) => {
   const groupRef = useRef<Group>(new Group());
 
   const handleClick = () => {
-    console.log(`Piece ${piece.id} clicked and its position is ${piece.position}, and its player is ${piece.player}`)
     onRefObtained(groupRef, piece);
   };
 

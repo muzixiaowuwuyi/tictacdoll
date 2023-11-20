@@ -65,4 +65,14 @@ async function login(req: Request, res: Response) {
   }
 }
 
-export default { registerUser, login };
+async function logout(req: RequestWithPayload, res: Response) {
+  try {
+    res.clearCookie('accessToken');
+    res.status(204).send()
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({message: 'Internal Server Error'})
+  }
+}
+
+export default { registerUser, login, logout };

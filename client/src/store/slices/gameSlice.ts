@@ -150,8 +150,6 @@ export const gameSlice = createSlice({
     },
 
     endGame: (state) => {
-      clearInterval(state.intervalId);
-      state.intervalId = undefined;
       state.gameEnded = true;
       state.isInGame = false;
     },

@@ -4,12 +4,10 @@ import "./Navbar.css";
 import GameOverPage from "../GameOverPage/GameOverPage";
 import Timer from "../Timer/Timer";
 import { useAppSelector } from "../../store/hooks";
-import { useLocation } from "react-router-dom";
 
 export default function Navbar() {
-  const location = useLocation();
   const gameEnded = useAppSelector((state) => state.game.gameEnded);
-  const shouldShowTimer = location.pathname !== "/";
+  const shouldShowTimer = useAppSelector((state) => state.game.isInGame);
   return (
     <div className="invisibal-container">
       <div className="navinfo">

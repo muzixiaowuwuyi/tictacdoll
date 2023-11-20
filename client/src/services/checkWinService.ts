@@ -1,5 +1,4 @@
 import { endGame } from '../store/slices/gameSlice';
-import { GamePiece } from '../utils/types';
 import { addGamedata } from './apiService';
 
 import winAudio from '../assets/sound/success.mp3';
@@ -8,14 +7,9 @@ import store from '../store/index';
 
 const winSound = new Audio(winAudio);
 
-const checkWinCondition = (
-  piece1: GamePiece,
-  piece2: GamePiece,
-  piece3: GamePiece
-) => {
+export const handleWin = (winner: number) => {
   const gameState = store.getState().game;
   const duration = gameState.duration;
-  const intervalId = gameState.intervalId;
 
   const username = sessionStorage.getItem('username');
   let seconds = Math.floor(duration / 1000);
@@ -23,24 +17,23 @@ const checkWinCondition = (
 
   const winnerData = {
     player: username!,
-    winner: piece1.player,
+    winner: winner,
     duration: seconds,
   };
-  if (piece1.player === piece2.player && piece1.player === piece3.player) {
-    winSound.play();
+  
+  winSound.play();
 
-    console.log(`${piece1.player} you win`);
-    clearInterval(intervalId);
-    store.dispatch(endGame()); // 发送游戏数据到服务器 /send game data to server
+  console.log(`${winner} you win`);
+  store.dispatch(endGame()); // 发送游戏数据到服务器 /send game data to server
 
-    addGamedata(winnerData)
-      .then((response) => {
-        console.log('Game data saved:', response);
-      })
-      .catch((error) => {
-        console.error('Failed to save game data:', error);
-      });
-  }
+  addGamedata(winnerData)
+    .then((response) => {
+      console.log('Game data saved:', response);
+    })
+    .catch((error) => {
+      console.error('Failed to save game data:', error);
+    });
+
   ////TODO: add apiservise
 };
 

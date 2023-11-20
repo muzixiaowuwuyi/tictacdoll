@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../store/hooks';
-import "./winner.css";
+import "./Winner.css";
 
 export default function Winner() {
   let duration = useAppSelector((state ) => state.game.duration);

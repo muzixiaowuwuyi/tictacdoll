@@ -12,7 +12,6 @@ import Board from '../Board/Board';
 import { TextureLoader } from 'three';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
-  endGame,
   placePiece,
   selectPiece,
   unselectPiece,
@@ -25,7 +24,7 @@ import errorAudio from '../../assets/sound/error.mp3';
 import { Group } from 'three';
 import { GamePiece } from '../../utils/types';
 import { placePieceAnimation } from '../../animations/placePieceAnimation';
-import { checkWinner, checkDraw } from '../../services/checkWinService';
+import { checkWinner, checkDraw, handleWin } from '../../services/checkWinService';
 
 const GameEnvironment = () => {
   const dispatch = useAppDispatch();
@@ -98,10 +97,9 @@ const GameEnvironment = () => {
     dispatch(unselectPiece());
 
     if (checkWinner(cell, activePiece.player)) {
-      dispatch(endGame());
+      handleWin(activePiece.player)
     } else if (checkDraw(activePiece.player)) {
-      dispatch(endGame());
-      console.log('DRAW');
+      handleWin(0);
     }
 
     return;

@@ -109,15 +109,16 @@ describe('gameReducer', () => {
       cells: newCells,
       currentPlayer: PiecePlayer.COMPUTER,
       activePiece: mockPiece1,
+      placedPieces: [mockPiece1.id],
     });
   });
 
   it('should handle settingWinner', () => {
     const stateBeforeAction = initialState;
-    const action = {type: 'game/setWinner', payload: {gamewinner: 'guy'}}
+    const action = { type: 'game/setWinner', payload: { gamewinner: 'guy' } };
 
-    const result = gameReducer(stateBeforeAction, action)
+    const result = gameReducer(stateBeforeAction, action);
 
-    expect(result).toStrictEqual({...initialState, winner: 'guy'})
-  })
+    expect(result).toStrictEqual({ ...initialState, winner: 'guy' });
+  });
 });

@@ -1,6 +1,6 @@
-import { endGame } from "../store/slices/gameSlice";
-import { GamePiece } from "../utils/types";
-import { addGamedata } from "./apiService";
+import { endGame } from '../store/slices/gameSlice';
+import { GamePiece } from '../utils/types';
+import { addGamedata } from './apiService';
 
 import winAudio from '../assets/sound/success.mp3';
 
@@ -11,11 +11,11 @@ const winSound = new Audio(winAudio);
 const checkWinCondition = (
   piece1: GamePiece,
   piece2: GamePiece,
-  piece3: GamePiece,
+  piece3: GamePiece
 ) => {
-  const gameState = store.getState().game
-  const duration = gameState.duration
-  const intervalId = gameState.intervalId
+  const gameState = store.getState().game;
+  const duration = gameState.duration;
+  const intervalId = gameState.intervalId;
 
   const username = sessionStorage.getItem('username');
   let seconds = Math.floor(duration / 1000);
@@ -44,78 +44,95 @@ const checkWinCondition = (
   ////TODO: add apiservise
 };
 
-const CheckWinner = () => {
-  const gameState = store.getState().game
+export const checkWinner = (cell: number[], player: number) => {
+  const gameState = store.getState().game;
   const cells = gameState.cells;
-  const pieces = gameState.pieces;
-  const intervalId = gameState.intervalId;
+  const pieces = gameState.allPieces;
 
-  if (cells[0][0] && cells[0][1] && cells[0][2]) {
-    const piece1 = pieces.find((p) => p.id === cells[0][0]);
-    const piece2 = pieces.find((p) => p.id === cells[0][1]);
-    const piece3 = pieces.find((p) => p.id === cells[0][2]);
+  const [row, col] = cell;
 
-    checkWinCondition(piece1!, piece2!, piece3!);
-  }
-  if (cells[1][0] && cells[1][1] && cells[1][2]) {
-    const piece1 = pieces.find((p) => p.id === cells[1][0]);
-    const piece2 = pieces.find((p) => p.id === cells[1][1]);
-    const piece3 = pieces.find((p) => p.id === cells[1][2]);
-    checkWinCondition(piece1!, piece2!, piece3!);
-  }
-  if (cells[2][0] && cells[2][1] && cells[2][2]) {
-    const piece1 = pieces.find((p) => p.id === cells[2][0]);
-    const piece2 = pieces.find((p) => p.id === cells[2][1]);
-    const piece3 = pieces.find((p) => p.id === cells[2][2]);
-    checkWinCondition(piece1!, piece2!, piece3!);
-  }
-  if (cells[0][0] && cells[1][0] && cells[2][0]) {
-    const piece1 = pieces.find((p) => p.id === cells[0][0]);
-    const piece2 = pieces.find((p) => p.id === cells[1][0]);
-    const piece3 = pieces.find((p) => p.id === cells[2][0]);
-    checkWinCondition(piece1!, piece2!, piece3!);
-  }
-  if (cells[0][1] && cells[1][1] && cells[2][1]) {
-    const piece1 = pieces.find((p) => p.id === cells[0][1]);
-    const piece2 = pieces.find((p) => p.id === cells[1][1]);
-    const piece3 = pieces.find((p) => p.id === cells[2][1]);
-    checkWinCondition(piece1!, piece2!, piece3!);
-  }
-  if (cells[0][2] && cells[1][2] && cells[2][2]) {
-    const piece1 = pieces.find((p) => p.id === cells[0][2]);
-    const piece2 = pieces.find((p) => p.id === cells[1][2]);
-    const piece3 = pieces.find((p) => p.id === cells[2][2]);
-    checkWinCondition(piece1!, piece2!, piece3!);
-  }
-  if (cells[0][0] && cells[1][1] && cells[2][2]) {
-    const piece1 = pieces.find((p) => p.id === cells[0][0]);
-    const piece2 = pieces.find((p) => p.id === cells[1][1]);
-    const piece3 = pieces.find((p) => p.id === cells[2][2]);
-    checkWinCondition(piece1!, piece2!, piece3!);
-  }
-  if (cells[0][2] && cells[1][1] && cells[2][0]) {
-    const piece1 = pieces.find((p) => p.id === cells[0][2]);
-    const piece2 = pieces.find((p) => p.id === cells[1][1]);
-    const piece3 = pieces.find((p) => p.id === cells[2][0]);
-    checkWinCondition(piece1!, piece2!, piece3!);
-  }
-
-  //TODO: Fix this. Currently says its a draw if the board fills up even if pieces can be placed on smaller ones
+  //check rows
   if (
-    cells[0][0] &&
-    cells[0][1] &&
-    cells[0][2] &&
-    cells[1][0] &&
-    cells[1][1] &&
-    cells[1][2] &&
-    cells[2][0] &&
-    cells[2][1] &&
-    cells[2][2]
+    cells[row].every((cell) => {
+      if (cell != null) return pieces[cell].player === player;
+      return false;
+    })
   ) {
-    console.log('it is  draw');
-    clearInterval(intervalId);
-    store.dispatch(endGame());
+    return true;
   }
+
+  //check cols
+  if (
+    cells.every((row) => {
+      if (row[col] != null) return pieces[row[col]!].player === player;
+      return false;
+    })
+  ) {
+    return true;
+  }
+
+  //check left diagonal
+  if (
+    row === col &&
+    cells.every((row, index) => {
+      if (row[index] != null) return pieces[row[index]!].player === player;
+      return false;
+    })
+  ) {
+    return true;
+  }
+
+  //check right diagonal
+  if (
+    row + col === 2 &&
+    cells.every((row, index) => {
+      if (row[index] != null) return pieces[row[index]!].player === player;
+      return false;
+    })
+  ) {
+    return true;
+  }
+
+  return false;
 };
 
-export default CheckWinner;
+export const checkDraw = (player: number) => {
+  //I can't find the rules of the game as intended so I am defining a draw as any situation
+  //where one player hasn't won and the person who's go it is cannot place a piece on the board
+  //i.e the board is full and all of the other players pieces are bigger than any remaining pieces the player has
+  const gameState = store.getState().game;
+  const cells = gameState.cells;
+
+  const boardHasSpace = !cells.every((row) =>
+    row.every((cell) => cell != null)
+  );
+
+  if (boardHasSpace) return false;
+
+  const pieces = gameState.allPieces;
+  const placedPieceIds = gameState.placedPieceIds;
+
+  const nextPlayer = player === 1 ? 2 : 1;
+
+  const piecesStillToPlace = pieces.filter(
+    (piece) => piece.player === nextPlayer && !placedPieceIds.includes(piece.id)
+  );
+
+  const piecesVisibleOnBoard = cells.map((row) =>
+    row.map((cell) => pieces[cell!])
+  );
+
+  const piecesThatCanBePlaced = piecesStillToPlace.filter((pieceToPlace) =>
+    piecesVisibleOnBoard.every((row) =>
+      row.every((visiblePiece) => {
+        return (
+          visiblePiece.player !== pieceToPlace.player ||
+          visiblePiece.size < pieceToPlace.size
+        );
+      })
+    )
+  );
+
+  console.log(piecesThatCanBePlaced);
+  return piecesThatCanBePlaced.length === 0;
+};

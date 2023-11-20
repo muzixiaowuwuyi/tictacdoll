@@ -1,4 +1,4 @@
-import { MutableRefObject, Suspense, useEffect, useState } from 'react';
+import { MutableRefObject, Suspense, useState } from 'react';
 import { Piece } from '../Piece/Piece';
 import {
   Environment,
@@ -12,6 +12,7 @@ import Board from '../Board/Board';
 import { TextureLoader } from 'three';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
+  endGame,
   placePiece,
   selectPiece,
   unselectPiece,
@@ -24,14 +25,14 @@ import errorAudio from '../../assets/sound/error.mp3';
 import { Group } from 'three';
 import { GamePiece } from '../../utils/types';
 import { placePieceAnimation } from '../../animations/placePieceAnimation';
-import CheckWinner from '../../services/checkWinService';
+import { checkWinner, checkDraw } from '../../services/checkWinService';
 
 const GameEnvironment = () => {
   const dispatch = useAppDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, '/texture.png');
 
-  const chessPieces = useAppSelector((state) => state.game.pieces);
+  const chessPieces = useAppSelector((state) => state.game.allPieces);
   const activePiece = useAppSelector((state) => state.game.activePiece);
   const currentPlayer = useAppSelector((state) => state.game.currentPlayer);
   const cells = useAppSelector((state) => state.game.cells);
@@ -90,23 +91,21 @@ const GameEnvironment = () => {
       return;
     }
 
-    dispatch(placePiece({ activePiece, cell }));
+    const chessRef = chessRefs[activePiece.id];
+    placePieceAnimation(newPosition, chessRef);
+
+    dispatch(placePiece({ cell }));
     dispatch(unselectPiece());
 
-    ////TODO: check if is win
-    ///checking the places surronding this piece after a piece is placed
-    ///will be more efficient than checking the current way.
-
-    const chessRef = chessRefs[activePiece.id];
-
-    placePieceAnimation(newPosition, chessRef);
+    if (checkWinner(cell, activePiece.player)) {
+      dispatch(endGame());
+    } else if (checkDraw(activePiece.player)) {
+      dispatch(endGame());
+      console.log('DRAW');
+    }
 
     return;
   };
-
-  useEffect(() => {
-    CheckWinner();
-  }, [cells]);
 
   useFrame(() => TWEEN.update());
   return (

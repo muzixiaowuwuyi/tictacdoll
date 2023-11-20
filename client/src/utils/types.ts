@@ -9,7 +9,8 @@ export type GameState = {
 
   cells: (null | number)[][];
 
-  pieces: GamePiece[];
+  allPieces: GamePiece[];
+  placedPieceIds: number[];
 
   currentPlayer: number;
   activePiece: undefined | GamePiece;

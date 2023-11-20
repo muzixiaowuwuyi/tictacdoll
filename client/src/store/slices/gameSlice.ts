@@ -22,7 +22,7 @@ export const initialState: GameState = {
     [null, null, null],
   ],
 
-  pieces: [
+  allPieces: [
     {
       id: 0,
       position: [15, 1.5, 0],
@@ -133,6 +133,8 @@ export const initialState: GameState = {
     },
   ],
 
+  placedPieceIds: [],
+
   currentPlayer: PiecePlayer.HUMAN,
   activePiece: undefined,
   winner: null,
@@ -148,6 +150,8 @@ export const gameSlice = createSlice({
     },
 
     endGame: (state) => {
+      clearInterval(state.intervalId);
+      state.intervalId = undefined;
       state.gameEnded = true;
       state.isInGame = false;
     },
@@ -184,6 +188,7 @@ export const gameSlice = createSlice({
       const [cellX, cellY] = cell;
 
       state.cells[cellX][cellY] = state.activePiece!.id;
+      state.placedPieceIds.push(state.activePiece!.id);
 
       state.currentPlayer =
         state.activePiece!.player === PiecePlayer.HUMAN

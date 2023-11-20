@@ -13,6 +13,5 @@ export type SelectPiecePayload = {
 };
 
 export type PlacePiecePayload = {
-  activePiece: GamePiece;
   cell: number[];
 };

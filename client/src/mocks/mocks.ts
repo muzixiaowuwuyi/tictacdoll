@@ -187,13 +187,13 @@ export const mockPiece1 : GamePiece = {
   id: 2,
   position: [15, 1.5, 3],
   size: PieceSize.LARGE,
-  player: PiecePlayer.HUMAN,
+  player: PiecePlayer.PLAYER1,
 };
 
 export const mockPiece2 : GamePiece = {
   id: 5,
   position: [12, 0.9, 3],
   size: PieceSize.MEDIUM,
-  player: PiecePlayer.HUMAN,
+  player: PiecePlayer.PLAYER1,
 };
 

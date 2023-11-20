@@ -8,6 +8,7 @@ import store from '../store/index';
 const winSound = new Audio(winAudio);
 
 export const handleWin = (winner: number) => {
+  console.log("WIN")
   const gameState = store.getState().game;
   const duration = gameState.duration;
 
@@ -23,8 +24,9 @@ export const handleWin = (winner: number) => {
   
   winSound.play();
 
-  console.log(`${winner} you win`);
-  store.dispatch(endGame()); // 发送游戏数据到服务器 /send game data to server
+  store.dispatch(endGame({gameWinner: winner}));
+  
+  // 发送游戏数据到服务器 /send game data to server
 
   addGamedata(winnerData)
     .then((response) => {

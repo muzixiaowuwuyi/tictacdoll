@@ -34,16 +34,6 @@ describe('gameReducer', () => {
     expect(result).toStrictEqual({ ...initialState, gameEnded: true });
   });
 
-  it('should handle updating intervalId', () => {
-    const stateBeforeAction = initialState;
-    const intervalId = setInterval(() => 'placeholder', 10);
-    const action = { type: 'game/setIntervalId', payload: { intervalId } };
-
-    const result = gameReducer(stateBeforeAction, action);
-    expect(result).toStrictEqual({ ...initialState, intervalId });
-    clearInterval(intervalId);
-  });
-
   it('should handle updating duration', () => {
     const stateBeforeAction = initialState;
     const action = { type: 'game/updateDuration', payload: { duration: 10 } };
@@ -107,18 +97,18 @@ describe('gameReducer', () => {
     expect(result).toStrictEqual({
       ...initialState,
       cells: newCells,
-      currentPlayer: PiecePlayer.COMPUTER,
+      currentPlayer: PiecePlayer.PLAYER2,
       activePiece: mockPiece1,
-      placedPieces: [mockPiece1.id],
+      placedPieceIds: [mockPiece1.id],
     });
   });
 
   it('should handle settingWinner', () => {
     const stateBeforeAction = initialState;
-    const action = { type: 'game/setWinner', payload: { gamewinner: 'guy' } };
+    const action = { type: 'game/setWinner', payload: { gamewinner: 1 } };
 
     const result = gameReducer(stateBeforeAction, action);
 
-    expect(result).toStrictEqual({ ...initialState, winner: 'guy' });
+    expect(result).toStrictEqual({ ...initialState, winner: 1 });
   });
 });

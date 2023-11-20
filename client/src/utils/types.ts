@@ -4,7 +4,6 @@ export type GameState = {
   gameEnded: boolean;
   isInGame: boolean;
   duration: number;
-  intervalId?: NodeJS.Timeout;
   startTime: null | number;
 
   cells: (null | number)[][];
@@ -14,7 +13,7 @@ export type GameState = {
 
   currentPlayer: number;
   activePiece: undefined | GamePiece;
-  winner: null | string;
+  winner: null | number;
 };
 
 export type GamePiece = {

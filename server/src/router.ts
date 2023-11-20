@@ -4,7 +4,8 @@ import userController from './controllers/userController';
 
 const router = Router();
 
-router.post('/users', userController.registerUser);
+router.post('/user/register', userController.registerUser);
+router.post('/user/login', userController.login);
 
 router.get("/sessions", gameSession.getGameSession);
 router.post("/sessions", gameSession.addGameSession);

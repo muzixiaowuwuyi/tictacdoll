@@ -16,6 +16,9 @@ export default function Home() {
     setShowButton(true);
   }, []);
 
+  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
+    setUsername(event.currentTarget.value);
+
   const handlePlayer1Change = (event: FormEvent<HTMLInputElement>) => {
     setPlayer1(event.currentTarget.value);
   };

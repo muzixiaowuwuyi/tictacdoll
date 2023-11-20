@@ -25,8 +25,12 @@ import { Group } from 'three';
 import { GamePiece } from '../../utils/types';
 import { placePieceAnimation } from '../../animations/placePieceAnimation';
 import { checkWinner, checkDraw, handleWin } from '../../services/checkWinService';
+type GameEnvironmentProps = {
+  setShowPopup: Function,
+  setPopupMessage: Function,
+}
 
-const GameEnvironment = () => {
+const GameEnvironment = ({setShowPopup, setPopupMessage}: GameEnvironmentProps ) => {
   const dispatch = useAppDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, '/texture.png');
@@ -41,6 +45,8 @@ const GameEnvironment = () => {
   const [chessRefs, setChessRefs] = useState<
     Record<number, MutableRefObject<Group>>
   >({});
+
+
 
   const errorSound = new Audio(errorAudio);
 
@@ -65,9 +71,9 @@ const GameEnvironment = () => {
       //TODO: 把 alert 移除，放置到二维图层 / Remove the alert and add a UI pop up
       errorSound.play();
       setTimeout(() => {
-        alert('not your turn!');
+        setShowPopup(true);
+        setPopupMessage('Not your turn!');
       }, 500);
-
       return;
     }
 
@@ -83,7 +89,8 @@ const GameEnvironment = () => {
       //TODO: 把 alert 移除，放置到二维图层 / Remove the alert and add a UI pop up
       errorSound.play();
       setTimeout(() => {
-        alert('Invalid move!');
+        setShowPopup(true);
+        setPopupMessage('Invalid move');
       }, 500);
 
       dispatch(unselectPiece());

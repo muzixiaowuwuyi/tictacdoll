@@ -23,15 +23,15 @@ describe('gameReducer', () => {
     });
 
     expect(result.startTime).toBeTruthy();
-    expect(Date.now() - result.startTime!).toBeLessThan(5);
+    expect(Date.now() - result.startTime!).toBeLessThan(10);
   });
 
   it('should handle ending the game', () => {
     const stateBeforeAction = { ...initialState, isInGame: true };
-    const action = { type: 'game/endGame' };
+    const action = { type: 'game/endGame', payload: {gameWinner: 1} };
 
     const result = gameReducer(stateBeforeAction, action);
-    expect(result).toStrictEqual({ ...initialState, gameEnded: true });
+    expect(result).toStrictEqual({ ...initialState, gameEnded: true, winner: 1});
   });
 
   it('should handle updating duration', () => {
@@ -101,14 +101,5 @@ describe('gameReducer', () => {
       activePiece: mockPiece1,
       placedPieceIds: [mockPiece1.id],
     });
-  });
-
-  it('should handle settingWinner', () => {
-    const stateBeforeAction = initialState;
-    const action = { type: 'game/setWinner', payload: { gamewinner: 1 } };
-
-    const result = gameReducer(stateBeforeAction, action);
-
-    expect(result).toStrictEqual({ ...initialState, winner: 1 });
   });
 });

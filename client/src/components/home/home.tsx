@@ -5,7 +5,6 @@ import { startGame } from "../../store/slices/gameSlice";
 import { useNavigate } from "react-router-dom";
 import logo1 from "/logos-and-icons/logo-1.png";
 import logo2 from "/logos-and-icons/logo-2.png";
-import Modal from "react-overlays/Modal";
 export default function Home() {
   const dispatch = useDispatch();
   const [username, setUsername] = useState("");
@@ -16,16 +15,7 @@ export default function Home() {
     setShowButton(true);
   }, []);
 
-  // Added local state for handling popup
-  const [showPopup, setShowPopup] = useState(false);
 
-  // Popup handlers START
-  const handleClose = () => setShowPopup(false);
-  const handleSuccess = () => console.log('success');
-
-  const renderBackdrop = (props: any) => <div className="backdrop" {...props} />;
-
-  // Popup handlers END
 
   const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
     setUsername(event.currentTarget.value);
@@ -46,26 +36,6 @@ export default function Home() {
 
   return (
     <div className="home-page">
-    <Modal
-    className="modal"
-    show={showPopup}
-    onHide={handleClose}
-    renderBackdrop={renderBackdrop}
-    >
-    <div>
-      <div className="modal-header">
-        <div className="modal-title">Message</div>
-        <div>
-          <span className="close-button" onClick={handleClose}>
-            ✖
-          </span>
-        </div>
-      </div>
-      <div className="modal-desc">
-        <p>Alert message</p>
-      </div>
-    </div>
-  </Modal>
       <div className="img-container">
         <img className="logo1" src={logo1} alt="img1" />
         <img className="logo2" src={logo2} alt="img2" />
@@ -82,7 +52,6 @@ export default function Home() {
           <button onClick={handleStartGame} className="start-button">
             Start Game
           </button>
-          <button onClick={() => setShowPopup(true)}>Popup</button>
         </div>
       )}
     </div>

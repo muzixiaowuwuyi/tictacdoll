@@ -44,7 +44,7 @@ const Piece = (props: PieceProps) => {
       onClick={handleClick}
     >
       {/* Player's pieces */}
-      {pieceSize === PieceSize.LARGE && piecePlayer === PiecePlayer.HUMAN && (
+      {pieceSize === PieceSize.LARGE && piecePlayer === PiecePlayer.PLAYER1 && (
         <>
           <mesh
             castShadow
@@ -72,7 +72,7 @@ const Piece = (props: PieceProps) => {
           />
         </>
       )}
-      {pieceSize === PieceSize.MEDIUM && piecePlayer === PiecePlayer.HUMAN && (
+      {pieceSize === PieceSize.MEDIUM && piecePlayer === PiecePlayer.PLAYER1 && (
         <>
           <mesh
             castShadow
@@ -100,7 +100,7 @@ const Piece = (props: PieceProps) => {
           />
         </>
       )}
-      {pieceSize === PieceSize.SMALL && piecePlayer === PiecePlayer.HUMAN && (
+      {pieceSize === PieceSize.SMALL && piecePlayer === PiecePlayer.PLAYER1 && (
         <>
           <mesh
             castShadow
@@ -131,7 +131,7 @@ const Piece = (props: PieceProps) => {
 
       {/* Computer's pieces */}
 
-      {pieceSize === PieceSize.LARGE && piecePlayer === PiecePlayer.COMPUTER && (
+      {pieceSize === PieceSize.LARGE && piecePlayer === PiecePlayer.PLAYER2 && (
         <>
           <mesh
             castShadow
@@ -161,7 +161,7 @@ const Piece = (props: PieceProps) => {
           />
         </>
       )}
-      {pieceSize === PieceSize.MEDIUM && piecePlayer === PiecePlayer.COMPUTER && (
+      {pieceSize === PieceSize.MEDIUM && piecePlayer === PiecePlayer.PLAYER2 && (
         <>
           <mesh
             castShadow
@@ -191,7 +191,7 @@ const Piece = (props: PieceProps) => {
           />
         </>
       )}
-      {pieceSize === PieceSize.SMALL && piecePlayer === PiecePlayer.COMPUTER && (
+      {pieceSize === PieceSize.SMALL && piecePlayer === PiecePlayer.PLAYER2 && (
         <>
           <mesh
             castShadow

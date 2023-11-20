@@ -15,6 +15,7 @@ export default function GameOverPage() {
     navigate('/');
     window.location.reload();
   }
+  
   return (
     <div className='overpage-container'>
       <div className={list}>

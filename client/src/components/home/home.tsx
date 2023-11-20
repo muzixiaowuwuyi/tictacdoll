@@ -1,13 +1,14 @@
-import "./home.css";
-import { FormEvent, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { startGame } from "../../store/slices/gameSlice";
-import { useNavigate } from "react-router-dom";
-import logo1 from "/logos-and-icons/logo-1.png";
-import logo2 from "/logos-and-icons/logo-2.png";
+import './home.css';
+import { FormEvent, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { startGame } from '../../store/slices/gameSlice';
+import { useNavigate } from 'react-router-dom';
+import logo1 from '/logos-and-icons/logo-1.png';
+import logo2 from '/logos-and-icons/logo-2.png';
 export default function Home() {
   const dispatch = useDispatch();
-  const [username, setUsername] = useState("");
+  const [player1, setPlayer1] = useState('');
+  const [player2, setPlayer2] = useState('');
   const navigate = useNavigate();
   const [showButton, setShowButton] = useState(false);
 
@@ -15,42 +16,61 @@ export default function Home() {
     setShowButton(true);
   }, []);
 
-  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
-    setUsername(event.currentTarget.value);
+  const handlePlayer1Change = (event: FormEvent<HTMLInputElement>) => {
+    setPlayer1(event.currentTarget.value);
+  };
+
+  const handlePlayer2Change = (event: FormEvent<HTMLInputElement>) => {
+    setPlayer2(event.currentTarget.value);
   };
 
   const handleStartGame = () => {
-    if (!username.trim()) {
-      alert("Please enter a username.");
-    }
+    sessionStorage.setItem('player1', player1);
+    sessionStorage.setItem('player2', player2);
 
-    sessionStorage.setItem("username", username);
-
-    navigate("/game");
-
+    navigate('/game');
     ////start game and the timer
     dispatch(startGame());
   };
 
   return (
-    <div className="home-page">
-      <div className="img-container">
-        <img className="logo1" src={logo1} alt="img1" />
-        <img className="logo2" src={logo2} alt="img2" />
+    <div className='home-page'>
+      <div className='img-container'>
+        <img className='logo1' src={logo1} alt='img1' />
+        <img className='logo2' src={logo2} alt='img2' />
       </div>
       {showButton && (
-        <div className="startgame">
-          <input
-            type="text"
-            placeholder="Enter your username"
-            value={username}
-            onChange={handleInputChange}
-            className="username-input"
-          />
-          <button onClick={handleStartGame} className="start-button">
+        <form onSubmit={handleStartGame} className='startgame'>
+          <div className='fields'>
+            <div className='input-field'>
+              <label className='input-label player1'>Player 1:</label>
+              <input
+                id='player1'
+                type='text'
+                placeholder='Enter your username'
+                value={player1}
+                onChange={handlePlayer1Change}
+                className='username-input player1'
+                required
+              />
+            </div>
+            <div className='input-field'>
+              <label className='input-label player2'>Player 2:</label>
+              <input
+                id='player2'
+                type='text'
+                placeholder='Enter your username'
+                value={player2}
+                onChange={handlePlayer2Change}
+                className='username-input player2'
+                required
+              />
+            </div>
+          </div>
+          <button type='submit' className='start-button'>
             Start Game
           </button>
-        </div>
+        </form>
       )}
     </div>
   );

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Box } from '@react-three/drei';
-import { useAppSelector } from '../../store/hooks';
 import PropTypes from 'prop-types';
 import { Vector3 } from 'three';
 
@@ -15,7 +14,6 @@ const Board = (props: BoardProps) => {
   const gap = 0.6; // gap between tile
   const separatorHeight = 0.1; // height of the separator, slightly higher than the tile
   const totalSize = boardSize * cellSize + (boardSize - 1) * gap + 1.5; // total size of the board including gaps
-  const gameState = useAppSelector((state) => state.game.isInGame);
 
   const { onPiecePlaced } = props;
 
@@ -46,8 +44,6 @@ const Board = (props: BoardProps) => {
           position={position}
           args={[cellSize, cellHeight, cellSize]}
           onClick={() => {
-            console.log(`cell ${x}-${y} clicked and is in game: ${gameState}`);
-
             handlePlacePiece(position, [x, y]);
           }}
         >

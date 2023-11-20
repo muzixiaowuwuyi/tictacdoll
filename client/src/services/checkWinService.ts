@@ -11,22 +11,25 @@ export const handleWin = (winner: number) => {
   const gameState = store.getState().game;
   const duration = gameState.duration;
 
-  const username = sessionStorage.getItem('username');
-  let seconds = Math.floor(duration / 1000);
-  console.log(`username ${username} win in ${seconds} seconds`);
+  const player1 = sessionStorage.getItem('player1')!;
+  const player2 = sessionStorage.getItem('player2')!;
 
-  const winnerData = {
-    player: username!,
-    winner: winner,
+  let seconds = Math.floor(duration / 1000);
+
+  const gameData = {
+    player1,
+    player2,
+    winner,
     duration: seconds,
   };
   
   winSound.play();
 
-  console.log(`${winner} you win`);
-  store.dispatch(endGame()); // 发送游戏数据到服务器 /send game data to server
+  store.dispatch(endGame({gameWinner: winner}));
+  
+  // 发送游戏数据到服务器 /send game data to server
 
-  addGamedata(winnerData)
+  addGamedata(gameData)
     .then((response) => {
       console.log('Game data saved:', response);
     })
@@ -68,7 +71,9 @@ export const checkWinner = (cell: number[], player: number) => {
   if (
     row === col &&
     cells.every((row, index) => {
-      if (row[index] != null) return pieces[row[index]!].player === player;
+      if (row[index] != null) {
+        return pieces[row[index]!].player === player;
+      }
       return false;
     })
   ) {
@@ -79,7 +84,9 @@ export const checkWinner = (cell: number[], player: number) => {
   if (
     row + col === 2 &&
     cells.every((row, index) => {
-      if (row[index] != null) return pieces[row[index]!].player === player;
+      if (row[2-index] != null) {
+        return pieces[row[2-index]!].player === player;
+      } 
       return false;
     })
   ) {
@@ -126,6 +133,5 @@ export const checkDraw = (player: number) => {
     )
   );
 
-  console.log(piecesThatCanBePlaced);
   return piecesThatCanBePlaced.length === 0;
 };

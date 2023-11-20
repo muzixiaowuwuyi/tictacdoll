@@ -42,6 +42,8 @@ const GameEnvironment = () => {
     Record<number, MutableRefObject<Group>>
   >({});
 
+
+
   const errorSound = new Audio(errorAudio);
 
   const onChessRefObtained = (
@@ -65,9 +67,8 @@ const GameEnvironment = () => {
       //TODO: 把 alert 移除，放置到二维图层 / Remove the alert and add a UI pop up
       errorSound.play();
       setTimeout(() => {
-        alert('not your turn!');
+        alert('Not your turn!');
       }, 500);
-
       return;
     }
 

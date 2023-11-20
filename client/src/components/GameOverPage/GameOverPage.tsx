@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import './GameOverPage.css';
 import { useState } from 'react';
-import Winner from '../Winner/Winner.tsx';
+import Winner from '../winner/Winner.tsx';
 import GameList from '../GameList/GameList.js';
 
 export default function GameOverPage() {

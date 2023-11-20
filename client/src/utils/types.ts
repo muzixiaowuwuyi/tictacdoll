@@ -24,7 +24,8 @@ export type GamePiece = {
 };
 
 export type NewGameSession = {
-  player: string;
+  player1: string;
+  player2: string;
   winner: number;
   duration: number;
 };

@@ -1,4 +1,4 @@
-import GameSessions from "../models/GameSessions";
+import GameSessions from "../models/game";
 import { Request, Response } from "express"
 
 async function getGameSession(req: Request, res: Response): Promise<void> {

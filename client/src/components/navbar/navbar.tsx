@@ -12,15 +12,12 @@ export default function Navbar() {
     <div className="invisibal-container">
       <div className="navinfo">
         <div className="game-name">Tic Tac Doll</div>
-        {/* {shouldShowTimer && <Timer className="timer" />} */}
-
         {shouldShowTimer && <Timer/>}
         <div className="logo_container">
           <img className="logo-doll-2" src={logo2} alt="logo-2" />
           <img className="logo-doll-1" src={logo1} alt="logo-doll" />
         </div>
       </div>
-
       {gameEnded && <GameOverPage/>}
     </div>
   );

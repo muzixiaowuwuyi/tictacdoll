@@ -5,7 +5,7 @@ import router from './router';
 
 import { mockGames } from './mocks/mocks';
 
-jest.mock('./controllers/eventController', () => ({
+jest.mock('./controllers/game', () => ({
   getGameSession: jest.fn((req: Request, res: Response) =>
     res.status(200).send(mockGames)
   ),

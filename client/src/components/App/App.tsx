@@ -2,6 +2,7 @@ import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import GameCanvas from "../GameCanvas/GameCavas";
 import Navbar from "../Navbar/Navbar";
+
 import Local from "../Local/Local";
 import Login from "../Login/Login";
 import Register from "../Register/Register";

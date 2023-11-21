@@ -13,7 +13,6 @@ export const handleWin = (winner: number) => {
 
   const player1 = sessionStorage.getItem('player1')!;
   const player2 = sessionStorage.getItem('player2')!;
-
   let seconds = Math.floor(duration / 1000);
 
   const gameData = {
@@ -26,8 +25,6 @@ export const handleWin = (winner: number) => {
   winSound.play();
 
   store.dispatch(endGame({gameWinner: winner}));
-  
-  // 发送游戏数据到服务器 /send game data to server
 
   addGamedata(gameData)
     .then((response) => {
@@ -36,8 +33,6 @@ export const handleWin = (winner: number) => {
     .catch((error) => {
       console.error('Failed to save game data:', error);
     });
-
-  ////TODO: add apiservise
 };
 
 export const checkWinner = (cell: number[], player: number) => {
@@ -107,11 +102,10 @@ export const checkDraw = (player: number) => {
     row.every((cell) => cell != null)
   );
 
-  if (boardHasSpace) return false;
+  if (boardHasSpace) return false;2
 
   const pieces = gameState.allPieces;
   const placedPieceIds = gameState.placedPieceIds;
-
   const nextPlayer = player === 1 ? 2 : 1;
 
   const piecesStillToPlace = pieces.filter(

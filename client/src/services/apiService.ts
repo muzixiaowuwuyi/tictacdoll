@@ -1,3 +1,4 @@
+import { ErrorGameData, ErrorGameList } from "../mocks/errorData";
 import { GameSession, NewGameSession } from "../utils/types";
 
 const API_BASE_URL = "http://localhost:3002";
@@ -11,7 +12,7 @@ export async function fetchGamedata () {
     return (await response.json()) as GameSession[];
   } catch (error) {
     console.error("Error fetching game data:", error);
-    throw error;
+    return ErrorGameList
   }
 };
 
@@ -30,7 +31,7 @@ export const addGamedata = async (gameData : NewGameSession) => {
     return await response.json();
   } catch (error) {
     console.error("Error adding game data:", error);
-    throw error;
+    return ErrorGameData
   }
 };
 

@@ -6,7 +6,9 @@
     opacity: 1;
   }
 }
+
 .home-page, .user-page {
+
   background-image: url("/texture.png"); /* 替换为你的图片路径 */
   background-size: cover; /* 背景图像覆盖整个div */
   background-position: center; /* 图片居中 */
@@ -23,8 +25,6 @@
   animation-duration: 2s;
   animation-fill-mode: both;
 }
-
-
 
 @keyframes slideInFromLeft {
   0% {
@@ -51,6 +51,7 @@
   }
 }
 
+
 .prompt {
   animation: slideInFromLeft 1.8s ease-out forwards;
   font-size: 2rem;
@@ -58,7 +59,6 @@
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #551600;
 }
-
 .logo1 {
   width: 200px;
   animation: slideInFromLeft 1.8s ease-out forwards;
@@ -66,6 +66,7 @@
 
 .logo2 {
   animation: slideInFromRightAndBounce 3s ease-out forwards;
+
   width: 150px;
   padding-bottom: 10px;
 }
@@ -78,12 +79,13 @@
   margin-left: 20px;
 }
 
+
 .startgame, .login-form {
+
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-
 }
 
 .input-label {

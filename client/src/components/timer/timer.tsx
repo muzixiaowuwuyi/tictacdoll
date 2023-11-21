@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { useAppSelector } from '../../store/hooks';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../store/hooks';
 import { updateDuration } from '../../store/slices/gameSlice';
 
 import './timer.css';
 
 const Timer = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const startTime = useAppSelector((state) => state.game.startTime);
   const duration = useAppSelector((state) => state.game.duration);
 

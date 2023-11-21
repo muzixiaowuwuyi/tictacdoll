@@ -21,7 +21,8 @@ afterAll(async () => {
 describe('Game Model', () => {
   it('creates and saves a game instance', async () => {
     const gameData = {
-      player: 'Player1',
+      player1: 'Player1',
+      player2: 'Player2',
       winner: 1,
       duration: 30,
     };
@@ -30,7 +31,8 @@ describe('Game Model', () => {
     const savedGame = await game.save();
 
     expect(savedGame._id).toBeDefined();
-    expect(savedGame.player).toBe(gameData.player);
+    expect(savedGame.player1).toBe(gameData.player1);
+    expect(savedGame.player2).toBe(gameData.player2);
     expect(savedGame.winner).toBe(gameData.winner);
     expect(savedGame.duration).toBe(gameData.duration);
     expect(savedGame.createdAt).toBeDefined();
@@ -47,7 +49,8 @@ describe('Game Model', () => {
     }
 
     expect(error).toBeDefined();
-    expect(error?.errors.player).toBeDefined();
+    expect(error?.errors.player1).toBeDefined();
+    expect(error?.errors.player2).toBeDefined();
     expect(error?.errors.winner).toBeDefined();
     expect(error?.errors.duration).toBeDefined();
   });

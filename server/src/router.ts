@@ -13,6 +13,7 @@ router.post('/sessions', gameSession.addGameSession);
 
 router.use(authMiddleware);
 
+router.get('/auth', (req, res) => res.status(200).send({message: 'Authorised'}));
 router.post('/user/logout', userController.logout);
 
 export default router;

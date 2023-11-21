@@ -3,11 +3,10 @@ import { SocketWithUser, JWTTokenPayload } from '../types';
 import {Socket} from 'socket.io'
 import User from '../models/user';
 
-const PRIVATE_KEY = 'TEMP_PRIVATE_KEY'
+const PRIVATE_KEY = process.env.PRIVATE_KEY!
 
 export async function socketAuthMiddleware(socket: Socket, next: (err?: Error) => void) {
   try {
-    console.log('AUTH');
     const token = socket.handshake.auth.token as string | undefined;
 
     if(!token) throw new Error('Autherntication error')
@@ -24,6 +23,7 @@ export async function socketAuthMiddleware(socket: Socket, next: (err?: Error) =
     (socket as SocketWithUser).user = {_id: user._id, username: user.username};
     next();
   } catch (error) {
+    console.log(error);
     return next(new Error('Authentication Error'));
   }
 }

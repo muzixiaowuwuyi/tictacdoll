@@ -1,3 +1,4 @@
+
 import './Local.css';
 import { FormEvent, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -10,6 +11,7 @@ export default function Local() {
   const dispatch = useDispatch();
   const [player1, setPlayer1] = useState('');
   const [player2, setPlayer2] = useState('');
+
   const navigate = useNavigate();
   const [showButton, setShowButton] = useState(false);
 

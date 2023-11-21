@@ -6,7 +6,9 @@
     opacity: 1;
   }
 }
-.home-page {
+
+.home-page, .user-page {
+
   background-image: url("/texture.png"); /* 替换为你的图片路径 */
   background-size: cover; /* 背景图像覆盖整个div */
   background-position: center; /* 图片居中 */
@@ -18,9 +20,9 @@
   height: 100vh;
 }
 
-.startgame {
+.startgame, .form-container {
   animation-name: fadeIn;
-  animation-duration: 5s;
+  animation-duration: 2s;
   animation-fill-mode: both;
 }
 
@@ -49,6 +51,14 @@
   }
 }
 
+
+.prompt {
+  animation: slideInFromLeft 1.8s ease-out forwards;
+  font-size: 2rem;
+  color: #e25026;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #551600;
+}
 .logo1 {
   width: 200px;
   animation: slideInFromLeft 1.8s ease-out forwards;
@@ -69,11 +79,19 @@
   margin-left: 20px;
 }
 
-.startgame {
+
+.startgame, .login-form {
+
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+}
+
+.input-label {
+  color: #e25026;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #551600;
 }
 
 .fields {
@@ -95,19 +113,16 @@
   color: #267ee2;
 }
 
-.username-input {
+.username-input, .password-input {
   width: 200px;
   padding: 10px 15px;
   border: 2px solid #ddd;
   border-radius: 5px;
   font-size: 16px;
   margin-bottom: 15px;
-  /* color: #ddd; */
-
-  
 }
 
-.player1:focus {
+.player1:focus, .username-input:focus, .password-input:focus {
     border-color: #e25026; /* 焦点时边框颜色变化 */
     outline: none; /* 移除默认轮廓 */
 }
@@ -117,7 +132,13 @@
   outline: none; /* 移除默认轮廓 */
 }
 
-.start-button {
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  column-gap: 2rem;
+}
+
+.start-button, .orange-button, .distinct-button {
   display: block; /* 块状元素 */
   width: 200px; /* 充满容器宽度 */
   padding: 10px 15px; /* 舒适的内边距 */
@@ -139,6 +160,19 @@
   &:active {
     background-color: #f0a286;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 点击时阴影更小更浅 */
+  }
+}
+
+.distinct-button {
+  margin: auto;
+  margin-top: 2rem;
+  background-color: #FDF4D7;
+  color: #551600;
+  &:hover {
+    background-color:  #fdf6e2;
+  }
+  &:active {
+    background-color:#fdf6e2;
   }
 }
 

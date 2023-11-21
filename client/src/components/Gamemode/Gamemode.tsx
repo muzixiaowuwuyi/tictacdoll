@@ -1,4 +1,5 @@
-
+import { useState, FormEvent, useEffect } from "react";
+import './Gamemode.css';
 
 function Gamemode() {
   return (

@@ -1,3 +1,5 @@
+import { useState, FormEvent, useEffect } from "react";
+import './Register.css';
 
 
 function Register() {

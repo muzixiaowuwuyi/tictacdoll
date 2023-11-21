@@ -37,6 +37,7 @@ function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props)
       Cookies.set('username', username);
       setUsername("");
       setPassword("");
+      console.log(Cookies.get('username'), Cookies.get('accessToken'));
       navigate("/gamemode");
     } else {
       const resJson = await res?.json();

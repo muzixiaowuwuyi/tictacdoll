@@ -34,6 +34,14 @@ export async function login(user: User) {
   }
 }
 
-export function logout() {
-
+export async function logout() {
+  try {
+    const res = await fetch( `${API_BASE_URL}/user/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    })
+    return res;
+  } catch(error) {
+    console.log(error);
+  }
 }

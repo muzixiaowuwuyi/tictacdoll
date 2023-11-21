@@ -7,11 +7,16 @@ import cookieParser from 'cookie-parser';
 import router from './router';
 import setupWebSocket from './sockets';
 
+const corsConfig = {
+  credentials: true,
+  origin: true
+}
+
 const app = express();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer);
 
-app.use(cors());
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(cookieParser());
 app.use(router);

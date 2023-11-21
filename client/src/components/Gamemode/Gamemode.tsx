@@ -28,7 +28,6 @@ function Gamemode() {
     </div>
   </div>
 )
-
 }
 
 export default Gamemode;

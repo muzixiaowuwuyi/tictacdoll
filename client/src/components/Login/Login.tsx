@@ -1,9 +1,18 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { Props } from "../App/App";
+import PopUp from "../PopUp/PopUp";
 import logo1 from "/logos-and-icons/logo-1.png";
 import logo2 from "/logos-and-icons/logo-2.png";
+import { login } from "../../services/userService";
+import Cookies from 'js-cookie';
 
-function Login() {
+export type User = {
+  username: string;
+  password: string;
+};
+
+function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,12 +26,35 @@ function Login() {
     }
   }
 
-  function handleLogin(event: FormEvent<HTMLFormElement>) {
+  async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // TODO: login logic, make call to the server
+    const user: User = {
+      username,
+      password
+    }
+    const res = await login(user);
+    if (res?.status === 200) {
+      Cookies.set('username', username);
+      setUsername("");
+      setPassword("");
+      console.log(Cookies.get('username'), Cookies.get('accessToken'));
+      navigate("/gamemode");
+    } else {
+      const resJson = await res?.json();
+      setUsername("");
+      setPassword("");
+      setPopUpMessage(resJson.message);
+      setShowPopup(true);
+    }
   }
 
   return (
+    <>
+    <PopUp
+    showPopUp={showPopUp}
+    setShowPopUp={setShowPopup}
+    popUpMessage={ popUpMessage }
+  />
     <div className="user-page">
       <div className="img-container">
         <img className="logo1" src={logo1} alt="img1" />
@@ -72,6 +104,7 @@ function Login() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

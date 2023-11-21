@@ -22,7 +22,7 @@ function Register() {
 
   return (
     <div className="user-page">
-        <div className="img-container">
+        <div className="prompt-container">
           <div className="prompt">
             <h2>Register your details</h2>
           </div>

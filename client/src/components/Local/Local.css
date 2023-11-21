@@ -130,6 +130,12 @@
   outline: none; /* 移除默认轮廓 */
 }
 
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  column-gap: 2rem;
+}
+
 .start-button, .orange-button, .distinct-button {
   display: block; /* 块状元素 */
   width: 200px; /* 充满容器宽度 */
@@ -157,7 +163,7 @@
 
 .distinct-button {
   margin: auto;
-  margin-top: 20px;
+  margin-top: 2rem;
   background-color: #FDF4D7;
   color: #551600;
   &:hover {

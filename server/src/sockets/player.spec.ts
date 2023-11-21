@@ -13,9 +13,11 @@ afterAll(() => {
 
 describe.only('playerSocket', () => {
   let socket1: Socket;
+  let socket2: Socket;
 
   beforeEach((done) => {
     socket1 = ioClient(`http://localhost:3002/players`);
+    socket2 = ioClient(`http://localhost:3002/players`);
     done();
   });
 

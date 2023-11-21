@@ -5,7 +5,6 @@ import { JWTTokenPayload, RequestWithPayload } from "../types";
 
 const PRIVATE_KEY = 'TEMP_PRIVATE_KEY';
 
-
 export async function authMiddleware(req: RequestWithPayload, res: Response, next: NextFunction) {
   try {
     const token = req.cookies.accessToken;

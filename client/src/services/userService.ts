@@ -47,3 +47,16 @@ export async function logout() {
     console.log(error);
   }
 }
+
+export async function checkAuth() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+    return res.ok;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}

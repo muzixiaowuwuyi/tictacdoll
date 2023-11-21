@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
-import { RequestWithPayload } from '../types';
+import { RequestWithUser } from '../types';
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY!;
 
@@ -65,7 +65,7 @@ async function login(req: Request, res: Response) {
   }
 }
 
-async function logout(req: RequestWithPayload, res: Response) {
+async function logout(req: RequestWithUser, res: Response) {
   try {
     res.clearCookie('accessToken');
     res.status(204).send()

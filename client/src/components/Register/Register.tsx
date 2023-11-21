@@ -5,12 +5,12 @@ import PopUp from "../PopUp/PopUp";
 import { User } from "../Login/Login";
 import Cookies from "js-cookie";
 
-function Register() {
+import { Props } from "../App/App";
+
+function Register({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPopUp, setShowPopup] = useState(false);
-  const [popUpMessage, setPopUpMessage] = useState("");
 
   const navigate = useNavigate();
 

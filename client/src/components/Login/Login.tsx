@@ -1,5 +1,6 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { Props } from "../App/App";
 import PopUp from "../PopUp/PopUp";
 import logo1 from "/logos-and-icons/logo-1.png";
 import logo2 from "/logos-and-icons/logo-2.png";
@@ -11,11 +12,9 @@ export type User = {
   password: string;
 };
 
-function Login() {
+function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPopUp, setShowPopup] = useState(false);
-  const [popUpMessage, setPopUpMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -100,16 +99,6 @@ function Login() {
             onClick={() => navigate("/register")}
           >
             Register
-          </button>
-          <button
-            className="distinct-button"
-            onClick={() => {
-              Cookies.remove('username');
-              Cookies.remove('accessToken');
-              console.log(Cookies.get())
-            }}
-          >
-            Delete cookies
           </button>
         </div>
       </div>

@@ -2,6 +2,12 @@ import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import logo1 from "/logos-and-icons/logo-1.png";
 import logo2 from "/logos-and-icons/logo-2.png";
+import { login } from "../../services/userService";
+
+export type User = {
+  username: string;
+  password: string;
+};
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -17,9 +23,13 @@ function Login() {
     }
   }
 
-  function handleLogin(event: FormEvent<HTMLFormElement>) {
+  async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // TODO: login logic, make call to the server
+    const user: User = {
+      username,
+      password
+    }
+    await login(user);
   }
 
   return (

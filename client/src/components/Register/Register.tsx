@@ -1,5 +1,9 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { register } from "../../services/userService";
+import PopUp  from "../PopUp/PopUp";
+import { User } from "../Login/Login";
+import Cookies from "js-cookie";
 
 function Register() {
 
@@ -16,8 +20,21 @@ function Register() {
     }
   }
 
-  function handleRegister() {
-    // TODO: register logic, send data to the server
+  async function handleRegister(event: any) {
+    event.preventDefault();
+    const user: User = {
+      username,
+      password
+    }
+    const res = await register(user);
+    if (res!.status === 201) {
+      Cookies.set("username", username);
+      setUsername("");
+      setPassword("");
+      navigate('/gamemode');
+    } else {
+
+    }
   }
 
   return (
@@ -40,7 +57,7 @@ function Register() {
                 value={username}
                 onChange={handleChange}
                 className="username-input"
-                // required
+                required
               />
             </div>
             <div className="input-field">
@@ -52,12 +69,12 @@ function Register() {
                 value={password}
                 onChange={handleChange}
                 className="password-input"
-                // required
+                required
               />
             </div>
           </div>
           <div className="button-container">
-            <button type="submit" className="orange-button" onClick={handleRegister}>
+            <button type="submit" className="orange-button">
               Register
             </button>
           </div>

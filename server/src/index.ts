@@ -7,9 +7,12 @@ import router from './router'
 const app: Express = express();
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3002;
 const HOST: string = process.env.HOST ? process.env.HOST : 'localhost';
+const corsConfig = {
+  credentials: true,
+  origin: true
+}
 
-
-app.use(cors());
+app.use(cors(corsConfig));
 app.use(express.json());
 app.use(cookieParser());
 app.use(router);

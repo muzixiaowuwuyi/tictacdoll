@@ -31,7 +31,7 @@ async function registerUser(req: Request, res: Response) {
     res.status(201).send();
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: 'Internal Server Error' });
+    res.status(500).send({ message: 'Internal Server Error', error });
   }
 }
 

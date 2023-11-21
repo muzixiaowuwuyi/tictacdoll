@@ -2,7 +2,7 @@ import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import GameCanvas from "../GameCanvas/GameCavas";
 import Navbar from "../Navbar/Navbar";
-import Home from "../Home/Home";
+import Home from "../Local/Local";
 
 function App() {
   return (

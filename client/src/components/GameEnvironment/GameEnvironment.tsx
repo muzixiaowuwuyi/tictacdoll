@@ -1,4 +1,4 @@
-import { MutableRefObject, Suspense, useState } from 'react';
+import { MutableRefObject, Suspense, useState, Dispatch as ReactDispatch, SetStateAction } from 'react';
 import { Piece } from '../Piece/Piece';
 import {
   Environment,
@@ -25,12 +25,14 @@ import { Group } from 'three';
 import { GamePiece } from '../../utils/types';
 import { placePieceAnimation } from '../../animations/placePieceAnimation';
 import { checkWinner, checkDraw, handleWin } from '../../services/checkWinService';
+
+
 type GameEnvironmentProps = {
-  setShowPopup: Function,
-  setPopupMessage: Function,
+  setShowPopUp: ReactDispatch<SetStateAction<boolean>>,
+  setPopUpMessage: ReactDispatch<SetStateAction<string>>,
 }
 
-const GameEnvironment = ({setShowPopup, setPopupMessage}: GameEnvironmentProps ) => {
+const GameEnvironment = ({setShowPopUp: setShowPopup, setPopUpMessage: setPopupMessage}: GameEnvironmentProps ) => {
   const dispatch = useAppDispatch();
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, '/texture.png');
@@ -45,8 +47,6 @@ const GameEnvironment = ({setShowPopup, setPopupMessage}: GameEnvironmentProps )
   const [chessRefs, setChessRefs] = useState<
     Record<number, MutableRefObject<Group>>
   >({});
-
-
 
   const errorSound = new Audio(errorAudio);
 
@@ -64,16 +64,21 @@ const GameEnvironment = ({setShowPopup, setPopupMessage}: GameEnvironmentProps )
     return;
   };
 
+  const showErrorPopUp = (message: string) => {
+    errorSound.play();
+    setTimeout(() => {
+      setShowPopup(true);
+      setPopupMessage(message);
+    }, 500);
+
+    dispatch(unselectPiece());
+  }
+
   const handlePiecePlaced = (newPosition: Vector3, cell: number[]) => {
     if (activePiece === undefined) return;
 
     if (activePiece.player !== currentPlayer) {
-      //TODO: 把 alert 移除，放置到二维图层 / Remove the alert and add a UI pop up
-      errorSound.play();
-      setTimeout(() => {
-        setShowPopup(true);
-        setPopupMessage('Not your turn!');
-      }, 500);
+      showErrorPopUp('Not Your Turn!')
       return;
     }
 
@@ -83,17 +88,8 @@ const GameEnvironment = ({setShowPopup, setPopupMessage}: GameEnvironmentProps )
     let targetPiece: GamePiece | undefined;
     if (targetPieceId != null) targetPiece = chessPieces[targetPieceId];
 
-    console.log(targetPiece, targetPieceId);
-
     if (targetPiece && targetPiece.size >= activePiece.size) {
-      //TODO: 把 alert 移除，放置到二维图层 / Remove the alert and add a UI pop up
-      errorSound.play();
-      setTimeout(() => {
-        setShowPopup(true);
-        setPopupMessage('Invalid move');
-      }, 500);
-
-      dispatch(unselectPiece());
+      showErrorPopUp('Invalid Move!')
       return;
     }
 

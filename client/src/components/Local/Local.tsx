@@ -1,11 +1,12 @@
-import './home.css';
+import './Local.css';
 import { FormEvent, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { startGame } from '../../store/slices/gameSlice';
 import { useNavigate } from 'react-router-dom';
 import logo1 from '/logos-and-icons/logo-1.png';
 import logo2 from '/logos-and-icons/logo-2.png';
-export default function Home() {
+
+export default function Local() {
   const dispatch = useDispatch();
   const [player1, setPlayer1] = useState('');
   const [player2, setPlayer2] = useState('');
@@ -15,9 +16,6 @@ export default function Home() {
   useEffect(() => {
     setShowButton(true);
   }, []);
-
-  const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
-    setUsername(event.currentTarget.value);
 
   const handlePlayer1Change = (event: FormEvent<HTMLInputElement>) => {
     setPlayer1(event.currentTarget.value);
@@ -32,7 +30,6 @@ export default function Home() {
     sessionStorage.setItem('player2', player2);
 
     navigate('/game');
-    ////start game and the timer
     dispatch(startGame());
   };
 

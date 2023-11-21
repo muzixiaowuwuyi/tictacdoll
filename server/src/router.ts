@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import gameSession from './controllers/eventController';
-import userController from './controllers/userController';
+import gameSession from './controllers/game';
+import userController from './controllers/user';
 import { authMiddleware } from './middlewares/auth';
-import { RequestWithPayload } from './types';
 
 const router = Router();
 

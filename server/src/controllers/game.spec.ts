@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import eventController from './eventController';
-import Game from '../models/GameSessions';
+import eventController from './game';
+import Game from '../models/game';
 import mongoose from '../models';
 import { mockGames } from '../mocks/mocks';
 

@@ -35,7 +35,9 @@ function Register() {
       setPassword("");
       navigate("/gamemode");
     } else {
-      const resJson = await res?.json();
+      const resJson = await res!.json();
+      setUsername("");
+      setPassword("");
       setPopUpMessage(resJson.message);
       setShowPopup(true);
     }

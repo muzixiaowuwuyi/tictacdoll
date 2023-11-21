@@ -1,8 +1,10 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import PopUp from "../PopUp/PopUp";
 import logo1 from "/logos-and-icons/logo-1.png";
 import logo2 from "/logos-and-icons/logo-2.png";
 import { login } from "../../services/userService";
+import Cookies from 'js-cookie';
 
 export type User = {
   username: string;
@@ -12,6 +14,8 @@ export type User = {
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPopUp, setShowPopup] = useState(false);
+  const [popUpMessage, setPopUpMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,10 +33,28 @@ function Login() {
       username,
       password
     }
-    await login(user);
+    const res = await login(user);
+    if (res?.status === 200) {
+      Cookies.set('username', username);
+      setUsername("");
+      setPassword("");
+      navigate("/gamemode");
+    } else {
+      const resJson = await res?.json();
+      setUsername("");
+      setPassword("");
+      setPopUpMessage(resJson.message);
+      setShowPopup(true);
+    }
   }
 
   return (
+    <>
+    <PopUp
+    showPopUp={showPopUp}
+    setShowPopUp={setShowPopup}
+    popUpMessage={ popUpMessage }
+  />
     <div className="user-page">
       <div className="img-container">
         <img className="logo1" src={logo1} alt="img1" />
@@ -79,9 +101,20 @@ function Login() {
           >
             Register
           </button>
+          <button
+            className="distinct-button"
+            onClick={() => {
+              Cookies.remove('username');
+              Cookies.remove('accessToken');
+              console.log(Cookies.get())
+            }}
+          >
+            Delete cookies
+          </button>
         </div>
       </div>
     </div>
+    </>
   );
 }
 

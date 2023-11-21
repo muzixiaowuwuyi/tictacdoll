@@ -3,8 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { JWTTokenPayload, RequestWithPayload } from "../types";
 
-const PRIVATE_KEY = 'TEMP_PRIVATE_KEY';
-
+const PRIVATE_KEY = process.env.PRIVATE_KEY!;
 
 export async function authMiddleware(req: RequestWithPayload, res: Response, next: NextFunction) {
   try {

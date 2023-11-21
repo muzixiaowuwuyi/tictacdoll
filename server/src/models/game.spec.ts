@@ -2,7 +2,7 @@
 
 import mongoose from 'mongoose';
 import {MongoMemoryServer} from 'mongodb-memory-server';
-import Game from './GameSessions'
+import Game from './game'
 
 let mongoServer : MongoMemoryServer;
 

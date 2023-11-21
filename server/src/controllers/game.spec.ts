@@ -4,7 +4,7 @@ import Game from '../models/game';
 import mongoose from '../models';
 import { mockGames } from '../mocks/mocks';
 
-jest.mock('../models/GameSessions');
+jest.mock('../models/game');
 
 const dbName: string = 'TicTacDollDB';
 

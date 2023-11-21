@@ -26,7 +26,6 @@ import { GamePiece } from '../../utils/types';
 import { placePieceAnimation } from '../../animations/placePieceAnimation';
 import { checkWinner, checkDraw, handleWin } from '../../services/checkWinService';
 
-
 type GameEnvironmentProps = {
   setShowPopUp: ReactDispatch<SetStateAction<boolean>>,
   setPopUpMessage: ReactDispatch<SetStateAction<string>>,
@@ -37,25 +36,22 @@ const GameEnvironment = ({setShowPopUp: setShowPopup, setPopUpMessage: setPopupM
   const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
   const texture = useLoader(TextureLoader, '/texture.png');
 
-  const chessPieces = useAppSelector((state) => state.game.allPieces);
+  const pieces = useAppSelector((state) => state.game.allPieces);
   const activePiece = useAppSelector((state) => state.game.activePiece);
   const currentPlayer = useAppSelector((state) => state.game.currentPlayer);
   const cells = useAppSelector((state) => state.game.cells);
 
   const isInGame = useAppSelector((state) => state.game.isInGame);
 
-  const [chessRefs, setChessRefs] = useState<
+  const [pieceRefs, setChessRefs] = useState<
     Record<number, MutableRefObject<Group>>
   >({});
 
   const errorSound = new Audio(errorAudio);
 
-  const onChessRefObtained = (
-    ref: MutableRefObject<Group>,
+  const onPieceClicked = (
     piece: GamePiece
   ) => {
-    setChessRefs((prev) => ({ ...prev, [piece.id]: ref }));
-
     if (!isInGame) return;
 
     for (const row of cells) if (row.includes(piece.id)) return;
@@ -63,6 +59,10 @@ const GameEnvironment = ({setShowPopUp: setShowPopup, setPopUpMessage: setPopupM
     dispatch(selectPiece({ piece }));
     return;
   };
+
+  const addPieceRef = (ref: MutableRefObject<Group>, id: number) => {
+    setChessRefs((prev) => ({ ...prev, [id]: ref }));
+  }
 
   const showErrorPopUp = (message: string) => {
     errorSound.play();
@@ -86,14 +86,14 @@ const GameEnvironment = ({setShowPopUp: setShowPopup, setPopUpMessage: setPopupM
     const targetPieceId = cells[cellX][cellY];
 
     let targetPiece: GamePiece | undefined;
-    if (targetPieceId != null) targetPiece = chessPieces[targetPieceId];
+    if (targetPieceId != null) targetPiece = pieces[targetPieceId];
 
     if (targetPiece && targetPiece.size >= activePiece.size) {
       showErrorPopUp('Invalid Move!')
       return;
     }
 
-    const chessRef = chessRefs[activePiece.id];
+    const chessRef = pieceRefs[activePiece.id];
     placePieceAnimation(newPosition, chessRef);
 
     dispatch(placePiece({ cell }));
@@ -112,16 +112,16 @@ const GameEnvironment = ({setShowPopUp: setShowPopup, setPopUpMessage: setPopupM
   return (
     <Suspense fallback={null}>
       <Board onPiecePlaced={handlePiecePlaced} />
-      {chessPieces.map((piece) => (
+      {pieces.map((piece) => (
         <Piece
           piece={piece}
           key={piece.id}
-          ref={chessRefs[piece.id]}
           pieceSize={piece.size}
           position={piece.position}
           piecePlayer={piece.player}
           floorPlane={floorPlane}
-          onRefObtained={onChessRefObtained}
+          onPieceClicked={onPieceClicked}
+          addPieceRef={addPieceRef}
         />
       ))}
       <PerspectiveCamera makeDefault fov={35} position={[0, 24, 24]} />

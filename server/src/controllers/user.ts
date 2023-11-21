@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import { RequestWithPayload } from '../types';
 
-const PRIVATE_KEY = 'TEMP_PRIVATE_KEY';
+const PRIVATE_KEY = process.env.PRIVATE_KEY!;
 
 async function registerUser(req: Request, res: Response) {
   try {
@@ -25,7 +25,7 @@ async function registerUser(req: Request, res: Response) {
 
     await newUser.save();
 
-    const token = jwt.sign({ userId: newUser._id }, PRIVATE_KEY);
+    const token = jwt.sign({ userId: newUser._id, username: newUser.username }, PRIVATE_KEY);
 
     res.cookie('accessToken', token);
     res.status(201).send();
@@ -55,7 +55,7 @@ async function login(req: Request, res: Response) {
         .send({ message: 'Incorrect username or password' });
     }
 
-    const token = jwt.sign({ userId: user._id }, PRIVATE_KEY);
+    const token = jwt.sign({ userId: user._id, username: user.username }, PRIVATE_KEY);
 
     res.cookie('accessToken', token);
     res.status(200).send();

@@ -1,4 +1,4 @@
-import { MutableRefObject, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 
 import { PieceSize, PiecePlayer } from '../../models/enums';
@@ -12,8 +12,8 @@ type PieceProps = {
   piece: GamePiece;
   position: Vector3;
   piecePlayer: number;
-  onRefObtained: (ref: MutableRefObject<Group>, piece: GamePiece) => void;
-  ref: MutableRefObject<Group>;
+  onPieceClicked: (piece: GamePiece) => void;
+  addPieceRef: (ref: MutableRefObject<Group>, id: number) => void;
   floorPlane: Plane;
 };
 
@@ -24,15 +24,20 @@ const Piece = (props: PieceProps) => {
     position,
     piecePlayer,
     piece,
-    onRefObtained,
+    onPieceClicked,
+    addPieceRef,
     ...otherProps
   } = props;
 
   const groupRef = useRef<Group>(new Group());
 
   const handleClick = () => {
-    onRefObtained(groupRef, piece);
+    onPieceClicked(piece);
   };
+
+  useEffect(() => {
+    addPieceRef(groupRef, piece.id)
+  }, [])
 
   return (
     <group

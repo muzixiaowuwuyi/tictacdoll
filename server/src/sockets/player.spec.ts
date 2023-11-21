@@ -12,24 +12,21 @@ afterAll(() => {
 });
 
 describe.only('playerSocket', () => {
-  let socket: Socket;
+  let socket1: Socket;
 
   beforeEach((done) => {
-    socket = ioClient(`http://localhost:3002/players`);
-    console.log('Client Created');
+    socket1 = ioClient(`http://localhost:3002/players`);
     done();
   });
 
   afterEach(() => {
-    socket.disconnect();
+    socket1.disconnect();
   });
 
-  it('Should do something', (done) => {
-    const testData = { data: 'test' };
-    socket.emit('createGame', testData);
-    socket.on('connect', () => {
-      socket.on('test', (data) => {
-        expect(data).toStrictEqual(testData);
+  it('Should get list of joinable games (list of roomNames)', (done) => {
+    socket1.on('connect', () => {
+      socket1.on('currentGames', (data) => {
+        expect(data).toStrictEqual([]);
         done();
       });
     });

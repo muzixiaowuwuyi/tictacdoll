@@ -1,47 +1,49 @@
 import { User } from '../components/Login/Login';
 
-const API_BASE_URL = "http://localhost:3002";
+const API_BASE_URL = 'http://localhost:3002';
 
 export async function register(user: User) {
   try {
-    const res = await fetch( `${API_BASE_URL}/user/register`, {
+    const response = await fetch(`${API_BASE_URL}/user/register`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(user),
     });
-    return res;
-  } catch(error) {
-    console.log(error)
+
+    return response;
+  } catch (error) {
+    console.log(error);
   }
 }
 
 export async function login(user: User) {
   try {
-    const res = await fetch( `${API_BASE_URL}/user/login`, {
+    const response = await fetch(`${API_BASE_URL}/user/login`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(user),
     });
-    return res;
-  } catch(error) {
-    console.log(error)
+
+    return response;
+  } catch (error) {
+    console.log(error);
   }
 }
 
 export async function logout() {
   try {
-    const res = await fetch( `${API_BASE_URL}/user/logout`, {
+    const res = await fetch(`${API_BASE_URL}/user/logout`, {
       method: 'POST',
-      credentials: 'include'
-    })
+      credentials: 'include',
+    });
     return res;
-  } catch(error) {
+  } catch (error) {
     console.log(error);
   }
 }

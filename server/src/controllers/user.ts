@@ -28,7 +28,7 @@ async function registerUser(req: Request, res: Response) {
     const token = jwt.sign({ userId: newUser._id, username: newUser.username }, PRIVATE_KEY);
 
     res.cookie('accessToken', token);
-    res.status(201).send();
+    res.status(201).send({username});
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error', error });
@@ -58,7 +58,7 @@ async function login(req: Request, res: Response) {
     const token = jwt.sign({ userId: user._id, username: user.username }, PRIVATE_KEY);
 
     res.cookie('accessToken', token);
-    res.status(200).send();
+    res.status(200).send({username: user.username});
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error' });

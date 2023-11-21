@@ -1,13 +1,15 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../services/userService";
+import { login } from "../../store/slices/userSlice";
 import PopUp from "../PopUp/PopUp";
 import { User } from "../Login/Login";
-import Cookies from "js-cookie";
 
 import { Props } from "../App/App";
+import { useAppDispatch } from "../../store/hooks";
 
 function Register({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props) {
+  const dispatch = useAppDispatch();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +32,7 @@ function Register({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Pro
     };
     const res = await register(user);
     if (res!.status === 201) {
-      Cookies.set("username", username);
+      dispatch(login({username}))
       setUsername("");
       setPassword("");
       navigate("/gamemode");

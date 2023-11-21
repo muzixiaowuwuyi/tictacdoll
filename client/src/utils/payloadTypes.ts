@@ -15,3 +15,7 @@ export type PlacePiecePayload = {
 export type SetWinnerPayload = {
   gameWinner: number;
 }
+
+export type LoginPayload = {
+  username: string;
+}

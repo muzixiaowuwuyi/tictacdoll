@@ -1,8 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../services/userService";
+import { logout as logoutReducer } from "../../store/slices/userSlice";
+import { useAppDispatch } from "../../store/hooks";
 
 function Gamemode() {
-
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout()
+    dispatch(logoutReducer());
+    navigate('/')
+  }
 
   return (
     <div className="user-page">
@@ -21,8 +30,8 @@ function Gamemode() {
         </button>
       </div>
       <div className="button-container">
-        <button className="distinct-button" onClick={() => navigate('/')}>
-          Go back
+        <button className="distinct-button" onClick={handleLogout}>
+          Logout
         </button>
       </div>
     </div>

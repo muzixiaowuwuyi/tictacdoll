@@ -5,7 +5,8 @@ import PopUp from "../PopUp/PopUp";
 import logo1 from "/logos-and-icons/logo-1.png";
 import logo2 from "/logos-and-icons/logo-2.png";
 import { login } from "../../services/userService";
-import Cookies from 'js-cookie';
+import { login as loginReducer } from "../../store/slices/userSlice";
+import { useAppDispatch } from "../../store/hooks";
 
 export type User = {
   username: string;
@@ -13,6 +14,7 @@ export type User = {
 };
 
 function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props) {
+  const dispatch = useAppDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -32,12 +34,12 @@ function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props)
       username,
       password
     }
+
     const res = await login(user);
     if (res?.status === 200) {
-      Cookies.set('username', username);
+      dispatch(loginReducer({username}))
       setUsername("");
       setPassword("");
-      console.log(Cookies.get('username'), Cookies.get('accessToken'));
       navigate("/gamemode");
     } else {
       const resJson = await res?.json();

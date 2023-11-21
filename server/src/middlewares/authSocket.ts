@@ -7,6 +7,7 @@ const PRIVATE_KEY = 'TEMP_PRIVATE_KEY'
 
 export async function socketAuthMiddleware(socket: Socket, next: (err?: Error) => void) {
   try {
+    console.log('AUTH');
     const token = socket.handshake.auth.token as string | undefined;
 
     if(!token) throw new Error('Autherntication error')

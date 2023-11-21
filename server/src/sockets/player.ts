@@ -16,34 +16,41 @@ export default function playerSocket(playerNameSpace: Namespace) {
       socket.join(newRoomName);
     });
 
-    socket.on('joinGame', (data) => {
-      socket.join(data.roomName);
+    socket.on('joinGame', (room: string) => {
+      socket.join(room);
       socket.leave('waiting');
     });
 
-    socket.on('startGame', () => {
-      //TODO: Add game logic event listeners
+    socket.on('triggerStartGame', (room: string) => {
+      socket.to(room).emit('startGame')
     });
 
-    socket.on('endGame', () => {
-      //TODO: Remove game logic event listeners
+    socket.on('startGame', (room: string) => {
+      socket.on('triggerMovePiece', (pieceId: number, cell: number[]) => {
+        socket.broadcast.to(room).emit('movePiece', pieceId, cell);
+      })
+    });
+
+    socket.on('tiggerEndGame', (room: string) => {
+      socket.to(room).emit('endGame', room);
+    })
+
+    socket.on('endGame', (room: string) => {
+      socket.join('waiting')
+      socket.leave(room)
     });
   });
 }
 
 function getAllJoinableGames(playerNameSpace: Namespace) {
-  const joinableGames: string[] = [];
+
+  const joinableGames: {name: string, members: number}[] = [];
 
   playerNameSpace.adapter.rooms.forEach((sockets, roomName) => {
     if (sockets.size === 1 && roomName !== 'waiting') {
-      joinableGames.push(roomName);
+      joinableGames.push({name: roomName, members: sockets.size});
     }
   });
 
   return joinableGames;
-}
-
-function startGame(socket: SocketWithUser) {
-  //TODO: movePiece listener that would take a pieceId and a cell as argument and then move it for the other person in the room
-  //That might actually be it. I don't think I need to do any other ones.
 }

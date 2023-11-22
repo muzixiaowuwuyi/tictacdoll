@@ -57,13 +57,22 @@
 }
 
 .logged-user {
-  display: flex;
-  z-index: 10;
+  z-index: 5;
   position: fixed;
-  right: 5vw;
-  top: 3vh;
+  left: 3vw;
+  top: 2vh;
+  font-weight: 800;
+  color: #e25026;
+  font-size: large;
+  text-align: start;
+  text-shadow: 1px 1px 5px rgba(65, 64, 64, 0.486);
 }
 
-.logged-in-text {
-  text-align: center;
+.logout-button {
+  position: fixed;
+  right: 3vw;
+  top: 3vh;
+  color: white;
+  background-color: #e25026;
+  z-index: 5;
 }

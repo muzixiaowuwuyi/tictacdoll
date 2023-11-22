@@ -66,7 +66,7 @@ function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props)
         <form onSubmit={handleLogin} className="login-form">
           <div className="fields">
             <div className="input-field">
-              <label className="input-label">Username:</label>
+              <label htmlFor="username" className="input-label">Username:</label>
               <input
                 id="username"
                 type="text"
@@ -78,7 +78,7 @@ function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props)
               />
             </div>
             <div className="input-field">
-              <label className="input-label">Password:</label>
+              <label htmlFor="password" className="input-label">Password:</label>
               <input
                 id="password"
                 type="password"

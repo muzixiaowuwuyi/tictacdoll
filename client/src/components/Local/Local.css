@@ -138,7 +138,7 @@
   column-gap: 2rem;
 }
 
-.start-button, .orange-button, .distinct-button {
+.start-button, .orange-button, .distinct-button, .logout-button {
   display: block; /* 块状元素 */
   width: 200px; /* 充满容器宽度 */
   padding: 10px 15px; /* 舒适的内边距 */
@@ -161,6 +161,10 @@
     background-color: #f0a286;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 点击时阴影更小更浅 */
   }
+}
+
+.logout-button {
+  width: fit-content;
 }
 
 .distinct-button {

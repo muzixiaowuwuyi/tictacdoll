@@ -30,12 +30,10 @@ export default function Navbar() {
           <img className='logo-doll-2' src={logo2} alt='logo-2' />
           <img className='logo-doll-1' src={logo1} alt='logo-doll' />
         </div>
-      </div>
-
       {username != null && (
         <div className='logged-user'>
           <div className='logged-in-text'>
-            Logged in as: <br />
+            Logged user: <br />
             {username}
           </div>
           <button className='logout-button' onClick={handleLogout}>
@@ -43,6 +41,7 @@ export default function Navbar() {
           </button>
         </div>
       )}
+      </div>
       {gameEnded && <GameOverPage />}
     </div>
   );

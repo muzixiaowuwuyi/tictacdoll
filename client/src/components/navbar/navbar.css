@@ -58,12 +58,17 @@
 
 .logged-user {
   display: flex;
+  column-gap: 1vw;
   z-index: 10;
   position: fixed;
-  right: 5vw;
-  top: 3vh;
+  right: 1vw;
+  top: 2.5vh;
 }
 
 .logged-in-text {
-  text-align: center;
+  text-align: left;
+  color: #e25026;
+  font-weight: bold;
+  -webkit-text-stroke-width: 0.6px;
+  -webkit-text-stroke-color: #551600;
 }

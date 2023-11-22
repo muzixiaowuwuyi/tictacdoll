@@ -4,12 +4,13 @@ import { register } from "../../services/userService";
 import { login } from "../../store/slices/userSlice";
 import PopUp from "../PopUp/PopUp";
 import { User } from "../Login/Login";
+import { show, hide } from "../../store/slices/popupSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-import { Props } from "../App/App";
-import { useAppDispatch } from "../../store/hooks";
-
-function Register({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props) {
+function Register() {
   const dispatch = useAppDispatch();
+  const showPopUp = useAppSelector((state) => state.popup.showPopup);
+  const popUpMessage = useAppSelector((state) => state.popup.popupMessage);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -40,18 +41,17 @@ function Register({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Pro
       const resJson = await res!.json();
       setUsername("");
       setPassword("");
-      setPopUpMessage(resJson.message);
-      setShowPopup(true);
+      dispatch(show({ message: resJson.message }));
     }
   }
 
   return (
     <>
-      <PopUp
+      {<PopUp
         showPopUp={showPopUp}
-        setShowPopUp={setShowPopup}
+        setShowPopUp={() => dispatch(hide())}
         popUpMessage={ popUpMessage }
-      />
+      />}
       <div className="user-page">
         <div className="prompt-container">
           <div className="prompt">

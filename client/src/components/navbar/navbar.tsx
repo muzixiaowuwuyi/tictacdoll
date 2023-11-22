@@ -34,11 +34,6 @@ export default function Navbar() {
 
   return (
     <div className='invisibal-container'>
-      {username != null && (
-        <div className='logged-user'>
-          Logged in as: <br/>{username}
-        </div>
-      )}
       <div className='navinfo'>
         <div className='game-name'>Tic Tac Doll</div>
         {shouldShowTimer && <Timer />}
@@ -47,12 +42,18 @@ export default function Navbar() {
           <img className='logo-doll-1' src={logo1} alt='logo-doll' />
         </div>
       </div>
-        {username != null && (
+      {username != null && (
+        <div className='logged-user'>
+          <div className='logged-in-text'>
+            Logged user: <br />
+            {username}
+          </div>
           <button className='logout-button' onClick={handleLogout}>
             Logout
           </button>
-        )}
-
+        </div>
+      )}
+      </div>
       {gameEnded && <GameOverPage />}
     </div>
   );

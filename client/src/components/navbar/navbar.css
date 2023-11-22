@@ -57,22 +57,18 @@
 }
 
 .logged-user {
-  z-index: 5;
+  display: flex;
+  column-gap: 1vw;
+  z-index: 10;
   position: fixed;
-  left: 3vw;
-  top: 2vh;
-  font-weight: 800;
-  color: #e25026;
-  font-size: large;
-  text-align: start;
-  text-shadow: 1px 1px 5px rgba(65, 64, 64, 0.486);
+  right: 1vw;
+  top: 2.5vh;
 }
 
-.logout-button {
-  position: fixed;
-  right: 3vw;
-  top: 3vh;
-  color: white;
-  background-color: #e25026;
-  z-index: 5;
+.logged-in-text {
+  text-align: left;
+  color: #e25026;
+  font-weight: bold;
+  -webkit-text-stroke-width: 0.6px;
+  -webkit-text-stroke-color: #551600;
 }

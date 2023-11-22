@@ -1,20 +1,24 @@
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { Props } from "../App/App";
 import PopUp from "../PopUp/PopUp";
 import logo1 from "/logos-and-icons/logo-1.png";
 import logo2 from "/logos-and-icons/logo-2.png";
 import { login } from "../../services/userService";
 import { login as loginReducer } from "../../store/slices/userSlice";
-import { useAppDispatch } from "../../store/hooks";
+import { show, hide } from "../../store/slices/popupSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 export type User = {
   username: string;
   password: string;
 };
 
-function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props) {
+function Login() {
+
   const dispatch = useAppDispatch();
+  const showPopUp = useAppSelector((state) => state.popup.showPopup);
+  const popUpMessage = useAppSelector((state) => state.popup.popupMessage);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -45,8 +49,7 @@ function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props)
       const resJson = await res?.json();
       setUsername("");
       setPassword("");
-      setPopUpMessage(resJson.message);
-      setShowPopup(true);
+      dispatch(show({ message: resJson.message }));
     }
   }
 
@@ -54,7 +57,7 @@ function Login({ showPopUp, setShowPopup, popUpMessage, setPopUpMessage}: Props)
     <>
     <PopUp
     showPopUp={showPopUp}
-    setShowPopUp={setShowPopup}
+    setShowPopUp={() => dispatch(hide())}
     popUpMessage={ popUpMessage }
   />
     <div className="user-page">

@@ -19,3 +19,7 @@ export type SetWinnerPayload = {
 export type LoginPayload = {
   username: string;
 }
+
+export type popupPayload = {
+  message: string;
+}

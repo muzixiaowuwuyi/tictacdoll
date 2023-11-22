@@ -4,9 +4,10 @@ import './Navbar.css';
 import GameOverPage from '../GameOverPage/GameOverPage';
 import Timer from '../Timer/Timer';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { logout } from '../../services/userService';
-import {logout as logoutReducer} from '../../store/slices/userSlice'
+import { checkAuth, logout } from '../../services/userService';
+import { logout as logoutReducer } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function Navbar() {
   const dispatch = useAppDispatch();
@@ -15,10 +16,20 @@ export default function Navbar() {
   const shouldShowTimer = useAppSelector((state) => state.game.isInGame);
   const username = useAppSelector((state) => state.user.username);
 
+  useEffect(() => {
+    (async function () {
+      if (!(await checkAuth())) {
+        navigate('/');
+      } else {
+        navigate('/gamemode');
+      }
+    })();
+  }, []);
+
   async function handleLogout() {
     await logout();
     dispatch(logoutReducer());
-    navigate('/')
+    navigate('/');
   }
 
   return (
@@ -30,6 +41,7 @@ export default function Navbar() {
           <img className='logo-doll-2' src={logo2} alt='logo-2' />
           <img className='logo-doll-1' src={logo1} alt='logo-doll' />
         </div>
+      </div>
       {username != null && (
         <div className='logged-user'>
           <div className='logged-in-text'>

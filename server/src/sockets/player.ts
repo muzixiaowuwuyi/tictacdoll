@@ -14,6 +14,7 @@ export default function playerSocket(playerNameSpace: Namespace) {
     socket.on('createGame', () => {
       const newRoomName = (socket as SocketWithUser).user.username + "'s game";
       socket.join(newRoomName);
+      socket.leave('waiting');
     });
 
     socket.on('joinGame', (room: string) => {
@@ -21,34 +22,41 @@ export default function playerSocket(playerNameSpace: Namespace) {
       socket.leave('waiting');
     });
 
+    socket.on('getRoomPlayers', async (room) => {
+      const socketsInRoom = await playerNameSpace.in(room).fetchSockets();
+      const usernames = socketsInRoom.map(
+        (roomSocket) => (roomSocket as unknown as SocketWithUser).user.username
+      );
+      socket.to(room).emit('roomPlayers', usernames);
+    });
+
     socket.on('triggerStartGame', (room: string) => {
-      socket.to(room).emit('startGame')
+      socket.to(room).emit('startGame');
     });
 
     socket.on('startGame', (room: string) => {
       socket.on('triggerMovePiece', (pieceId: number, cell: number[]) => {
         socket.broadcast.to(room).emit('movePiece', pieceId, cell);
-      })
+      });
     });
 
     socket.on('tiggerEndGame', (room: string) => {
       socket.to(room).emit('endGame', room);
-    })
+    });
 
     socket.on('endGame', (room: string) => {
-      socket.join('waiting')
-      socket.leave(room)
+      socket.join('waiting');
+      socket.leave(room);
     });
   });
 }
 
 function getAllJoinableGames(playerNameSpace: Namespace) {
-
-  const joinableGames: {name: string, members: number}[] = [];
+  const joinableGames: { name: string; members: number }[] = [];
 
   playerNameSpace.adapter.rooms.forEach((sockets, roomName) => {
     if (sockets.size === 1 && roomName !== 'waiting') {
-      joinableGames.push({name: roomName, members: sockets.size});
+      joinableGames.push({ name: roomName, members: sockets.size });
     }
   });
 

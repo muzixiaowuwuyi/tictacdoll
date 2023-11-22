@@ -93,8 +93,8 @@ const GameEnvironment = ({setShowPopUp: setShowPopup, setPopUpMessage: setPopupM
       return;
     }
 
-    const chessRef = pieceRefs[activePiece.id];
-    placePieceAnimation(newPosition, chessRef);
+    const pieceRef = pieceRefs[activePiece.id];
+    placePieceAnimation(newPosition, pieceRef);
 
     dispatch(placePiece({ cell }));
     dispatch(unselectPiece());

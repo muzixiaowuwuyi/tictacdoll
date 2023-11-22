@@ -16,7 +16,7 @@ export default function GameList() {
           const sortedData = [...data]
             .sort((a, b) => a.duration - b.duration)
             .slice(0, 10);
-          setGameData(sortedData);
+          setGameData(sortedData as GameSession[]);
         }
       } catch (error) {
         console.error("Failed to fetch game data:", error);

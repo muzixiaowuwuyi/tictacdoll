@@ -53,7 +53,7 @@ export async function logout() {
 export async function checkAuth() {
   try {
     const res = await fetch(`${API_BASE_URL}/auth`, {
-      method: 'POST',
+      method: 'GET',
       credentials: 'include',
     });
     if (res.ok) {

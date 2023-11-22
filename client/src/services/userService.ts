@@ -1,4 +1,6 @@
 import { User } from '../components/Login/Login';
+import store from '../store/index';
+import { login as loginReducer } from '../store/slices/userSlice';
 
 const API_BASE_URL = 'http://localhost:3002';
 
@@ -54,7 +56,12 @@ export async function checkAuth() {
       method: 'POST',
       credentials: 'include',
     });
-    return res.ok;
+    if (res.ok) {
+      const data = await res.json();
+      store.dispatch(loginReducer({username: data.username}))
+      return true;
+    }
+    return false;
   } catch (error) {
     console.log(error);
     return false;

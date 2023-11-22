@@ -6,14 +6,21 @@ type GameLobbyProps = {
   name: string;
   players: string[];
   getRoomPlayers: (room: string) => void;
+  triggerStartGame: (room: string) => void;
 };
 
 export default function GameLobby(props: GameLobbyProps) {
-  const { name, players, getRoomPlayers } = props;
+  const { name, players, getRoomPlayers, triggerStartGame } = props;
 
   useEffect(() => {
     getRoomPlayers(name);
   }, []);
+
+  function handleStartGame() {
+    if (players.length < 2) return;
+
+    triggerStartGame(name)
+  }
 
   return (
     <div className='game-lobby'>
@@ -30,7 +37,9 @@ export default function GameLobby(props: GameLobbyProps) {
           </div>
         </div>
       </div>
-      <button className='start-button' disabled={players.length < 2}>Start Game</button>
+      <button className='start-button' onClick={handleStartGame}>
+        Start Game
+      </button>
     </div>
   );
 }

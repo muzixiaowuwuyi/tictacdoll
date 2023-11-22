@@ -38,13 +38,20 @@ export default function Online() {
     setGameLobby(gameName);
   }
 
+  function leaveGame(gameName: string) {
+    socket.emit('leaveRoom', gameName)
+    setGameLobby(undefined);
+    refreshPage();
+  }
+
   function getRoomPlayers(room: string) {
     socket.emit('getRoomPlayers', room);
   }
 
   socket.on('connect', refreshPage);
   socket.on('currentGames', setGames);
-  socket.on('roomPlayers', setPlayersInRoom)
+  socket.on('roomPlayers', setPlayersInRoom);
+  socket.on('leaveGame', leaveGame)
 
   return (
     <>

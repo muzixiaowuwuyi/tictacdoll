@@ -22,6 +22,11 @@ export default function playerSocket(playerNameSpace: Namespace) {
       socket.leave('waiting');
     });
 
+    socket.on('leaveRoom', (room: string) => {
+      socket.leave(room);
+      socket.join('waiting');
+    })
+
     socket.on('getRoomPlayers', async (room) => {
       const socketsInRoom = await playerNameSpace.in(room).fetchSockets();
       const usernames = socketsInRoom.map(
@@ -48,6 +53,11 @@ export default function playerSocket(playerNameSpace: Namespace) {
       socket.join('waiting');
       socket.leave(room);
     });
+
+    socket.on('disconnect', () => {
+      const socketRoom = (socket as SocketWithUser).user.username + '\'s game'
+      socket.broadcast.to(socketRoom).emit('leaveGame', socketRoom, socket.id);
+    })
   });
 }
 

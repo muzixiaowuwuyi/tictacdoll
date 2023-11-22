@@ -53,7 +53,6 @@ export default function Navbar() {
           </button>
         </div>
       )}
-      </div>
       {gameEnded && <GameOverPage />}
     </div>
   );

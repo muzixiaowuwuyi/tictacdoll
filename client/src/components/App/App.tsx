@@ -8,6 +8,7 @@ import Local from "../Local/Local";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import Gamemode from "../Gamemode/Gamemode";
+import Online from "../Online/Online";
 
 export type Props = {
   showPopUp: boolean;
@@ -39,8 +40,9 @@ function App() {
         setPopUpMessage={setPopUpMessage}/>} />
         <Route path="/gamemode" element={<Gamemode />} />
         <Route path="/local" element={<Local />} />
+        <Route path='online' element={<Online />} />
         <Route
-          path="/game"
+          path="/game" 
           element={<GameCanvas key={Date.now()} />}
         />
       </Routes>

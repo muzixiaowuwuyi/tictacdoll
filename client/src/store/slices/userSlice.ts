@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { LoginPayload } from '../../utils/payloadTypes';
 
-const initialState: { username?: string, isAuthenticated:boolean } = {
+const initialState: { username?: string; isAuthenticated: boolean } = {
   username: undefined,
-  isAuthenticated: false
+  isAuthenticated: false,
 };
 
 //kinda overkill but could be useful when expanding
@@ -18,7 +18,7 @@ const userSlice = createSlice({
 
     logout: (state) => {
       state.username = undefined;
-      state.isAuthenticated = false
+      state.isAuthenticated = false;
     },
   },
 });

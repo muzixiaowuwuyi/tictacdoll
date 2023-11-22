@@ -9,12 +9,16 @@ import setupWebSocket from './sockets';
 
 const corsConfig = {
   credentials: true,
-  origin: true
-}
+  origin: true,
+};
 
 const app = express();
 const httpServer = http.createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: true,
+  },
+});
 
 app.use(cors(corsConfig));
 app.use(express.json());

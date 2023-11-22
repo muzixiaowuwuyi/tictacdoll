@@ -122,11 +122,12 @@ const GameEnvironment = (props: GameEnvironmentProps) => {
     }
 
     const pieceRef = pieceRefs[activePiece.id];
+    
     placePieceAnimation(newPosition, pieceRef);
-
+    
     dispatch(placePiece({ cell }));
     dispatch(unselectPiece());
-
+    
     console.log(pieceRefs);
 
     if (online) {

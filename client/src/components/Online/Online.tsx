@@ -16,6 +16,7 @@ import { movePieceData } from '../../utils/types';
 import { placePieceAnimation } from '../../animations/placePieceAnimation';
 import { MutableRefObject } from 'react';
 import { Group } from 'three';
+import { checkDraw, checkWinner } from '../../services/checkWinService';
 
 export default function Online() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function Online() {
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const username = useAppSelector((state) => state.user.username);
   const isInGame = useAppSelector((state) => state.game.isInGame);
+  const gameEnded = useAppSelector((state) => state.game.gameEnded);
   const pieces = useAppSelector((state) => state.game.allPieces);
 
   const [games, setGames] = useState<{ name: string; members: number }[]>([]);
@@ -73,14 +75,8 @@ export default function Online() {
   }
 
   function recieveRef(id: number, ref: MutableRefObject<Group>) {
-    console.log('ID', id, 'REF', ref);
-    pieceRefs[id] = ref;
-    // setPieceRefs((prev) => {
-    //   const newPieceRefs = { ...prev, [id]: ref };
-    //   console.log('INSIDE', newPieceRefs)
-    //   return newPieceRefs;
-    // });
-    // console.log('REFS', pieceRefs);
+    pieceRefs[id] = ref; //this is not the "correct" way to do this but it works
+    // setPieceRefs((prev) => ({ ...prev, [id]: ref };) this is what you should do but it doesn't
   }
 
   function leaveGame(gameName: string) {
@@ -98,33 +94,35 @@ export default function Online() {
     socket.emit('triggerStartGame', room);
   }
 
-  function startGame(room: string) {
-    console.log('starting game', room);
+  function startGame() {
     dispatch(startGameReducer());
   }
 
   function triggerMovePiece(data: movePieceData) {
-    console.log('TRIGGER');
     socket.emit('movePiece', gameLobby, data);
   }
 
   function movePiece(data: movePieceData) {
-    console.log(username, `piece ${data.pieceId} moved to cell ${data.cell}`);
+    const piece = pieces[data.pieceId]
 
-    dispatch(selectPiece({ piece: pieces[data.pieceId] }));
+    placePieceAnimation(data.newPosition, pieceRefs[data.pieceId]);
+    
+    dispatch(selectPiece({ piece: piece}));
     dispatch(placePiece({ cell: data.cell }));
     dispatch(unselectPiece());
 
-    console.log(pieceRefs);
-    console.log('ID', data.pieceId);
-    placePieceAnimation(data.newPosition, pieceRefs[data.pieceId]);
+    if(checkWinner(data.cell, piece.player)){
+      dispatch(endGame({gameWinner: piece.player}))
+    } else if (checkDraw(piece.player)) {
+      dispatch(endGame({gameWinner: 0}))
+    }
   }
 
 
 
   return (
     <>
-      {isInGame ? (
+      {isInGame || gameEnded ? (
         <GameCanvas
           online={{
             [1]: playersInRoom[0],

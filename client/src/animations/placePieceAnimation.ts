@@ -13,9 +13,6 @@ export function placePieceAnimation(
 ) {
   //should be able to deconstruct with vector3 but it won't accept so have to cast
   //it does work
-
-  console.log('ANIMATION', newPosition, pieceRef);
-
   const { x, y, z } = newPosition as { x: number; y: number; z: number };
 
   const jumpSound = new Audio(jumpAudio);

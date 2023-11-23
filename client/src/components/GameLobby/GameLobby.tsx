@@ -6,7 +6,7 @@ type GameLobbyProps = {
   name: string;
   players: string[];
   getRoomPlayers: (room: string) => void;
-  triggerStartGame: (room: string) => void;
+  triggerStartGame: (room: string, player1: string, player2: string) => void;
 };
 
 export default function GameLobby(props: GameLobbyProps) {
@@ -19,7 +19,7 @@ export default function GameLobby(props: GameLobbyProps) {
   function handleStartGame() {
     if (players.length < 2) return;
 
-    triggerStartGame(name)
+    triggerStartGame(name, players[0], players[1])
   }
 
   return (

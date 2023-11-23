@@ -38,9 +38,9 @@ export default function playerSocket(playerNameSpace: Namespace) {
       socket.to(room).emit('roomPlayers', usernames);
     });
 
-    socket.on('triggerStartGame', (room: string) => {
+    socket.on('triggerStartGame', (room: string, player1: string, player2: string) => {
       console.log('StartGame', room);
-      socket.broadcast.to(room).emit('startGame', room);
+      socket.broadcast.to(room).emit('startGame', player1, player2);
     });
 
     socket.on('movePiece', (room, data) => {

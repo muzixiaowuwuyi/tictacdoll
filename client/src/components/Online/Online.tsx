@@ -90,15 +90,17 @@ export default function Online() {
     socket.emit('getRoomPlayers', room);
   }
 
-  function triggerStartGame(room: string) {
-    socket.emit('triggerStartGame', room);
+  function triggerStartGame(room: string, player1: string, player2: string) {
+    socket.emit('triggerStartGame', room, player1, player2);
   }
 
-  function startGame() {
+  function startGame(player1: string, player2: string) {
     dispatch(startGameReducer());
+    sessionStorage.setItem('player1', player1);
+    sessionStorage.setItem('player2', player2);
   }
 
-  function triggerMovePiece(data: movePieceData) {
+  function triggerMovePiece(data: movePieceData) {;
     console.log(gameLobby);
     socket.emit('movePiece', gameLobby, data);
   }

@@ -23,10 +23,10 @@ git clone https://github.com/YourGitHubUsername/tic-tac-doll.git
 ```
 
 ## Frontend dependencies
-
+```bash
 cd client
 npm install
-
+```
 ## Backend dependencies
 
 cd ../server

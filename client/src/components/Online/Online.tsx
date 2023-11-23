@@ -101,7 +101,6 @@ export default function Online() {
   }
 
   function triggerMovePiece(data: movePieceData) {;
-    console.log(gameLobby);
     socket.emit('movePiece', gameLobby, data);
   }
 

@@ -1,4 +1,3 @@
-import { socket } from '../../socket';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -17,6 +16,13 @@ import { placePieceAnimation } from '../../animations/placePieceAnimation';
 import { MutableRefObject } from 'react';
 import { Group } from 'three';
 import { checkDraw, checkWinner } from '../../services/checkWinService';
+
+import { Socket, io } from 'socket.io-client';
+import Cookie from 'js-cookie';
+
+const URL = 'http://localhost:3002/players';
+
+let socket : Socket;
 
 export default function Online() {
   const navigate = useNavigate();
@@ -39,6 +45,13 @@ export default function Online() {
 
   useEffect(() => {
     if (!isAuthenticated) navigate('/');
+
+    socket = io(URL, {
+      autoConnect: false,
+      auth: {
+        token: Cookie.get('accessToken'),
+      },
+    });
 
     socket.on('connect', refreshPage);
     socket.on('currentGames', setGames);

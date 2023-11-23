@@ -1,7 +1,7 @@
 # Tic Tac Doll Project
 
 This is a 3D tic-tac-toe game built with React and Redux, where players can battle against AI（The feature is currently being improved.） or freely control pieces of both sides.
-[![Intro of Tic Tac Doll]([http://img.youtube.com/vi/ZCWxmSYVd-Q?si=6vqRBIyPIrMIbpU1/0.jpg](https://github.com/muzixiaowuwuyi/tictacdoll/blob/main/client/public/tic-tac-doll.png))](http://www.youtube.com/watch?v=ZCWxmSYVd-Q?si=6vqRBIyPIrMIbpU1 "Tic-Tac-Doll")
+[![Intro of Tic Tac Doll]([(https://github.com/muzixiaowuwuyi/tictacdoll/blob/main/client/public/tic-tac-doll.png))](http://www.youtube.com/watch?v=ZCWxmSYVd-Q?si=6vqRBIyPIrMIbpU1 "Tic-Tac-Doll")
 
 
 

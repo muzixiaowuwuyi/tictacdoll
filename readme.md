@@ -1,6 +1,6 @@
 # Tic Tac Doll Project
 
-This is a 3D tic-tac-toe game built with React and Redux, where players can battle against AI or freely control pieces of both sides.
+This is a 3D tic-tac-toe game built with React and Redux, where players can battle against AI（The feature is currently being improved.） or freely control pieces of both sides.
 
 ## Tech Stack
 

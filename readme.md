@@ -28,10 +28,10 @@ cd client
 npm install
 ```
 ## Backend dependencies
-
-cd ../server
+```bash
+cd server
 npm install
-
+```
 ## Frontend
 
 cd client

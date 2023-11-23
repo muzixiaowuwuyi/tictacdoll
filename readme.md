@@ -20,8 +20,6 @@ Clone the project locally:
 
 ```bash
 git clone https://github.com/YourGitHubUsername/tic-tac-doll.git
-cd tic-tac-doll
-
 ```
 
 ## Frontend dependencies

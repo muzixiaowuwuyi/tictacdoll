@@ -44,7 +44,10 @@ export default function playerSocket(playerNameSpace: Namespace) {
     });
 
     socket.on('movePiece', (room, data) => {
-      socket.broadcast.to(room).emit('movePiece', data);
+      console.log(room);
+      socket.broadcast
+        .to(room)
+        .emit('movePiece', data, (socket as SocketWithUser).user.username);
     });
 
     socket.on('tiggerEndGame', (room: string) => {
@@ -58,7 +61,7 @@ export default function playerSocket(playerNameSpace: Namespace) {
 
     socket.on('disconnect', () => {
       const username = (socket as SocketWithUser).user.username;
-      console.log(`Socket disconnecting ${username}`)
+      console.log(`Socket disconnecting ${username}`);
       const socketRoom = username + "'s game";
       socket.broadcast.to(socketRoom).emit('leaveGame', socketRoom, socket.id);
     });

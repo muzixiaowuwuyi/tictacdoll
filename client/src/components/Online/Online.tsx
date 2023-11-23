@@ -32,7 +32,7 @@ export default function Online() {
   const [gameLobby, setGameLobby] = useState<string>();
   const [playersInRoom, setPlayersInRoom] = useState<string[]>([]);
 
-  //@ts-ignore
+  // @ts-ignore
   const [pieceRefs, setPieceRefs] = useState<
     Record<number, MutableRefObject<Group>>
   >({});
@@ -99,10 +99,12 @@ export default function Online() {
   }
 
   function triggerMovePiece(data: movePieceData) {
+    console.log(gameLobby);
     socket.emit('movePiece', gameLobby, data);
   }
 
-  function movePiece(data: movePieceData) {
+  function movePiece(data: movePieceData, sentby: string) {
+    if(sentby === username) return;
     const piece = pieces[data.pieceId]
 
     placePieceAnimation(data.newPosition, pieceRefs[data.pieceId]);

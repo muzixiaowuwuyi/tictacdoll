@@ -71,23 +71,21 @@ const GameEnvironment = (props: GameEnvironmentProps) => {
   const onPieceClicked = (piece: GamePiece) => {
     if (!isInGame) return;
 
+    
+    for (const row of cells) if (row.includes(piece.id)) return;
+    
     if (online && online[piece.player] !== username) {
-      console.log('THIS');
       showErrorPopUp('Not your piece');
       return;
     }
-
-    for (const row of cells) if (row.includes(piece.id)) return;
-
+    
     dispatch(selectPiece({ piece }));
     return;
   };
 
   const addPieceRef = (ref: MutableRefObject<Group>, id: number) => {
     setPieceRefs((prev) => ({ ...prev, [id]: ref }));
-    console.log('ref added');
     if(online) {
-      console.log('ref sent');
       online.sendRef(id, ref);
     }
   };
@@ -127,8 +125,6 @@ const GameEnvironment = (props: GameEnvironmentProps) => {
     
     dispatch(placePiece({ cell }));
     dispatch(unselectPiece());
-    
-    console.log(pieceRefs);
 
     if (online) {
       console.log(
@@ -139,7 +135,6 @@ const GameEnvironment = (props: GameEnvironmentProps) => {
         cell,
         newPosition,
       };
-      console.log('data', movePieceData);
       online.triggerMovePiece(movePieceData);
     }
 

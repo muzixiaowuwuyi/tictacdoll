@@ -34,3 +34,9 @@ export type GameSession = NewGameSession & {
   _id: string;
   createdAt: Date;
 };
+
+export type movePieceData = {
+  pieceId: number;
+  cell: number[];
+  newPosition: Vector3;
+};

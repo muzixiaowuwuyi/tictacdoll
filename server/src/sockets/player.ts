@@ -3,6 +3,9 @@ import { SocketWithUser } from '../types';
 
 export default function playerSocket(playerNameSpace: Namespace) {
   playerNameSpace.on('connection', (socket) => {
+    console.log(
+      `Socket Client Connected ${(socket as SocketWithUser).user.username}`
+    );
     socket.join('waiting');
     playerNameSpace.adapter.del(socket.id, socket.id);
 
@@ -22,6 +25,11 @@ export default function playerSocket(playerNameSpace: Namespace) {
       socket.leave('waiting');
     });
 
+    socket.on('leaveRoom', (room: string) => {
+      socket.leave(room);
+      socket.join('waiting');
+    });
+
     socket.on('getRoomPlayers', async (room) => {
       const socketsInRoom = await playerNameSpace.in(room).fetchSockets();
       const usernames = socketsInRoom.map(
@@ -30,14 +38,16 @@ export default function playerSocket(playerNameSpace: Namespace) {
       socket.to(room).emit('roomPlayers', usernames);
     });
 
-    socket.on('triggerStartGame', (room: string) => {
-      socket.to(room).emit('startGame');
+    socket.on('triggerStartGame', (room: string, player1: string, player2: string) => {
+      console.log('StartGame', room);
+      socket.broadcast.to(room).emit('startGame', player1, player2);
     });
 
-    socket.on('startGame', (room: string) => {
-      socket.on('triggerMovePiece', (pieceId: number, cell: number[]) => {
-        socket.broadcast.to(room).emit('movePiece', pieceId, cell);
-      });
+    socket.on('movePiece', (room, data) => {
+      console.log(room);
+      socket.broadcast
+        .to(room)
+        .emit('movePiece', data, (socket as SocketWithUser).user.username);
     });
 
     socket.on('tiggerEndGame', (room: string) => {
@@ -47,6 +57,13 @@ export default function playerSocket(playerNameSpace: Namespace) {
     socket.on('endGame', (room: string) => {
       socket.join('waiting');
       socket.leave(room);
+    });
+
+    socket.on('disconnect', () => {
+      const username = (socket as SocketWithUser).user.username;
+      console.log(`Socket disconnecting ${username}`);
+      const socketRoom = username + "'s game";
+      socket.broadcast.to(socketRoom).emit('leaveGame', socketRoom, socket.id);
     });
   });
 }

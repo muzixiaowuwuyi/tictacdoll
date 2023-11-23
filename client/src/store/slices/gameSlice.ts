@@ -188,6 +188,10 @@ export const gameSlice = createSlice({
           ? PiecePlayer.PLAYER1
           : PiecePlayer.PLAYER2;
     },
+
+    resetGame: () => {
+      return initialState;
+    }
   },
 });
 
@@ -199,6 +203,7 @@ export const {
   placePiece,
   updateDuration,
   endGame,
+  resetGame,
 } = gameSlice.actions;
 
 // 导出 reducer

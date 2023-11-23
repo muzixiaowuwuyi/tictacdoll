@@ -18,7 +18,6 @@ function Login() {
   const dispatch = useAppDispatch();
   const showPopUp = useAppSelector((state) => state.popup.showPopup);
   const popUpMessage = useAppSelector((state) => state.popup.popupMessage);
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -41,7 +40,8 @@ function Login() {
 
     const res = await login(user);
     if (res?.status === 200) {
-      dispatch(loginReducer({username}))
+      const userData = await res?.json();
+      dispatch(loginReducer({id: userData.id, username}))
       setUsername("");
       setPassword("");
       navigate("/gamemode");

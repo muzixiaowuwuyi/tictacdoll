@@ -1,6 +1,7 @@
 import mongoose from './index';
 
 const gameSchema = new mongoose.Schema({
+  userId: { type: String, required: true},
   player1: { type: String, required: true },
   player2: {type: String, required : true},
   winner: { type: Number, required: true },

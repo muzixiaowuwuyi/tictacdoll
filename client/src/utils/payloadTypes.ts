@@ -17,6 +17,7 @@ export type SetWinnerPayload = {
 }
 
 export type LoginPayload = {
+  id: string;
   username: string;
 }
 

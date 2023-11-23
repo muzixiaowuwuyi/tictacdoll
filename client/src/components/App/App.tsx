@@ -22,7 +22,7 @@ function App() {
         <Route path="/local" element={<Local />} />
         <Route path='online' element={<Online />} />
         <Route
-          path="/game" 
+          path="/game"
           element={<GameCanvas key={Date.now()} />}
         />
       </Routes>

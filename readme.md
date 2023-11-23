@@ -33,15 +33,15 @@ cd server
 npm install
 ```
 ## Frontend
-
+```bash
 cd client
 npm start
-
+```
 ## Backend
-
-cd ../server
+```bash
+cd server
 npm start
-
+```
 ## Project Link
 
 GITHUB: https://github.com/muzixiaowuwuyi/tictacdoll

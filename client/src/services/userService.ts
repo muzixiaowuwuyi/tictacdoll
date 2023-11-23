@@ -58,7 +58,7 @@ export async function checkAuth() {
     });
     if (res.ok) {
       const data = await res.json();
-      store.dispatch(loginReducer({username: data.username}))
+      store.dispatch(loginReducer({id: data.id, username: data.username}))
       return true;
     }
     return false;

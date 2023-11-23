@@ -1,4 +1,3 @@
-import './OnlinePage.css';
 import OnlineGamesList from '../OnlineGamesList/OnlineGamesList';
 
 type OnlinePageProps = {
@@ -14,8 +13,10 @@ export default function OnlinePage(props: OnlinePageProps) {
   return (
     <div className='online-page'>
       <OnlineGamesList games={games} joinGame={joinGame} />
-      <button onClick={createGame}>Create new game</button>
-      <button onClick={refreshPage}>Refresh</button>
+      <div className="online-page-buttons">
+        <button className="orange-button" onClick={createGame}>Create new game</button>
+        <button className="orange-button" onClick={refreshPage}>Refresh</button>
+      </div>
     </div>
   );
 }

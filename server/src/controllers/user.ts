@@ -58,7 +58,7 @@ async function login(req: Request, res: Response) {
     const token = jwt.sign({ userId: user._id, username: user.username }, PRIVATE_KEY);
 
     res.cookie('accessToken', token);
-    res.status(200).send({username: user.username});
+    res.status(200).send({username: user.username, id: user._id});
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Internal Server Error' });

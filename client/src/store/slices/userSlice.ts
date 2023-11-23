@@ -1,7 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { LoginPayload } from '../../utils/payloadTypes';
 
-const initialState: { username?: string; isAuthenticated: boolean } = {
+const initialState: { id?: string; username?: string; isAuthenticated: boolean } = {
+  id: undefined,
   username: undefined,
   isAuthenticated: false,
 };
@@ -12,6 +13,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, { payload }: PayloadAction<LoginPayload>) => {
+      state.id = payload.id;
       state.username = payload.username;
       state.isAuthenticated = true;
     },

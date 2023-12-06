@@ -7,7 +7,7 @@ const initialState = {
   duration: 0,
   intervalId: null,
   startTime: null,
-  cells: [[null, null, null], [null, null, null], [null, null, null]],
+  cells: [null, null, null, null, null, null, null, null, null],
   chessPieces: [
     {
       id: 1,
@@ -140,9 +140,6 @@ const initialState = {
   activePiece: undefined,
   winner: null,
   gridPositions: []
-  // gameState: "playing", // 'won', 'lost', 'tie' 'playing'
-  // winCondition: null // 胜利条件，例如 'row', 'column', 'diagonal', 'tie' 或 null
-  // history: [],
 };
 
 export const chessSlice = createSlice({
@@ -192,17 +189,16 @@ export const chessSlice = createSlice({
     },
 
     placePiece: (state, action) => {
-      const { activePiece, cell } = action.payload;
+      const { activePiece, cellIndex } = action.payload;
 
       // find piece and update status
       const currentPiece = state.chessPieces.find(p => p.id === activePiece.id);
-      const [cellX, cellY] = cell;
       // update piece status
       currentPiece.isMoved = true;
       currentPiece.position = activePiece.position;
 
       // update cell info with the actual chess piece
-      state.cells[cellX][cellY] = activePiece;
+      state.cells[cellIndex] = activePiece;
 
       state.currentPlayer = activePiece.player === ChessType.HUMAN ? ChessType.COMPUTER : ChessType.HUMAN;
     },

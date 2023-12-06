@@ -1,14 +1,12 @@
 import { ChessType } from "../models/enums";
-const winCombos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [6, 4, 2]];
 
 const switchPlayer = player => {
   return player === ChessType.HUMAN ? ChessType.COMPUTER : ChessType.HUMAN;
 };
 
 const findBestSpot = board => {
-  const [score, bestMove] = minimax(board.flat(), ChessType.COMPUTER);
-  const result = restoreToGrid(bestMove);
-  return result;
+  const [score, bestMove] = minimax(board, ChessType.COMPUTER);
+  return bestMove;
 };
 
 const findRandomSpot = (board, maxChessSize, availableChess) => {
@@ -59,15 +57,16 @@ const DRAW = 0;
 const getWinner = grid => {
   const winningCombos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
   let res = null;
-  winningCombos.forEach((el, i) => {
-    if (grid[el[0]] !== null && grid[el[0]] === grid[el[1]] && grid[el[0]] === grid[el[2]]) {
-      res = grid[el[0]];
+  winningCombos.forEach((piece, i) => {
+    if (grid[piece[0]] !== null && grid[piece[0]] === grid[piece[1]] && grid[piece[0]] === grid[piece[2]]) {
+      res = grid[piece[0]];
     } else if (res === null && getEmptySquares(grid).length === 0) {
       res = DRAW;
     }
   });
   return res;
 };
+
 const makeMove = (square, player, grid) => {
   if (grid[square] === null) {
     grid[square] = player;
@@ -116,4 +115,4 @@ const minimax = (board, player) => {
   }
 };
 
-export { findBestSpot, findRandomSpot, restoreToGrid };
+export { findBestSpot, findRandomSpot, restoreToGrid, getWinner };

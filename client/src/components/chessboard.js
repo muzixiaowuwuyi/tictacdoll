@@ -23,8 +23,8 @@ const Chessboard = props => {
   const grids = [];
 
   const handlePlacePiece = useCallback(
-    (position, cell) => {
-      onPiecePlaced(position, cell);
+    (position, cellIndex) => {
+      onPiecePlaced(position, cellIndex);
     },
     [onPiecePlaced]
   );
@@ -38,6 +38,7 @@ const Chessboard = props => {
         cellHeight / 2,
         (y - (boardSize - 1) / 2) * (cellSize + gap)
       ];
+      const cellIndex = x * 3 + y;
       grids.push(position);
       cells.push(
         <Box
@@ -45,8 +46,8 @@ const Chessboard = props => {
           position={position}
           args={[cellSize, cellHeight, cellSize]}
           onClick={() => {
-            console.log(`cell ${y}-${x} clicked and is in game: ${gameState}`);
-            handlePlacePiece(position, [y, x]);
+            console.log(`cell ${x}-${y} clicked and is in game: ${gameState}`);
+            handlePlacePiece(position, cellIndex);
           }}
         >
           <meshBasicMaterial attach="material" color={"#f4f4f4"} />

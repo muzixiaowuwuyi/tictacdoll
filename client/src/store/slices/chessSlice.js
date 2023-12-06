@@ -7,7 +7,6 @@ const initialState = {
   duration: 0,
   intervalId: null,
   startTime: null,
-
   cells: [[null, null, null], [null, null, null], [null, null, null]],
   chessPieces: [
     {
@@ -202,8 +201,8 @@ export const chessSlice = createSlice({
       currentPiece.isMoved = true;
       currentPiece.position = activePiece.position;
 
-      // 更新棋盘状态
-      state.cells[cellX][cellY] = activePiece.id;
+      // update cell info with the actual chess piece
+      state.cells[cellX][cellY] = activePiece;
 
       state.currentPlayer = activePiece.player === ChessType.HUMAN ? ChessType.COMPUTER : ChessType.HUMAN;
     },

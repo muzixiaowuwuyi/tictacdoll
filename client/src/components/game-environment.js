@@ -39,6 +39,16 @@ const GameEnvironment = props => {
   const winnSound = new Audio(winAudio);
   const duration = useSelector(state => state.chess.duration);
 
+  const finishAnimation = () => {};
+
+  const placeError = message => {
+    errorSound.play();
+    setTimeout(() => {
+      alert(message);
+    }, 500);
+    dispatch(unselectPiece());
+  };
+
   const onChessClicked = (ref, piece) => {
     chessRefs[piece.id] = ref;
 
@@ -54,7 +64,6 @@ const GameEnvironment = props => {
     }
 
     console.log(`Chess ${piece.id} selected. its position is ${piece.position}, and is it moved: ${piece.isMoved}`);
-
     dispatch(selectPiece({ piece }));
   };
 
@@ -66,40 +75,30 @@ const GameEnvironment = props => {
     if (activePiece === undefined) return;
 
     if (activePiece.player !== ChessType.HUMAN) {
-      //TODO: 把 alert 移除，放置到二维图层
-      errorSound.play();
-      setTimeout(() => {
-        alert("not your turn!");
-      }, 500);
-
+      placeError("Not your turn!");
       return;
     }
 
     // 检查目标位置是否为空或者可以覆盖
     const [cellX, cellY] = cell;
-
-    const targetPieceId = cells[cellX][cellY];
-    const targetPiece = chessPieces.find(p => p.id === targetPieceId);
+    const targetPiece = cells[cellX][cellY];
 
     if (targetPiece && cells[cellX][cellY] !== undefined) {
       if (targetPiece.size - activePiece.size >= 0) {
         // Add logic showing error placement
-        //TODO: 把 alert 移除，放置到二维图层
-        errorSound.play();
-        setTimeout(() => {
-          alert("Invalid move!");
-        }, 500);
-
-        dispatch(unselectPiece());
-        return;
+        placeError("Invalid piece size!");
       }
     }
 
     const chessRef = chessRefs[activePiece.id];
-    const blockedCell = [activePiece.id, cell];
+    const blockedCell = [activePiece, cell];
 
     dispatch(placePiece({ activePiece, cell }));
     dispatch(unselectPiece());
+
+    if (!isInGame) {
+      return;
+    }
 
     if (chessRef && newPosition) {
       jumpAnimation(chessRef, newPosition);
@@ -108,8 +107,6 @@ const GameEnvironment = props => {
     setTimeout(() => {
       CheckWinner();
       computerRound(blockedCell);
-
-      // TODO: Fix winning condition
     }, 1000);
 
     console.log(chessPieces);
@@ -147,8 +144,9 @@ const GameEnvironment = props => {
     horizontalTween.start();
     upTween.start();
   };
+
   const computerRound = blockedCell => {
-    const useMinMax = Math.round(Math.random * 100);
+    const useMinMax = 0; // Math.round(Math.random * 100);
     let computerChess = biggestComputerChess();
     let computerCell = [null, null];
     let updatedCells = [];
@@ -164,22 +162,7 @@ const GameEnvironment = props => {
       }
       updatedCells.push(columns);
     }
-
-    if (useMinMax < 10) {
-      computerCell = findBestSpot(updatedCells);
-    } else {
-      const remainingChess = getRemainingComputerChess();
-      const [cell, size] = findRandomSpot(updatedCells, computerChess.size, remainingChess);
-      computerCell = cell;
-
-      computerChess = smallestComputerChess(size);
-
-      if (cell === null || computerChess === undefined) {
-        CheckWinner();
-        dispatch(endGame());
-        return;
-      }
-    }
+    computerCell = findBestSpot(updatedCells);
 
     const gridPositions = JSON.parse(gridPosition);
     const targetCell = computerCell[0] * 3 + computerCell[1];
@@ -189,14 +172,10 @@ const GameEnvironment = props => {
     dispatch(placePiece({ activePiece: computerChess, cell: computerCell }));
 
     jumpAnimation(ref, targetPosition);
-    CheckWinner();
-    // TODO: check computer is win
   };
 
   useEffect(
     () => {
-      ////TODO: check if is win
-      // const checkwin = new CheckWinner();
       CheckWinner();
     },
     [cells]

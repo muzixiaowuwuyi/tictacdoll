@@ -45,8 +45,8 @@ const Chessboard = props => {
           position={position}
           args={[cellSize, cellHeight, cellSize]}
           onClick={() => {
-            console.log(`cell ${x}-${y} clicked and is in game: ${gameState}`);
-            handlePlacePiece(position, [x, y]);
+            console.log(`cell ${y}-${x} clicked and is in game: ${gameState}`);
+            handlePlacePiece(position, [y, x]);
           }}
         >
           <meshBasicMaterial attach="material" color={"#f4f4f4"} />

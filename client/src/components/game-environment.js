@@ -173,6 +173,7 @@ const GameEnvironment = props => {
     dispatch(placePiece({ activePiece: computerChess, cellIndex: computerCell }));
 
     jumpAnimation(ref, targetPosition);
+    checkWinner();
   };
 
   useEffect(

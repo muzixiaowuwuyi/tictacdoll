@@ -58,7 +58,11 @@ const getWinner = grid => {
   const winningCombos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
   let res = null;
   winningCombos.forEach((piece, i) => {
-    if (grid[piece[0]] !== null && grid[piece[0]] === grid[piece[1]] && grid[piece[0]] === grid[piece[2]]) {
+    if (
+      grid[piece[0]]?.player !== null &&
+      grid[piece[0]]?.player === grid[piece[1]]?.player &&
+      grid[piece[0]]?.player === grid[piece[2]]?.player
+    ) {
       res = grid[piece[0]];
     } else if (res === null && getEmptySquares(grid).length === 0) {
       res = DRAW;

@@ -52,5 +52,5 @@ npm start
 ```
 ## Project Link
 
-GITHUB: https://github.com/muzixiaowuwuyi/tictacdoll
+GITHUB: https://github.com/muzixiaowuwuyi/tictacdoll <br>
 YOUTUBE: https://www.youtube.com/watch?v=e_wa6LVl4TQ

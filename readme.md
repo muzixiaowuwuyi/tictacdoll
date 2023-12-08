@@ -28,22 +28,24 @@ Clone the project locally:
 git clone https://github.com/YourGitHubUsername/tic-tac-doll.git
 ```
 
-### Frontend dependencies
+#### Frontend dependencies
 ```bash
 cd client
 npm install
 ```
-### Backend dependencies
+#### Backend dependencies
 ```bash
 cd server
 npm install
 ```
-## Frontend
+
+## Run the app
+#### Frontend
 ```bash
 cd client
 npm start
 ```
-## Backend
+#### Backend
 ```bash
 cd server
 npm start

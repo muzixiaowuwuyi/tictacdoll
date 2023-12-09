@@ -34,15 +34,15 @@ $ git clone git@github.com:muzixiaowuwuyi/tictacdoll.git
 #### Frontend dependencies
 
 ```bash
-cd client
-npm install
+$ cd client
+$ npm install
 ```
 
 #### Backend dependencies
 
 ```bash
-cd server
-npm install
+$ cd server
+$ npm install
 ```
 
 ### 2. Run the app
@@ -50,15 +50,15 @@ npm install
 #### Frontend
 
 ```bash
-cd client
-npm start
+$ cd client
+$ npm start
 ```
 
 #### Backend
 
 ```bash
-cd server
-npm start
+$ cd server
+$ npm start
 ```
 
 ## Project Link

@@ -7,14 +7,25 @@ Click [HERE](http://www.youtube.com/watch?v=ZCWxmSYVd-Q?si=6vqRBIyPIrMIbpU1 'Tic
 
 ## Tech Stack
 
-![Tictacdoll tech stack](https://github.com/muzixiaowuwuyi/Stream/blob/main/assets/Tech-Stack.jpg)
+![Tictacdoll tech stack](https://github.com/muzixiaowuwuyi/tictacdoll/blob/refactor/update-readme/client/public/tech-stack.jpg)
 
 ## Installation
 
-Clone the project locally:
+### 0. Prerequisites
 
-```bash
-git clone https://github.com/YourGitHubUsername/tic-tac-doll.git
+stream requires `node 18` or above.
+
+### 1. Clone and install dependencies
+
+To start, clone this repo
+
+```
+# Using HTTPS
+$ git clone https://github.com/muzixiaowuwuyi/tictacdoll.git
+
+# Using SSH
+$ git clone git@github.com:muzixiaowuwuyi/tictacdoll.git
+
 ```
 
 #### Frontend dependencies
@@ -31,7 +42,7 @@ cd server
 npm install
 ```
 
-## Run the app
+### 2. Run the app
 
 #### Frontend
 
@@ -49,5 +60,5 @@ npm start
 
 ## Project Link
 
-GITHUB: https://github.com/muzixiaowuwuyi/tictacdoll <br>
+GITHUB: https://github.com/muzixiaowuwuyi/tictacdoll  
 YOUTUBE: https://www.youtube.com/watch?v=e_wa6LVl4TQ

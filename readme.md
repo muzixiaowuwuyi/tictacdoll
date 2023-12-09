@@ -13,7 +13,7 @@ Click [HERE](http://www.youtube.com/watch?v=ZCWxmSYVd-Q?si=6vqRBIyPIrMIbpU1 'Tic
 
 ### 0. Prerequisites
 
-stream requires `node 18` or above.
+Tic tac doll requires `node 18` or above, and please start the Mongo DB before run the app.
 
 ### 1. Clone and install dependencies
 

@@ -7,7 +7,8 @@ Click [HERE](http://www.youtube.com/watch?v=ZCWxmSYVd-Q?si=6vqRBIyPIrMIbpU1 'Tic
 
 ## Tech Stack
 
-![Tictacdoll tech stack](https://github.com/muzixiaowuwuyi/tictacdoll/blob/refactor/update-readme/client/public/tech-stack.jpg)
+![Tictacdoll tech stack](https://github.com/muzixiaowuwuyi/tictacdoll/blob/main/client/public/tech-stack.jpg)
+
 
 ## Installation
 

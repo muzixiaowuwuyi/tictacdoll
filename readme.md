@@ -1,4 +1,4 @@
-# About
+# Tic Tac Doll
 
 This is a 3D tic-tac-toe game, developed using React and Redux, featuring an engaging gameplay where players can either challenge an AI opponent (currently undergoing enhancements) or take full control of pieces for both sides.
 
